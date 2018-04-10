@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!--공공데이터 포털 api key
+  utf-8 변환하여 전달하지말고 get메소드 설정시 encode = true ?로 해야함-->
+  <string name="open_data_key" templateMergeStrategy="preserve" translatable="false">
+    VEQG7Dkn9phMbx%2Bvwni9uI8YB0Wk37FPh%2BFaIhIqXo3dh%2FXvJdkOhSs6XXHpHdfvL25UEU%2FLriN4idb8l7bUIw%3D%3D</string>
+</resources>
