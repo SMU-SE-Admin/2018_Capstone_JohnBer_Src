@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:background="@color/grey"
+  android:orientation="vertical">
+<android.support.design.widget.AppBarLayout
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+  <!--toolbar-->
+  <include
+    android:id="@+id/toolbar"
+    app:layout_scrollFlags="scroll|enterAlways"
+    layout="@layout/toolbar"/>
+</android.support.design.widget.AppBarLayout>
+
+  <fragment
+    android:id="@+id/course_content"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:name="smu.ac.kr.johnber.course.CourseFragment"
+    tools:layout="@layout/course_content_frag"/>
+
+  <!--bottom navigationbar-->
+  <include
+    android:id="@+id/bottomNavigationView"
+    layout="@layout/navigationbar"/>
+
+
+</LinearLayout>
+
