@@ -13,6 +13,7 @@
 
   <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
+    android:id="@+id/run_running_status_container"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:background="@color/white">
@@ -33,22 +34,22 @@
       tools:text="01/29/2018/Run"/>
 
     <TextView
-      android:id="@+id/tv_run_distance"
-      android:textStyle="bold"
-      android:layout_width="wrap_content"
-      android:layout_height="32dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginStart="24dp"
-      android:textAlignment="center"
-      android:textAppearance="@style/TextAppearance.AppCompat"
-      android:textColor="@color/black"
-      android:textSize="24sp"
-      app:layout_constraintEnd_toStartOf="@+id/tv_run_time"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintHorizontal_chainStyle="spread_inside"
-      app:layout_constraintStart_toStartOf="@+id/guideline13"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_title"
-      tools:text="26.4"/>
+            android:id="@+id/tv_run_distance"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_run_time"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_title"
+            tools:text="26.4"/>
 
 
     <TextView
@@ -84,50 +85,49 @@
       tools:text="2,560"/>
 
     <TextView
-      android:id="@+id/tv_run_distance_text"
-      android:layout_width="27dp"
-      android:layout_height="24dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="8dp"
-      android:text="KM"
-      android:textAlignment="center"
-      android:textSize="18sp"
-      app:layout_constraintEnd_toEndOf="@+id/tv_run_distance"
-      app:layout_constraintHorizontal_chainStyle="spread_inside"
-      app:layout_constraintStart_toStartOf="@+id/tv_run_distance"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_distance"/>
+            android:id="@+id/tv_run_distance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="KM"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_run_distance"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@+id/tv_run_distance"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_distance"/>
 
 
     <TextView
-      android:id="@+id/tv_run_time_text"
-      android:layout_width="41dp"
-      android:layout_height="24dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="8dp"
-      android:text="TIME"
-      android:textAlignment="center"
-      android:textSize="18sp"
-      app:layout_constraintEnd_toEndOf="@+id/tv_run_time"
-      app:layout_constraintStart_toStartOf="@+id/tv_run_time"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_time"/>
+            android:id="@+id/tv_run_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="TIME"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_run_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_run_time"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_time" app:layout_constraintHorizontal_bias="0.52"/>
 
 
     <TextView
-      android:id="@+id/tv_run_calories_text"
-      android:layout_width="34dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="8dp"
-      android:text="CAL"
-      android:textAlignment="center"
-      android:textSize="18sp"
-      app:layout_constraintEnd_toEndOf="@+id/tv_run_calories"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="@+id/tv_run_calories"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_calories"/>
+            android:id="@+id/tv_run_calories_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="CAL"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_run_calories"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/tv_run_calories"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_calories"/>
     <android.support.constraint.Guideline
       android:id="@+id/guideline13"
       android:layout_width="wrap_content"
@@ -142,31 +142,49 @@
       app:layout_constraintGuide_end="16dp"/>
 
     <Button
-      android:id="@+id/btn_resume"
-      style="@style/RunButtonDarkTheme"
-      android:layout_width="match_parent"
-      android:layout_height="48dp"
-      android:layout_marginTop="16dp"
-      android:background="@drawable/btn_run_dark_bg"
-      android:text="Resume"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_time_text"
-      />
+            android:id="@+id/btn_resume"
+            style="@style/RunButtonDarkTheme"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/btn_run_dark_bg"
+            android:text="Resume"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_time_text"
+            android:textAlignment="center"/>
     <Button
-      android:id="@+id/btn_"
-      style="@style/RunButtonLightTheme"
-      android:layout_width="match_parent"
-      android:layout_height="52dp"
-      android:layout_marginTop="4dp"
-      android:layout_marginBottom="24dp"
-      android:background="@drawable/btn_run_light_bg"
-      android:text="Stop"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/btn_resume"
-      app:layout_constraintVertical_bias="0.0"/>
+            android:id="@+id/btn_stop"
+            style="@style/RunButtonLightTheme"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/btn_run_light_bg"
+            android:text="Stop"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_resume"
+            app:layout_constraintVertical_bias="0.0" android:textAlignment="center"/>
+    <Button
+            android:id="@+id/btn_return"
+            style="@style/RunButtonDarkTheme"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/btn_run_dark_bg"
+            android:text="Return"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_time_text"
+            app:layout_constraintVertical_bias="0.0" android:textAlignment="center"/>
+
   </android.support.constraint.ConstraintLayout>
 
 

@@ -5,6 +5,8 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGV;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -54,21 +56,31 @@ public class MainActivity extends BaseActivity implements OnClickListener {
   @Override
   protected void onStop() {
     super.onStop();
+    LOGD(TAG, "onStop");
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
+    LOGD(TAG, "onDestroy");
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    LOGD(TAG, "onPause");
   }
 
   @Override
   protected void onResume() {
     super.onResume();
+    LOGD(TAG, "onResume");
   }
 
   @Override
   protected void onRestart() {
     super.onRestart();
+    LOGD(TAG, "onRestart");
   }
 
 
@@ -94,11 +106,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
   @Override
   public void onClick(View view) {
-    switch (view.getId()){
-      case R.id.btn_run:
-        Intent intent = new Intent(this,RunningActivity.class);
-        startActivity(intent);
-        break;
-    }
+    //Todo: 버튼 visibility
+    mRun.setVisibility(view.GONE);
+    //Todo: RunningActivity의 역할을 MainActiviy에서, fragmentTransition으로 바꾸기
+    RunningFragment runningFragment = new RunningFragment();
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentTransaction.add(R.id.homeContainer,runningFragment,"RUNNINGFRAGMENT")
+            .addToBackStack(null)
+            .commit();
   }
 }

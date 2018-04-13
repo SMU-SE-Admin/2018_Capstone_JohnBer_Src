@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import smu.ac.kr.johnber.course.CourseActivity;
@@ -24,6 +25,7 @@ import smu.ac.kr.johnber.run.MainActivity;
  * Activity들은 BaseActivity를 상속받아 구현
  * 기본적인 공통기능 수행
  * - Toolbar
+ * - Toolbar title
  * - Bottom NavigationBar
  */
 
@@ -39,12 +41,8 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    LOGD(TAG,"oncreate");
-
-//    setToolbar();
-
+    LOGD(TAG, "oncreate");
   }
-
 
   @Override
   protected void onStart() {
@@ -90,6 +88,7 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
   public boolean onOptionsItemSelected(MenuItem item) {
     return super.onOptionsItemSelected(item);
   }
+
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     Intent intent;
@@ -123,7 +122,7 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
         if (mToolbarTitle != null) {
           int titleId = getNavigationItemID();
           if (titleId != 0) {
-            switch (titleId){
+            switch (titleId) {
               case R.id.action_course:
                 mToolbarTitle.setText(R.string.navigation_course);
 
@@ -144,37 +143,38 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
     }
   }
 
-  protected void setBottomNavigation(){
-    if(mBottomNavigation == null){
+  protected void setBottomNavigation() {
+    if (mBottomNavigation == null) {
       mBottomNavigation = findViewById(R.id.bottomNavigationView);
       if (mBottomNavigation != null) {
         setNavigationItemClicked();
-        }
-        mBottomNavigation.setOnNavigationItemSelectedListener(this);
       }
+      mBottomNavigation.setOnNavigationItemSelectedListener(this);
     }
+  }
 
   /**
-   *
    * @return 현재 화면 이름
    */
-  protected int getNavigationItemID(){
+  protected int getNavigationItemID() {
     return 0;
   }
 
 
-protected void setNavigationItemClicked() {
-  int navId = getNavigationItemID();
-  switch (navId) {
-    case R.id.action_course:
-      mBottomNavigation.setSelectedItemId(R.id.action_course);
-      break;
-    case R.id.action_run:
-      mBottomNavigation.setSelectedItemId(R.id.action_run);
-      break;
-    case R.id.action_statistics:
-      mBottomNavigation.setSelectedItemId(R.id.action_statistics);
-      break;
+  protected void setNavigationItemClicked() {
+    int navId = getNavigationItemID();
+    switch (navId) {
+      case R.id.action_course:
+        mBottomNavigation.setSelectedItemId(R.id.action_course);
+        break;
+      case R.id.action_run:
+        mBottomNavigation.setSelectedItemId(R.id.action_run);
+        break;
+      case R.id.action_statistics:
+        mBottomNavigation.setSelectedItemId(R.id.action_statistics);
+        break;
+    }
   }
-}
+
+
 }
