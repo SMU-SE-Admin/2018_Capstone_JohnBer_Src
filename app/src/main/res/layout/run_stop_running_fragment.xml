@@ -32,22 +32,22 @@
       tools:text="01/29/2018/Run"/>
 
     <TextView
-      android:id="@+id/tv_run_distance"
-      android:textStyle="bold"
-      android:layout_width="wrap_content"
-      android:layout_height="32dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginStart="24dp"
-      android:textAlignment="center"
-      android:textAppearance="@style/TextAppearance.AppCompat"
-      android:textColor="@color/black"
-      android:textSize="24sp"
-      app:layout_constraintEnd_toStartOf="@+id/tv_run_time"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintHorizontal_chainStyle="spread_inside"
-      app:layout_constraintStart_toStartOf="@+id/guideline13"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_title"
-      tools:text="26.4"/>
+            android:id="@+id/tv_run_distance"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_run_time"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_title"
+            tools:text="26.4"/>
 
 
     <TextView
@@ -83,34 +83,34 @@
       tools:text="2,560"/>
 
     <TextView
-      android:id="@+id/tv_run_distance_text"
-      android:layout_width="27dp"
-      android:layout_height="24dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="8dp"
-      android:text="KM"
-      android:textAlignment="center"
-      android:textSize="18sp"
-      app:layout_constraintEnd_toEndOf="@+id/tv_run_distance"
-      app:layout_constraintHorizontal_chainStyle="spread_inside"
-      app:layout_constraintStart_toStartOf="@+id/tv_run_distance"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_distance"/>
+            android:id="@+id/tv_run_distance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="KM"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_run_distance"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@+id/tv_run_distance"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_distance"/>
 
 
     <TextView
-      android:id="@+id/tv_run_time_text"
-      android:layout_width="41dp"
-      android:layout_height="24dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="8dp"
-      android:text="TIME"
-      android:textAlignment="center"
-      android:textSize="18sp"
-      app:layout_constraintEnd_toEndOf="@+id/tv_run_time"
-      app:layout_constraintStart_toStartOf="@+id/tv_run_time"
-      app:layout_constraintTop_toBottomOf="@+id/tv_run_time"/>
+            android:id="@+id/tv_run_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="TIME"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_run_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_run_time"
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_time"/>
 
 
     <TextView
