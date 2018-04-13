@@ -37,13 +37,14 @@ public class RunningActivity extends AppCompatActivity {
     initView();
   }
 
+
   public void initView() {
-    // 달리기 fragment 동적 추가
+    // 달리기 fragment
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.add(R.id.run_running_status_container,new RunningFragment(),"RUNNINGFRAGMENT");
-    fragmentTransaction.addToBackStack(null);
-    fragmentTransaction.commit();
+    fragmentTransaction.add(R.id.run_running_status_container,new RunningFragment(),"RUNNINGFRAGMENT")
+            .addToBackStack(null)
+            .commit();
 
   }
 

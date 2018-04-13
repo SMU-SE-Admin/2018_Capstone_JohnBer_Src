@@ -7,6 +7,7 @@ import android.content.Context;
 
 import android.icu.util.Calendar;
 import java.text.SimpleDateFormat;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +25,7 @@ public class WeatherForecast {
 
 
 
-  private static String baseDate = "20180331";
+  private static String baseDate = null;
   private static String baseTime = "0800";
   private static int nx = 24;
   private static int ny = 64;
@@ -42,14 +43,14 @@ public class WeatherForecast {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
       calendar = Calendar.getInstance();
     }
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyMMDD-hh:mm:ss aa");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd/hh:mm:ss aa");
     String datetime=null;
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
       datetime = dateFormat.format(calendar.getTime());
+      LOGD(TAG,datetime.toString());
     }
     String[] splitdateTime = datetime.split("/");
-    String baseDate = splitdateTime[0];
-    WeatherForecast.baseDate = baseDate;
+    WeatherForecast.baseDate = splitdateTime[0];
   }
 
   public static void setTime(String baseTime) {
