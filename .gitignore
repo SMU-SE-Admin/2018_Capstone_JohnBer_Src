@@ -45,3 +45,12 @@ Thumbs.db
 _mac/
 codestyles/
 keymaps/
+
+colors.scheme.xml
+debugger.xml
+editor.xml
+ide.general.xml
+ignore.xml
+notifications.xml
+ui.lnf.xml
+vcs.xml
