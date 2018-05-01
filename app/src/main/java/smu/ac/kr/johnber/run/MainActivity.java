@@ -5,12 +5,21 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGV;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Arrays;
+
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.WeatherForecast;
@@ -35,15 +44,52 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
   private Button mRun;
 
+  // Choose an arbitrary request code value
+  private static final int RC_SIGN_IN = 123;
+
+  //Firebase instance variables
+  private FirebaseAuth mFirebaseAuth;
+  private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_run_main);
+
+    //Initialize Firebase components
+    mFirebaseAuth = FirebaseAuth.getInstance();
+
     initView();
     seListeners();
+
     //TODO: 일정 시간마다 데이터를 갱신해야함
     WeatherForecast.loadWeatherData(this);
     LOGD(TAG, "onCreate");
+
+    mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+      @Override
+      public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user != null){
+          //user is signed in
+            Toast.makeText(MainActivity.this,"You're now signed in.",  Toast.LENGTH_SHORT);
+        }else{
+          //user is signed out.
+          startActivityForResult(
+                  AuthUI.getInstance()
+                          .createSignInIntentBuilder()
+                          .setIsSmartLockEnabled(false)
+                          .setAvailableProviders(Arrays.asList(
+                                  new AuthUI.IdpConfig.EmailBuilder().build(),
+                                  new AuthUI.IdpConfig.GoogleBuilder().build()))
+                          .build(),
+                  RC_SIGN_IN);
+
+        }
+
+      }
+    };
 
   }
 
@@ -68,12 +114,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
   @Override
   protected void onPause() {
     super.onPause();
+    mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     LOGD(TAG, "onPause");
   }
 
   @Override
   protected void onResume() {
     super.onResume();
+    mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     LOGD(TAG, "onResume");
   }
 
