@@ -3,18 +3,18 @@ package smu.ac.kr.johnber.run;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
@@ -58,7 +59,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private MapView mMapview;
     private GoogleMap mgoogleMap;
     private FusedLocationProviderClient mFusedLocationClient;
-    private Location LastLocation;
+    private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
 
@@ -71,11 +72,16 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         seListeners();
         //TODO: 일정 시간마다 데이터를 갱신해야함
 
+        /**
+         * 지도 설정 & 위치 트래킹
+         */
         mMapview.onCreate(savedInstanceState);
-        //callback onMapReady
-        mMapview.getMapAsync(this);
         //Initialize mFusedLocationClient
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mLocationRequest = getLocationRequest();
+        createLocationCallback();
+        //callback on onMapReady
+        mMapview.getMapAsync(this);
 
         WeatherForecast.loadWeatherData(this);
         LOGD(TAG, "onCreate");
@@ -87,6 +93,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapview.onSaveInstanceState(outState);
+
+
     }
 
     @Override
@@ -95,11 +103,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         mMapview.onStart();
         LOGD(TAG, "onStart");
 
-    /*
-    현재위치 확인 기능 활성화
-    Permission 체크 및 요청
-    */
-        enableMyLocation();
     }
 
     @Override
@@ -135,6 +138,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         super.onDestroy();
         mMapview.onDestroy();
         LOGD(TAG, "onDestroy");
+        //location tracking 해제
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
     @Override
@@ -157,15 +162,20 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
     @Override
     public void onClick(View view) {
-        //Todo: 버튼 visibility
-        mRun.setVisibility(view.GONE);
-        //Todo: RunningActivity의 역할을 MainActiviy에서, fragmentTransition으로 바꾸기
-        RunningFragment runningFragment = new RunningFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.homeContainer, runningFragment, "RUNNINGFRAGMENT")
-                .addToBackStack(null)
-                .commit();
+
+        if(!PermissionUtil.shouldAskPermission(this,PERMISSION)){
+            //권한 있음
+            //Todo: 버튼 visibility
+            mRun.setVisibility(view.GONE);
+            //Todo: RunningActivity의 역할을 MainActiviy에서, fragmentTransition으로 바꾸기
+            RunningFragment runningFragment = new RunningFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.homeContainer, runningFragment, "RUNNINGFRAGMENT")
+                    .addToBackStack(null)
+                    .commit();
+        }else
+            PermissionUtil.checkPermission(this,PERMISSION,REQUEST_LOCATION_PERMISSION);
     }
 
     // 퍼미션 요청에 대한 call back
@@ -181,7 +191,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
                     //권한 거부
                     //안내 메세지 snack bar
                     if (PermissionUtil.shouldShowRationale(this, PERMISSION))
-                        PermissionUtil.makePermissionRationaleSnackbar(this, "앱 사용 동안 위치 권한 접근이 필요합니다. 설정>권한에서 권한을 허용할 수 있습니다.");
+                        PermissionUtil.makePermissionRationaleSnackbar(this);
                 }
                 return;
         }
@@ -190,37 +200,58 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mgoogleMap = googleMap;
-
-        googleMap.setMinZoomPreference(12);
-        LatLng ny = new LatLng(40.7143528, -74.0059731);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(ny));
+        if (PermissionUtil.shouldAskPermission(this, PERMISSION)) {
+            //권한없는경우 default 서울로 설정 + 안내 문구
+            googleMap.setMinZoomPreference(17);
+            LatLng defaultLatLng = new LatLng(37.5665, 126.9780);
+            mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng,18));
+            PermissionUtil.makePermissionRationaleSnackbar(this);
+            return;
+        }
+        //googleMap 준비가 끝나면 location tracking
+        enableLocationTracking();
+        //위치 권한있음
     }
 
     /**
-     * 위치 권한 설정 및 지도 세팅
+     * Start location tracking
      */
     @SuppressLint("MissingPermission")
-    private void enableMyLocation() {
+    private void enableLocationTracking() {
+        LOGD(TAG, "enableLocationTracking : check permission");
         if (!PermissionUtil.shouldAskPermission(this, PERMISSION)) {
             //권한 있음
-            if (mgoogleMap != null)
+            if (mgoogleMap != null) {
                 mgoogleMap.setMyLocationEnabled(true);
-            return;
+                //TODO : request current location
+                LOGD(TAG, "Start location tracking");
+                mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+
+                return;
+            }
         }
-        //권한 체크
+        //권한 체크 //TOdo : 최초 실행에서 권한 얻은 후 다시 앱을 열었을 때 권한 없음으로 나옴 ~ onPause 에서 다시 시작하면 권한 체크되는 문제 .... 제일 처음 앱을 열면 googleMap이 null dlfk...
+        LOGD(TAG, "enableLocationTracking : have no permission");
         PermissionUtil.checkPermission(this, PERMISSION, REQUEST_LOCATION_PERMISSION);
     }
 
-    //Todo: Location 지도 설정
-    private void getLocationRequest() {
+    /**
+     * LocationRequest 설정
+        - interval
+        - fastest interval
+        - priority
+     */
+    private LocationRequest getLocationRequest() {
         @SuppressLint("RestrictedApi")
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
+        //5 seconds
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return locationRequest;
     }
 
-    /*
+    /**
     mFusedLocationClient로 부터 위치를 받았을 때 실행할 콜백 메소드
     현재 위치를 가져온다.
      */
@@ -230,15 +261,27 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 mCurrentLocation = locationResult.getLastLocation();
-                //마커 업데이트?
-//        updateUI();
+                //Todo: 업데이트된 좌표로 마커 이동
+               updateMarker();
+
             }
         };
 
     }
 
-    private void updateUI() {
-        //TODO : permission 체크
+    private void updateMarker() {
+        //TODO : permission 체크//이동 좌표 찍어보기
+        Double latitude = mCurrentLocation.getLatitude();
+        Double longtitude = mCurrentLocation.getLongitude();
+
+        //update UI
+        LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        mgoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+
+
+//        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+        LOGD(TAG, "Lattitude : " + latitude + "/Longtitude : " + longtitude);
+
     }
 
 
