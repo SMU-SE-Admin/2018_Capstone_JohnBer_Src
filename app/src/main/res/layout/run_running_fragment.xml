@@ -9,9 +9,16 @@
   <com.google.android.gms.maps.MapView
     android:id="@+id/running_mapview"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+      android:name="com.google.android.gms.maps.MapFragment"/>
+
+<FrameLayout
+    android:id="@+id/map_container"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
   <android.support.constraint.ConstraintLayout
+      android:id="@+id/run_running_status_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"

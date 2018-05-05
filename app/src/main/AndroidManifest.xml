@@ -43,7 +43,12 @@
         <activity android:name=".my.MyActivity" />
         <activity android:name=".run.RunningActivity" />
         <activity android:name=".account.loginActivity" />
-        <activity android:name=".account.SignUpActivity"></activity>
+        <activity android:name=".account.SignUpActivity" />
+
+        <service
+            android:name=".run.TrackerService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

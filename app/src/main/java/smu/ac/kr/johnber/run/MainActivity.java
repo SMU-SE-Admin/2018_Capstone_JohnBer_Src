@@ -3,6 +3,7 @@ package smu.ac.kr.johnber.run;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -47,7 +48,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
     private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
     private static final int REQUEST_LOCATION_PERMISSION = 101;
-
     private static final String PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
 
     private TextView mRegion;
@@ -109,7 +109,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     protected void onResume() {
         super.onResume();
         mMapview.onResume();
+        enableLocationTracking();
         LOGD(TAG, "onResume");
+
 
     }
 
@@ -125,6 +127,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         super.onStop();
         mMapview.onStop();
         LOGD(TAG, "onStop");
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
     @Override
@@ -162,18 +165,18 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
     @Override
     public void onClick(View view) {
-
+        //달리기 실행전 권한 체크
         if(!PermissionUtil.shouldAskPermission(this,PERMISSION)){
             //권한 있음
-            //Todo: 버튼 visibility
-            mRun.setVisibility(view.GONE);
-            //Todo: RunningActivity의 역할을 MainActiviy에서, fragmentTransition으로 바꾸기
-            RunningFragment runningFragment = new RunningFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.homeContainer, runningFragment, "RUNNINGFRAGMENT")
-                    .addToBackStack(null)
-                    .commit();
+//            mRun.setVisibility(view.GONE);
+//            RunningFragment runningFragment = new RunningFragment();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.homeContainer, runningFragment, "RUNNINGFRAGMENT")
+//                    .addToBackStack(null)
+//                    .commit();
+            Intent intent = new Intent(this, RunningActivity.class);
+            startActivity(intent);
         }else
             PermissionUtil.checkPermission(this,PERMISSION,REQUEST_LOCATION_PERMISSION);
     }
@@ -230,7 +233,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
                 return;
             }
         }
-        //권한 체크 //TOdo : 최초 실행에서 권한 얻은 후 다시 앱을 열었을 때 권한 없음으로 나옴 ~ onPause 에서 다시 시작하면 권한 체크되는 문제 .... 제일 처음 앱을 열면 googleMap이 null dlfk...
+
         LOGD(TAG, "enableLocationTracking : have no permission");
         PermissionUtil.checkPermission(this, PERMISSION, REQUEST_LOCATION_PERMISSION);
     }

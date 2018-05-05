@@ -131,6 +131,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         //Todo : RunningActivity에서 운동기록 정보를 저장 ->  on Ready callback 메소드 필요
         //Todo : 달리기 종료버튼 클릭 후 running fragment , pause fragment 모두 스택에서 pop
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getActivity().onBackPressed();
         break;
     }
   }
