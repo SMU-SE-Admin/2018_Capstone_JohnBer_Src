@@ -5,32 +5,19 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.transition.Slide;
-import android.transition.Transition;
 import android.transition.TransitionManager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
-import com.google.android.gms.maps.MapView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.gms.maps.MapView;
 
 import smu.ac.kr.johnber.R;
 
@@ -50,7 +37,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
   private ViewGroup transitionContainer;
   private View mView;
 
-  private PauseRunFragCallBackListener callBackListener;
+  private RunFragCallBackListener callBackListener;
 
   public PauseRunningFragment() {
     // Required empty public constructor
@@ -69,7 +56,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
     //Activity에 할당되었을 때 호출
     super.onAttach(context);
     // Activity로 데이터를 전달 할 커스텀 리스너 연결(RunningFragment와 통신을 위해 Activity를 거쳐 통신함)
-    callBackListener = (PauseRunFragCallBackListener) getActivity();
+    callBackListener = (RunFragCallBackListener) getActivity();
     LOGD(TAG,"onAttached");
   }
 
@@ -128,6 +115,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
       case R.id.btn_resume:
         //달리기 재개
         if (fragmentManager.getBackStackEntryCount() != 0) {
+          callBackListener.onClickedResume();
           fragmentManager.popBackStack();
         }
         break;
@@ -142,6 +130,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
       case R.id.btn_return:
         //Todo : RunningActivity에서 운동기록 정보를 저장 ->  on Ready callback 메소드 필요
         //Todo : 달리기 종료버튼 클릭 후 running fragment , pause fragment 모두 스택에서 pop
+        callBackListener.onClickedReturn();
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getActivity().onBackPressed();
         break;
@@ -154,8 +143,12 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
     mReturn.setVisibility(view.VISIBLE);
   }
 
-  public interface PauseRunFragCallBackListener{
+  public interface RunFragCallBackListener {
     public void onClickedResume();
-  }
 
+   public void onClickedReturn();
+
+
+
+}
 }

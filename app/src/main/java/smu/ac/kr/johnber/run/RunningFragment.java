@@ -234,7 +234,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
       // 예기치 못한 상황으로 연결 실패
-      LOGD(TAG,"TrackerService Connected");
+      LOGD(TAG,"TrackerService disConnected");
       Toast.makeText(mTrackerService, "TrackerService disconnected", Toast.LENGTH_SHORT).show();
       //callback 해제
       mTrackerService.unregisterCallback(mCallback);
@@ -352,6 +352,11 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         break;
 
     }
+  }
+
+  public void resumebindService(){
+    LOGD(TAG, "resumebindService");
+    bindTrackerService();
   }
 
 }

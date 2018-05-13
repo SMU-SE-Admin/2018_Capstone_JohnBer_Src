@@ -4,15 +4,22 @@ package smu.ac.kr.johnber.run;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import smu.ac.kr.johnber.R;
 
@@ -26,7 +33,7 @@ import smu.ac.kr.johnber.R;
  * - fragment간 통신 구현
  *
  */
-public class RunningActivity extends AppCompatActivity implements PauseRunningFragment.PauseRunFragCallBackListener{
+public class RunningActivity extends AppCompatActivity implements PauseRunningFragment.RunFragCallBackListener {
 
   private final static String TAG = makeLogTag(RunningActivity.class);
   private Record mRecord;
@@ -36,7 +43,6 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.run_running_activity);
-    mRecord = new Record();
     initView();
   }
 
@@ -88,8 +94,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     // 달리기 fragment
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    runningFragment = new RunningFragment();
-    fragmentTransaction.add(R.id.run_running_status_container,runningFragment,"RUNNINGFRAGMENT")
+    fragmentTransaction.add(R.id.run_running_status_container,new RunningFragment(),"RUNNINGFRAGMENT")
             .addToBackStack(null)
             .commit();
 
@@ -105,6 +110,42 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
   //Resume버튼을 눌렀을 때 state를 Resume으로 바꾸고, runningFragment에서 start trackerService를 한다.
   @Override
   public void onClickedResume() {
-//   runningFragment.setState(20003);
+    LOGD(TAG,"onClikedReusme");
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    RunningFragment runfrag = (RunningFragment) fragmentManager.findFragmentByTag("RUNNINGFRAGMENT");
+    runfrag.setState(20003);
+   runfrag.resumebindService();
   }
+
+  /**
+   * sharedPreference에 있는 데이터 + date, endTime, Title -> Record객체에 저장
+   * firebase에 저장
+   */
+  @Override
+  public void onClickedReturn() {
+    LOGD(TAG,"onClikedReturn ~ save data");
+
+    SharedPreferences preferences;
+    preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
+
+    Gson gson = new Gson();
+    String response = preferences.getString("LOCATIONLIST", "");
+      ArrayList<Location> locationArrayList = gson.fromJson(response, new TypeToken<List<Location>>(){}.getType());
+
+    // 나머지 복원
+    double distance = Double.parseDouble(preferences.getString("DISTANCE", ""));
+    double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
+    double calories = Double.parseDouble(preferences.getString("CALORIES", ""));
+    double startTime = Double.parseDouble(preferences.getString("STARTTIME", ""));
+
+    //TODO : date, endTime, Title 받아오기
+    Date date = null;
+    double endTime = 0;
+    String title = null;   // date를 변환해서 우선 넣기로함
+
+    mRecord = new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime, title);
+    //TODO : 파이어베이스와 연동
+  }
+
+
 }
