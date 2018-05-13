@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.SystemClock;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -19,13 +20,16 @@ import com.google.maps.android.SphericalUtil;
 import java.util.ArrayList;
 import java.util.Date;
 
+import smu.ac.kr.johnber.util.RecordUtil;
+
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 /**
  * RunningFragment 와 통신
- *  - data의 전송은 callback listener을 사
+ *  - data의 전송은 callback listener을 사용
  * 달리기 기록 측정을 위한 Service
+ * requestLocationUpdates()할 때 마다 거리, 칼로리를 계산한다.
  */
 public class TrackerService extends Service {
 
@@ -47,20 +51,21 @@ public class TrackerService extends Service {
     private double distance;
     private double elapsedTime;
     private double calories;
-    private ArrayList<LatLng> location;
+//    private ArrayList<LatLng> location;
     private Location mCurrentLocation;
     private Location mLastLocation;
     private Location mActivityLastLocation; // 처음 start할때 location
+    private ArrayList<Location> locationArrayList = new ArrayList<Location>();
     private Date date;
-    private int startTime;
-    private int currentTime;
+    private double startTime;
+    private double currentTime;
     private String title;
-
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
 //    private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
-
+//TODO : user 객체를 앱 로그인 성공후 만들어놓고 weight만 getter로 받아와서 사용할 수 있도록 하기
+    private double weight = 70.0;
 
     public TrackerService() {
     }
@@ -119,7 +124,7 @@ public class TrackerService extends Service {
         public void onDistanceChanged(double value);
         public void onCaloriesChanged(double value);
         public void onElapsedtimeChanged(double value);
-        public void onLocationChanged(LatLng value);
+        public void onLocationChanged(LatLng from, LatLng value);
     }
 
 //    @SuppressLint("MissingPermission")
@@ -158,7 +163,11 @@ public class TrackerService extends Service {
                 if (mState == INIT) {
                     //RUN버튼 누른 시점의 위치
                     mActivityLastLocation = locationResult.getLastLocation();
+                    //ArrayList에 시작 location 저장
                     mLastLocation = mActivityLastLocation;
+
+                    locationArrayList.add(mLastLocation);
+
                 }
                 startImpl(locationResult);
             }
@@ -171,11 +180,18 @@ public class TrackerService extends Service {
         distance = 0;
         elapsedTime = 0;
         calories = 0;
-         location = null;
-         mCurrentLocation = null;
+//        location = null;
+        mCurrentLocation = null;
         mLastLocation = null;
         mActivityLastLocation = null;
-         date = null;
+        if (locationArrayList != null) {
+            if (!locationArrayList.isEmpty()) {
+                locationArrayList.clear();
+                LOGD(TAG,"locationList cleared"+locationArrayList.size());
+            }
+        }
+
+        date = null;
         startTime = 0;
         currentTime = 0;
     }
@@ -188,7 +204,7 @@ public class TrackerService extends Service {
     public void start() {
         LOGD(TAG, "start tracking");
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-
+        startTime = SystemClock.elapsedRealtime();
         //기록 계산은 requsetLocationUpdates()에 따른 콜백 메소드인 onLocationResult에서 이루어짐 -> startImpl()
     }
     // TODO : 운동기록 측정 함수  , mCallback의 각 함수 호출
@@ -198,16 +214,30 @@ public class TrackerService extends Service {
 
         //거리 측정
         mCurrentLocation = locationResult.getLastLocation();
+        //ArrayList에 location 저장
+        locationArrayList.add(mCurrentLocation);
         LatLng from = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         LatLng to = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-        distance += SphericalUtil.computeDistanceBetween(from,to);
+        if(!from.equals(to))
+            //mLastLocation~mCurrentLocation간 거리 구하기
+          distance +=  SphericalUtil.computeDistanceBetween(from,to);
         LOGD(TAG, "기록 측정"+"Current: "+from.toString()+"  Last: "+to.toString()+" distance: "+Integer.toString((int)distance));
-        //runningfragment에서 오버라이딩한 onDistanceChanged call
-        //TODO : distance에 더해주기
+        //runningfragment에서 오버라이딩한 onDistanceChanged를 호출하여 UI업데이트
         mtrackerCallback.onDistanceChanged(distance);
-
-
+        mtrackerCallback.onLocationChanged(from,to);
+        //운동시간
+        elapsedTime = SystemClock.elapsedRealtime() - startTime;
+        //평균속도
+        double averageSpeed = distance / elapsedTime;
+        LOGD(TAG, "sppeed: " + averageSpeed+" dist and elapsed "+distance+"  "+elapsedTime);
+        //칼로리 계산
+        calories = RecordUtil.getAverageCalories(weight, elapsedTime);
+        LOGD(TAG,"calories:"+calories);
+        mtrackerCallback.onCaloriesChanged(calories);
+        //LastLocation 업데이트
+        mLastLocation = mCurrentLocation;
     }
+
     /**
      * 기록 임시저장 -> sharedPreference에..
      * removeFusedLocation

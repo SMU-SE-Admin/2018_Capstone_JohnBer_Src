@@ -32,6 +32,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.util.RecordUtil;
 
 /**
  * - MAP view 설정 , 콜백 메소드
@@ -62,7 +63,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
   private boolean isBound;
   // service 객체를 onServiceConnected 에서 받아옴
   private TrackerService mTrackerService;
-
+  private Timer mTimer;
 
 
   public RunningFragment() {
@@ -145,7 +146,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     mTime = mView.findViewById(R.id.tv_run_time);
     mCalories = mView.findViewById(R.id.tv_run_calories);
     mPauseButton = mView.findViewById(R.id.btn_pause);
-
     mPauseButton.setOnClickListener(this);
   }
 
@@ -159,6 +159,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
   @Override
   public void onClick(View view) {
+    //Pause
+    mTimer.stop();
     //달리기 중지 fragment
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -196,7 +198,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
 
 
-  /** Todo :
+  /**
    * bind Service 객체 연결
    */
    ServiceConnection mConnection = new ServiceConnection() {
@@ -207,9 +209,11 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
       Toast.makeText(mTrackerService, "TrackerService connected", Toast.LENGTH_SHORT).show();
       //callback 등록
       mTrackerService.registerCallback(mCallback);
+      mTimer = new Timer();
       //TODO:기록 측정 시작?
       if (mTrackerService != null) {
         mTrackerService.start();
+        mTimer.start(mHandler);
       }
 
     }
@@ -228,16 +232,20 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     //메세지 핸들러를 통한 ui변경
     @Override
     public void onDistanceChanged(double value) {
-      //TODO:파라미터값 수정
       Message msg = mHandler.obtainMessage(MSG_DISTANCE, (int)value, 0);
-      LOGD(TAG,"value: "+Integer.toString((int)value));
+      LOGD(TAG,"distance: "+Integer.toString((int)value));
       mHandler.sendMessage(msg);
+
 
     }
 
     @Override
     public void onCaloriesChanged(double value) {
-
+        Message msg = mHandler.obtainMessage(MSG_CALORIES);
+        Bundle bundle = new Bundle();
+        bundle.putString("calories", Integer.toString((int)value));
+        msg.setData(bundle);
+        mHandler.sendMessageDelayed(msg,1000);
     }
 
     @Override
@@ -245,15 +253,24 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
     }
 
+      /**
+       * @param from last location
+       * @param to current location
+       */
     @Override
-    public void onLocationChanged(LatLng value) {
+    public void onLocationChanged(LatLng from, LatLng to) {
+      //TODO:폴리라인그리기   https://github.com/googlemaps/android-maps-utils/blob/master/demo/src/com/google/maps/android/utils/demo/DistanceDemoActivity.java
+      //Bundle에 데이터를 담아 message.setData(bundle)후 보내 http://al02000.tistory.com/9
+      //TODO: 현재 위치 표시 마커 추가
 
     }
   };
 
 
 
-  private static final int MSG_DISTANCE =3;
+  private static final int MSG_DISTANCE =322;
+  private static final int MSG_TIME = 323;
+  private static final int MSG_CALORIES =324;
 // Service에서 보낸 msg 수신을 위함
   private Handler mHandler = new Handler(){
     //메세지 수신
@@ -261,14 +278,25 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case MSG_DISTANCE:
-          //UI변경
-          LOGD(TAG,"messge - distance"+Integer.toString(msg.arg1));
-          mDistance.setText(Integer.toString(msg.arg1));
-
+          double distance = RecordUtil.metersToKillometers(msg.arg1);
+          String distanceString  = String.format("%.2f", distance);
+          mDistance.setText(distanceString);
+          break;
+        case MSG_TIME:
+          Bundle bundle = msg.getData();
+          String time = bundle.getString("time");
+          mTime.setText(time);
+          break;
+        case MSG_CALORIES:
+           bundle = msg.getData();
+          String calories = bundle.getString("calories");
+          mCalories.setText(calories);
+          break;
         default:
            super.handleMessage(msg);
 
       }
+
     }
   };
    //TODO : bindService
