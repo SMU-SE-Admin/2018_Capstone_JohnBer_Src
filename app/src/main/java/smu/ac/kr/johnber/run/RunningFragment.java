@@ -4,6 +4,7 @@ package smu.ac.kr.johnber.run;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -47,7 +48,7 @@ import smu.ac.kr.johnber.util.RecordUtil;
 public class RunningFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
   private final static String TAG = makeLogTag(RunningFragment.class);
-
+  private Activity mActivity;
   private TextView mDistance;
   private TextView mTime;
   private TextView mCalories;
@@ -72,7 +73,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
   private static final int PAUSE = 20002;
   private static final int RESUME = 20003;
   private static final int STOP = 20003;
-
+  private static int state;
   public RunningFragment() {
     // Required empty public constructor
   }
@@ -106,6 +107,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
   public void onAttach(Context context) {
     //Activity에 할당되었을 때 호출
     super.onAttach(context);
+    mActivity = getActivity();
     LOGD(TAG,"onAttached");
     //TODO:  MAP
   }
@@ -221,8 +223,10 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
       mTimer = new Timer();
       //기록 측정 시작
       if (mTrackerService != null) {
-        mTrackerService.start();
+        mTrackerService.start(state);
         mTimer.start(mHandler,INIT);
+
+
       }
 
     }
@@ -273,6 +277,13 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
       Message msg = mHandler.obtainMessage(MSG_LOCATION);
       Bundle bundle = new Bundle();
 //      bundle.put
+    }
+
+    @Override
+    public void onPausedLisenter(Record record) {
+      //call activity's setrecord
+      Message msg = mHandler.obtainMessage(PAUSE,record);
+      mHandler.sendMessage(msg);
     }
   };
 
@@ -329,6 +340,18 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     }
     isBound = false;
 
+  }
+
+  public void setState(int state){
+    switch (state) {
+      case INIT:
+        this.state =INIT;
+        break;
+      case RESUME :
+        this.state = RESUME;
+        break;
+
+    }
   }
 
 }

@@ -26,15 +26,17 @@ import smu.ac.kr.johnber.R;
  * - fragment간 통신 구현
  *
  */
-public class RunningActivity extends AppCompatActivity {
+public class RunningActivity extends AppCompatActivity implements PauseRunningFragment.PauseRunFragCallBackListener{
 
   private final static String TAG = makeLogTag(RunningActivity.class);
-
+  private Record mRecord;
+  private Fragment runningFragment;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.run_running_activity);
+    mRecord = new Record();
     initView();
   }
 
@@ -86,10 +88,23 @@ public class RunningActivity extends AppCompatActivity {
     // 달리기 fragment
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.add(R.id.run_running_status_container,new RunningFragment(),"RUNNINGFRAGMENT")
+    runningFragment = new RunningFragment();
+    fragmentTransaction.add(R.id.run_running_status_container,runningFragment,"RUNNINGFRAGMENT")
             .addToBackStack(null)
             .commit();
 
   }
 
+
+
+
+  public void setRecord(Record record) {
+    mRecord = record;
+  }
+
+  //Resume버튼을 눌렀을 때 state를 Resume으로 바꾸고, runningFragment에서 start trackerService를 한다.
+  @Override
+  public void onClickedResume() {
+//   runningFragment.setState(20003);
+  }
 }

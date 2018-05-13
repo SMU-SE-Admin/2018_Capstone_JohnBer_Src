@@ -2,7 +2,9 @@ package smu.ac.kr.johnber.run;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
@@ -15,11 +17,13 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import smu.ac.kr.johnber.util.RecordUtil;
 
@@ -91,10 +95,7 @@ public class TrackerService extends Service {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationRequest = getLocationRequest();
         createLocationCallback();
-        //변수 초기화
-        if(mState != RESUME){
-            initService();
-        }
+
     }
 
     @Override
@@ -126,6 +127,8 @@ public class TrackerService extends Service {
         public void onCaloriesChanged(double value);
         public void onElapsedtimeChanged(double value);
         public void onLocationChanged(LatLng from, LatLng value);
+//TODO:
+        public void onPausedLisenter(Record record);
     }
 
 //    @SuppressLint("MissingPermission")
@@ -176,7 +179,7 @@ public class TrackerService extends Service {
     }
 
     // 변수들 초기화
-    public void initService(){
+    public void init(){
         mState = INIT;
         distance = 0;
         elapsedTime = 0;
@@ -191,10 +194,9 @@ public class TrackerService extends Service {
                 LOGD(TAG,"locationList cleared"+locationArrayList.size());
             }
         }
-
-        date = null;
-        startTime = 0;
         currentTime = 0;
+        startTime = SystemClock.elapsedRealtime();
+        date = new Date(System.currentTimeMillis());
     }
     /**
      * state 확인 ( resume인경우 이전값에 이어서 측정)
@@ -202,13 +204,19 @@ public class TrackerService extends Service {
      *  Timer.start
      */
     @SuppressLint("MissingPermission")
-    public void start() {
+    public void start(int Action) {
         LOGD(TAG, "start tracking");
+        if(mState != RESUME){
+            init();
+        } else if (mState == RESUME) {
+            resume();
+        }
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-        startTime = SystemClock.elapsedRealtime();
-        date = new Date(System.currentTimeMillis());
         //기록 계산은 requsetLocationUpdates()에 따른 콜백 메소드인 onLocationResult에서 이루어짐 -> startImpl()
+        //변수 초기화
+
     }
+
     // TODO : 운동기록 측정 함수  , mCallback의 각 함수 호출
     public void startImpl(LocationResult locationResult){
         mState = START;
@@ -240,21 +248,37 @@ public class TrackerService extends Service {
         mLastLocation = mCurrentLocation;
     }
 
-    /**
-     * 기록 임시저장 -> sharedPreference에..
-     * removeFusedLocation
-     * Timer.pause
-     * stopSelf()
-     */
-    public void pause() {
-
-    }
 
     /**
-     * start
+     * sharedPreference로 부터 데이터 복원
+     * - distance
+     * - calories
+     * - elapsedTime
+     * - startTime
+     * - locationArrayList
+     * - lastLocation
+     *      locationArrayList.get(마지막)값으로 복원
      */
     public void resume() {
+        mState = RESUME;
 
+        SharedPreferences preferences;
+        SharedPreferences.Editor editor;
+        preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String response = preferences.getString("LOCATIONLIST", "");
+        locationArrayList = gson.fromJson(response, new TypeToken<List<Location>>(){}.getType());
+        LOGD(TAG, "size of saved array list " + locationArrayList.size());
+        mLastLocation = locationArrayList.get(locationArrayList.size()-1);
+        LOGD(TAG, "lat of last location"+mLastLocation.getLatitude());
+
+        // 나머지 복원
+        distance = Double.parseDouble(preferences.getString("DISTANCE", ""));
+        elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
+        calories = Double.parseDouble(preferences.getString("CALORIES", ""));
+        startTime = Double.parseDouble(preferences.getString("STARTTIME", ""));
+        LOGD(TAG, "distance: " + distance + " elapsedTime: " + elapsedTime + " statTime: " + startTime);
     }
 
     /**
@@ -263,14 +287,33 @@ public class TrackerService extends Service {
      * stopSelf()
      */
     public void stop() {
-        mRecord = new Record(distance,elapsedTime,calories, locationArrayList,date, startTime, SystemClock.elapsedRealtime(), date.toString());
-        //test
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd/hh:mm");
-        LOGD(TAG,format.format(date));
-        //
+        double endTime = SystemClock.elapsedRealtime();
+//        mRecord = new Record(distance,elapsedTime,calories, locationArrayList,date, startTime, endTime, date.toString());
         /**
-         * sharedPreference에 저장
+         * sharedPreference에 Record값 저장
          */
+        //TODO:
+        //locaitonArrayList저장
+        SharedPreferences preferences;
+        SharedPreferences.Editor editor;
+        preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(locationArrayList);
+        editor = preferences.edit();
+        editor.remove("LOCATIONLIST").commit();
+        editor.putString("LOCATIONLIST", json);
+
+        // 나머지 저장
+        //TODO : String으로 변환해 저장 한 후 데이터 복원시 double로 다시 복원
+        editor.putString("DISTANCE", Double.toString(distance));
+        editor.putString("ELAPSEDTIME", Double.toString(elapsedTime));
+        editor.putString("CALORIES", Double.toString(calories));
+        //TODO : Date와 Title은 firebase에 Record 객체를 저장하기 전에 설정할것
+        editor.putString("STARTTIME", Double.toString(startTime));
+        editor.putString("ENDTIME", Double.toString(endTime));
+        editor.putString("TITLE", date.toString());
+        editor.commit();
 
         //서비스 종료
         this.stopSelf();
