@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -46,7 +47,7 @@ public class TrackerService extends Service {
 
     private final IBinder mIBinder = new TrackerBinder();
     private TrackerCallback mtrackerCallback;
-
+    private Record mRecord;
     private int mState;
     private double distance;
     private double elapsedTime;
@@ -64,7 +65,7 @@ public class TrackerService extends Service {
     private LocationRequest mLocationRequest;
 //    private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
-//TODO : user 객체를 앱 로그인 성공후 만들어놓고 weight만 getter로 받아와서 사용할 수 있도록 하기
+//TODO : user 객체를 앱 로그인 성공후 사용자 만들어 놓고 weight만 getter로 받아와서 사용할 수 있도록 하기
     private double weight = 70.0;
 
     public TrackerService() {
@@ -205,17 +206,18 @@ public class TrackerService extends Service {
         LOGD(TAG, "start tracking");
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         startTime = SystemClock.elapsedRealtime();
+        date = new Date(System.currentTimeMillis());
         //기록 계산은 requsetLocationUpdates()에 따른 콜백 메소드인 onLocationResult에서 이루어짐 -> startImpl()
     }
     // TODO : 운동기록 측정 함수  , mCallback의 각 함수 호출
     public void startImpl(LocationResult locationResult){
         mState = START;
 
-
         //거리 측정
         mCurrentLocation = locationResult.getLastLocation();
         //ArrayList에 location 저장
         locationArrayList.add(mCurrentLocation);
+        LOGD(TAG,"size of location list"+locationArrayList.size());
         LatLng from = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         LatLng to = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         if(!from.equals(to))
@@ -261,7 +263,18 @@ public class TrackerService extends Service {
      * stopSelf()
      */
     public void stop() {
+        mRecord = new Record(distance,elapsedTime,calories, locationArrayList,date, startTime, SystemClock.elapsedRealtime(), date.toString());
+        //test
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd/hh:mm");
+        LOGD(TAG,format.format(date));
+        //
+        /**
+         * sharedPreference에 저장
+         */
 
+        //서비스 종료
+        this.stopSelf();
+        LOGD(TAG, "stopTrackerService");
     }
 
     /**

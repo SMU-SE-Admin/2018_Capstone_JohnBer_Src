@@ -15,15 +15,15 @@ public class Record {
     private double calories;
     private ArrayList<Location> location;
     private Date date;
-    private int startTime;
-    private int endTime;
+    private double startTime;
+    private double endTime;
     private String title;
 
     public Record() {
 
     }
 
-    public Record(double distance, double elapsedTime, double calories, ArrayList<Location> location, Date date, int startTime, int endTime, String title) {
+    public Record(double distance, double elapsedTime, double calories, ArrayList<Location> location, Date date, double startTime, double endTime, String title) {
         this.distance = distance;
         this.elapsedTime = elapsedTime;
         this.calories = calories;
@@ -74,7 +74,7 @@ public class Record {
         this.date = date;
     }
 
-    public int getStartTime() {
+    public double getStartTime() {
         return startTime;
     }
 
@@ -82,7 +82,7 @@ public class Record {
         this.startTime = startTime;
     }
 
-    public int getEndTime() {
+    public double getEndTime() {
         return endTime;
     }
 

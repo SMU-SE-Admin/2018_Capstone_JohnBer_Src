@@ -30,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.util.RecordUtil;
@@ -58,13 +59,19 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
   private View mWeatherWidgetView;
   private MapView mMapView;
   private GoogleMap mgoogleMap;
+  private Marker mMarkerFrom;
+  private Marker mMarkerTo;
 
   private boolean isRunning;
   private boolean isBound;
   // service 객체를 onServiceConnected 에서 받아옴
   private TrackerService mTrackerService;
   private Timer mTimer;
-
+  private static final int INIT = 20000;
+  private static final int START = 20001;
+  private static final int PAUSE = 20002;
+  private static final int RESUME = 20003;
+  private static final int STOP = 20003;
 
   public RunningFragment() {
     // Required empty public constructor
@@ -110,8 +117,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
     //Fragment 화면 full screen으로 만듬
 //    hideActivityContainer();
-
-
   }
 
   @Override
@@ -160,7 +165,10 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
   @Override
   public void onClick(View view) {
     //Pause
-    mTimer.stop();
+    if (mTrackerService != null) {
+      mTrackerService.stop();
+      mTimer.stop();
+    }
     //달리기 중지 fragment
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -209,11 +217,12 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
       Toast.makeText(mTrackerService, "TrackerService connected", Toast.LENGTH_SHORT).show();
       //callback 등록
       mTrackerService.registerCallback(mCallback);
+      //타이머
       mTimer = new Timer();
-      //TODO:기록 측정 시작?
+      //기록 측정 시작
       if (mTrackerService != null) {
         mTrackerService.start();
-        mTimer.start(mHandler);
+        mTimer.start(mHandler,INIT);
       }
 
     }
@@ -252,7 +261,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     public void onElapsedtimeChanged(double value) {
 
     }
-
       /**
        * @param from last location
        * @param to current location
@@ -262,7 +270,9 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
       //TODO:폴리라인그리기   https://github.com/googlemaps/android-maps-utils/blob/master/demo/src/com/google/maps/android/utils/demo/DistanceDemoActivity.java
       //Bundle에 데이터를 담아 message.setData(bundle)후 보내 http://al02000.tistory.com/9
       //TODO: 현재 위치 표시 마커 추가
-
+      Message msg = mHandler.obtainMessage(MSG_LOCATION);
+      Bundle bundle = new Bundle();
+//      bundle.put
     }
   };
 
@@ -271,6 +281,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
   private static final int MSG_DISTANCE =322;
   private static final int MSG_TIME = 323;
   private static final int MSG_CALORIES =324;
+  private static final int MSG_LOCATION =325;
 // Service에서 보낸 msg 수신을 위함
   private Handler mHandler = new Handler(){
     //메세지 수신
@@ -304,7 +315,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     LOGD(TAG,"TrackerService Connected");
     //TODO : intent action으로 stop인지... 상태
     getActivity().startService(new Intent(getActivity(), TrackerService.class));
-    getActivity().bindService(new Intent(getActivity(), TrackerService.class), mConnection, Context.BIND_AUTO_CREATE);
+    //flag BIND_AUTO_CREATE 로 설정시 stopSelf()를 호출하여도 unbound 될 때까지 연결이 살아있기때문에 0으로 교체
+    getActivity().bindService(new Intent(getActivity(), TrackerService.class), mConnection, 0);
     isBound = true;
   }
 

@@ -36,16 +36,26 @@ public class Timer {
     private double elapsedTimeBuff;
 
     private static final String TAG = makeLogTag(Timer.class);
-    public void start(Handler handler) {
+    public void start(Handler handler, int action) {
         LOGD(TAG,"startTimer");
-        if(mSTATE == INIT){
+        switch (action) {
+            case INIT:
+                mSTATE = INIT;
+                break;
+
+            case RESUME:
+                mSTATE = RESUME;
+                break;
+        }
+
+        if(mSTATE == INIT || mSTATE == STOP){
             elapsedTime =0;
             startTime = SystemClock.elapsedRealtime();
             elapsedTime = 0;
             elapsedTimeBuff = 0;
         }
         if (mSTATE == RESUME) {
-            //reload elapsedTimeBuff & startTime
+            //TODO : reload elapsedTimeBuff & startTime
         }
         mSTATE = START;
         mhandler = handler;
@@ -57,8 +67,10 @@ public class Timer {
     public void stop(){
         mSTATE = STOP;
         LOGD(TAG,"stopTimer");
+        //TODO : sharedPreference에 저장?
     }
-    private void resume(){
+
+    private void loadPrevTimer(){
 
     }
 
