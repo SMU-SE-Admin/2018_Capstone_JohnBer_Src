@@ -115,8 +115,8 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
       case R.id.btn_resume:
         //달리기 재개
         if (fragmentManager.getBackStackEntryCount() != 0) {
-          callBackListener.onClickedResume();
           fragmentManager.popBackStack();
+          callBackListener.onClickedResume();
         }
         break;
 

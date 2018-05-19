@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
             //권한없는경우 default 서울로 설정 + 안내 문구
             googleMap.setMinZoomPreference(17);
             LatLng defaultLatLng = new LatLng(37.5665, 126.9780);
-            mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng,18));
+            mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng, 18));
             PermissionUtil.makePermissionRationaleSnackbar(this);
             return;
         }

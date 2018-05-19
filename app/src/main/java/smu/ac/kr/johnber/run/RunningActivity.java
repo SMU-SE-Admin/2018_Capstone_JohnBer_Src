@@ -107,7 +107,10 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     mRecord = record;
   }
 
-  //Resume버튼을 눌렀을 때 state를 Resume으로 바꾸고, runningFragment에서 start trackerService를 한다.
+  /**
+   * Resume 버튼을 눌렀을때 동작
+   * Resume버튼을 눌렀을 때 state를 Resume으로 바꾸고, runningFragment에서 start trackerService를 한다.
+   */
   @Override
   public void onClickedResume() {
     LOGD(TAG,"onClikedReusme");
@@ -115,6 +118,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     RunningFragment runfrag = (RunningFragment) fragmentManager.findFragmentByTag("RUNNINGFRAGMENT");
     runfrag.setState(20003);
    runfrag.resumebindService();
+//   runfrag.resumestartTimer();
   }
 
   /**
@@ -133,10 +137,10 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
       ArrayList<Location> locationArrayList = gson.fromJson(response, new TypeToken<List<Location>>(){}.getType());
 
     // 나머지 복원
-    double distance = Double.parseDouble(preferences.getString("DISTANCE", ""));
-    double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
-    double calories = Double.parseDouble(preferences.getString("CALORIES", ""));
-    double startTime = Double.parseDouble(preferences.getString("STARTTIME", ""));
+    double distance = Double.parseDouble(preferences.getString("DISTANCE", "0"));
+    double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", "0"));
+    double calories = Double.parseDouble(preferences.getString("CALORIES", "0"));
+    double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
 
     //TODO : date, endTime, Title 받아오기
     Date date = null;

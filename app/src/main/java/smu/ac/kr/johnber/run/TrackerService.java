@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -73,8 +74,10 @@ public class TrackerService extends Service {
     private LocationRequest mLocationRequest;
     //    private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
+    private Handler mHandler;
     //TODO : user 객체를 앱 로그인 성공후 사용자 만들어 놓고 weight만 getter로 받아와서 사용할 수 있도록 하기
     private double weight = 70.0;
+    private Timer mTimer;
 
     public TrackerService() {
     }
@@ -151,9 +154,9 @@ public class TrackerService extends Service {
     private LocationRequest getLocationRequest() {
         @SuppressLint("RestrictedApi")
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
+        locationRequest.setInterval(1000);
         //5 seconds
-        locationRequest.setFastestInterval(5000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }
@@ -206,11 +209,13 @@ public class TrackerService extends Service {
      * {@link #startImpl(LocationResult)}호출에 따라 운동기록을 측정 시작
      * - state 확인 (resume인경우 이전값에 이어서 측정)
      * - locationrequestUpdates (onLocationResult콜백이 호출되고, 여기서 운동기록 측정 함수 호출)
-     * - Timer.start
+     * - Timer쓰레드 start
      */
     @SuppressLint("MissingPermission")
-    public void start(int Action) {
+    public void start(int Action,Handler handler) {
         LOGD(TAG, "Start TrackerService...current state(01init 03-resume) : " + mState);
+        mHandler = handler;
+        mTimer = new Timer(this);
         // set state
         switch (Action) {
             case INIT:
@@ -224,9 +229,13 @@ public class TrackerService extends Service {
         if (mState != RESUME) {
             //init variables
             init();
+            LOGD(TAG, "startTimer init " + mState);
+            mTimer.start(mHandler, mState);
         } else if (mState == RESUME) {
             //reload variables from sharedPreferences
             resume();
+            LOGD(TAG, "resumetTimer init " + mState);
+            mTimer.start(mHandler, mState);
         }
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         //기록 계산은 requsetLocationUpdates()에 따른 콜백 메소드인 onLocationResult에서 이루어짐 -> startImpl()
@@ -258,7 +267,7 @@ public class TrackerService extends Service {
         mtrackerCallback.onCaloriesChanged(calories);
         mtrackerCallback.onDistanceChanged(distance);
         mtrackerCallback.onLocationChanged(from, to);
-        LOGD(TAG, "[Lap] " +"CurrentLoc: "+to+" LastLoc: "+from+" Dist: "+distance+" ElapsedTime: "+elapsedTime+" Cal: "+calories+" Av.Speed: "+averageSpeed+" startTime: "+startTime);
+//        LOGD(TAG, "[Lap] " +"CurrentLoc: "+to+" LastLoc: "+from+" Dist: "+distance+" ElapsedTime: "+RecordUtil.milliseconsToStringFormat(elapsedTime)+" Cal: "+calories+" Av.Speed: "+averageSpeed+" startTime: "+startTime);
         //LastLocation 업데이트
         mLastLocation = mCurrentLocation;
     }
@@ -293,14 +302,14 @@ public class TrackerService extends Service {
         }.getType());
         LOGD(TAG, "saved locationList size :  " + locationArrayList.size());
         mLastLocation = locationArrayList.get(locationArrayList.size() - 1);
-        LOGD(TAG, "saved LastLoc: " + mLastLocation);
+        LOGD(TAG, "saved LastLoc: " + mLastLocation+" get lat " + mLastLocation.getLatitude());
 
         // 나머지 복원
         distance = Double.parseDouble(preferences.getString("DISTANCE", ""));
-        elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
+//        elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
         calories = Double.parseDouble(preferences.getString("CALORIES", ""));
         startTime = Double.parseDouble(preferences.getString("STARTTIME", ""));
-        LOGD(TAG, "[Restored Lap] " +"CurrentLoc: "+mCurrentLocation+" LastLoc: "+mLastLocation+" Dist: "+distance+" ElapsedTime: "+elapsedTime+" Cal: "+" startTime: "+startTime);
+//        LOGD(TAG, "[Restored Lap] " +"CurrentLoc: "+mCurrentLocation+" LastLoc: "+mLastLocation+" Dist: "+distance+" ElapsedTime: "+RecordUtil.milliseconsToStringFormat(elapsedTime)+" Cal: "+" startTime: "+startTime);
         mState = RESUME;
     }
 
@@ -328,11 +337,11 @@ public class TrackerService extends Service {
         editor = preferences.edit();
         editor.putString("LOCATIONLIST", json);
         editor.apply();
-        
+
         // 나머지 저장
         //TODO : String으로 변환해 저장 한 후 데이터 복원시 double로 다시 복원
         editor.putString("DISTANCE", Double.toString(distance));
-        editor.putString("ELAPSEDTIME", Double.toString(elapsedTime));
+//        editor.putString("ELAPSEDTIME", Double.toString(elapsedTime));
         editor.putString("CALORIES", Double.toString(calories));
         //TODO : Date와 Title은 firebase에 Record 객체를 저장하기 전에 설정할것
         editor.putString("STARTTIME", Double.toString(startTime));
@@ -341,6 +350,8 @@ public class TrackerService extends Service {
 
         //서비스 종료
         this.stopSelf();
+        mTimer.stop();
+//        LOGD(TAG, "[Stopped Lap] " +"ElapsedTime: "+RecordUtil.milliseconsToStringFormat(elapsedTime)+" Cal: "+" startTime: "+startTime);
         LOGD(TAG, "stopTrackerService");
     }
 
