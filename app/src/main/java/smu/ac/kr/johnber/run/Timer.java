@@ -38,7 +38,6 @@ public class Timer {
     private static int mSTATE ;
     private double startTime;
     private double elapsedTime;
-    //resume하는경우 elapsedTime  = elasepdTimeBuff + timeInterval
     private double elapsedTimeBuff;
     private Thread mthread;
     private SharedPreferences preferences;
@@ -73,17 +72,13 @@ public class Timer {
             resume();
             LOGD(TAG,"RESUME TIMER " + elapsedTimeBuff);
         }
-            LOGD(TAG , "elapsed after start : " + elapsedTimeBuff);
+//            LOGD(TAG , "elapsed after start : " + elapsedTimeBuff);
         mSTATE = START;
         mhandler = handler;
 
-//        if(mthread == null) {
             mthread = new Thread(new TimerThread());
-
-            LOGD(TAG, "Thread is alive? : " + mthread.isAlive());
-
+//            LOGD(TAG, "Thread is alive? : " + mthread.isAlive());
             mthread.start();
-
             LOGD(TAG, "starttimerthread");
             LOGD(TAG, "timer state is : " + mSTATE);
 //        }
@@ -91,29 +86,24 @@ public class Timer {
 
     public void stop(){
         mSTATE = STOP;
+        //sharedPreferences에 시간 기록 저장
         LOGD(TAG,"stopTimer");
-
         double endTime = SystemClock.elapsedRealtime();
-//        SharedPreferences preferences;
         SharedPreferences.Editor editor;
         preferences = mContext.getSharedPreferences("saveRecord", Context.MODE_PRIVATE);
         editor = preferences.edit();
+        editor.putString("ENDTIME", Double.toString(endTime));
         editor.putString("ELAPSEDTIME", Double.toString(elapsedTime));
         editor.commit();
     }
 
     private void resume(){
-//        preferences = mContext.getSharedPreferences("saveRecord",Context.MODE_PRIVATE)
-//                ;
+        //sharedPreferences로부터 시간 기록 복원
         startTime = SystemClock.elapsedRealtime();
 //      double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
-
         elapsedTimeBuff = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
         elapsedTime = 0;
-//        startTime = startTime - elapsedTimeBuff;
-
         LOGD(TAG, "restored elapsedBuff: " + RecordUtil.milliseconsToStringFormat(elapsedTimeBuff));
-
     }
 
   class TimerThread implements Runnable {
@@ -121,24 +111,18 @@ public class Timer {
 
         @Override
         public void run() {
-            LOGD(TAG,"runnable");
-
 
             while(mSTATE == START) {
                 timeInterval = SystemClock.elapsedRealtime() - startTime;
                 LOGD(TAG, "stat time! : " + startTime);
-
+                // 현재 시간 = 측정 재개(시작) 시간으로 부터 경과한 시간 + 이전 시간기록
                 elapsedTime = timeInterval+elapsedTimeBuff;
-
-                int seconds = (int) ((elapsedTime)/ 1000);
-                int minutes = (seconds / 60)%60;
-                seconds = seconds % 60;
                 String stringTime = RecordUtil.milliseconsToStringFormat(elapsedTime);
+
                 //UI 처리를 위한 hanlder, message
                 Message msg = mhandler.obtainMessage(MSG_TIME);
                 Bundle bundle = new Bundle();
                 bundle.putString("time", stringTime);
-                LOGD(TAG, "TIME BEFORE MESSAGING : " +RecordUtil.milliseconsToStringFormat(elapsedTime));
                 msg.setData(bundle);
                 mhandler.sendMessage(msg);
                 try {
@@ -149,8 +133,6 @@ public class Timer {
                 }
 
             }
-            LOGD(TAG,"Thread is alive? : "+mthread.isAlive());
-            LOGD(TAG, "while문 빠져나감" + "state " + mSTATE);
         }
 
     }

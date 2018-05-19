@@ -165,7 +165,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //TODO : 기본위치 - 현재위치로
-        // GPS : 확인 
+        // GPS : 확인
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(17);
         LatLng defaultLatLng = new LatLng(37.5665, 126.9780);
