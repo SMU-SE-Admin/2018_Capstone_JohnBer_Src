@@ -10,7 +10,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.VectorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,12 +35,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
@@ -68,7 +71,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private View mWeatherWidgetView;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
-    private Marker mMarker;
+    private Marker mMarker;                     // 현재 위치를 표시할 마
     private ArrayList<LatLng> locationArrayList = new ArrayList<>(); //마커, 폴리라인 표시를 위한 좌표 목록
     private boolean isBound;
     // service 객체를 onServiceConnected 에서 받아옴
@@ -161,14 +164,25 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         if (mTrackerService != null) {
             mTrackerService.stop();
         }
+        
+        //PauseFragment의 km, time, cal View에 세팅할 값 넘겨주기
+        Bundle bundle = new Bundle();
+        PauseRunningFragment pauseRunningFragment = new PauseRunningFragment();
+        bundle.putString("time", txtTime);
+        bundle.putString("distance", txtDistance);
+        bundle.putString("calories",txtCalories);
+        //TODO : 오늘 날짜 넘겨주기 + 포맷형식은 Util에 구현?~  tracker Service에서 sharedPreferences에 저장한것을 PauseRunningFrragment에서 불러와서 세팅
+        pauseRunningFragment.setArguments(bundle);
+
         //달리기 중지 fragment로 전환
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.run_running_status_container, new PauseRunningFragment(), "PAUSEFRAGMENT")
+        fragmentTransaction.add(R.id.run_running_status_container, pauseRunningFragment, "PAUSEFRAGMENT")
                 .addToBackStack(null)
                 .commit();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //TODO : 기본위치 - 현재위치로
@@ -176,7 +190,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(17);
         LatLng defaultLatLng = new LatLng(37.5665, 126.9780);
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng, 18));
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng, 3));
+//        mgoogleMap.setMyLocationEnabled(true);
     }
 
 //  private void hideActivityContainer() {
@@ -275,6 +290,9 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private static final int MSG_TIME = 323;
     private static final int MSG_CALORIES = 324;
     private static final int MSG_LOCATION = 325;
+    private String txtTime;
+    private String txtDistance;
+    private String txtCalories;
     // Service에서 보낸 msg 수신을 위함
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -284,28 +302,27 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
             switch (msg.what) {
                 case MSG_DISTANCE:
                     double distance = RecordUtil.metersToKillometers(msg.arg1);
-                    String distanceString = RecordUtil.distanceToStringFormat(distance);
-                    mDistance.setText(distanceString);
+                    txtDistance = RecordUtil.distanceToStringFormat(distance);
+                    mDistance.setText(txtDistance);
                     break;
                 case MSG_TIME:
                     Bundle bundle = msg.getData();
-                    String time = bundle.getString("time");
-                    mTime.setText(time);
+                    txtTime = bundle.getString("time");
+                    mTime.setText(txtTime);
                     break;
                 case MSG_CALORIES:
                     bundle = msg.getData();
-                    String calories = bundle.getString("calories");
-                    mCalories.setText(calories);
+                    txtCalories = bundle.getString("calories");
+                    mCalories.setText(txtCalories);
                     break;
                 case MSG_LOCATION:
-//                   if(mState == )
-    LOGD(TAG, "MSGLOCATIONCHANGED");
                     bundle = msg.getData();
                     double latitude = bundle.getDouble("latitude");
                     double longitude = bundle.getDouble("longitude");
                     locationArrayList.add(new LatLng(latitude, longitude));
 
                     drawPolylines(locationArrayList);
+                    setMarkers();
 
                     break;
                 default:
@@ -319,14 +336,40 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     // 지도에 이동 경로 표시
     private void drawPolylines(ArrayList<LatLng> locationArrayList) {
         PolylineOptions options = new PolylineOptions();
-        options.addAll(locationArrayList).width(7).color(Color.RED).geodesic(true);
+        options.addAll(locationArrayList).width(25).color(R.color.polyline).geodesic(true);
         mgoogleMap.addPolyline(options);
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList.get(locationArrayList.size()-1), 8));
+
 
     }
     // 지도에 마커 표시
-    private void setMarker(LatLng currentLocation) {
+    // 시작점, 끝점(현재위치)
+    private void setMarkers() {
+        ArrayList<LatLng> markerList = new ArrayList<>();
+        markerList.add(0,locationArrayList.get(0));
+        if (locationArrayList.size() > 1) {
 
+        markerList.add(1,locationArrayList.get(locationArrayList.size() - 1)); // 끝점(현재위치)
+        }
+        //시작 지점
+        MarkerOptions options1 = new MarkerOptions();
+        options1.position(markerList.get(0)).title("start");
+        options1.icon(getBitmapDescriptor(R.drawable.ic_marker_flag));
+        mgoogleMap.addMarker(options1);
+
+        //현재 지점
+        if (markerList.size() > 1) {
+            //이전 마커 삭제
+            if (mMarker != null) {
+                mMarker.remove();
+            }
+            MarkerOptions options2 = new MarkerOptions();
+            options2.position(markerList.get(1)).title("end");
+            options2.icon(getBitmapDescriptor(R.drawable.ic_marker_current));
+            mMarker = mgoogleMap.addMarker(options2);
+        }
+
+        // 카메라 이동
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList.get(locationArrayList.size()-1), 3));
     }
 
     //bindService
@@ -368,6 +411,25 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         }
     }
 
+    private BitmapDescriptor getBitmapDescriptor(int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            VectorDrawable vectorDrawable = (VectorDrawable) mActivity.getDrawable(id);
+
+            int h = vectorDrawable.getIntrinsicHeight();
+            int w = vectorDrawable.getIntrinsicWidth();
+
+            vectorDrawable.setBounds(0, 0, w, h);
+
+            Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bm);
+            vectorDrawable.draw(canvas);
+
+            return BitmapDescriptorFactory.fromBitmap(bm);
+
+        } else {
+            return BitmapDescriptorFactory.fromResource(id);
+        }
+    }
 
 }
 

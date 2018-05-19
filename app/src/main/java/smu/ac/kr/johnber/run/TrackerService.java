@@ -23,6 +23,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -335,13 +336,16 @@ public class TrackerService extends Service {
         editor.apply();
 
         // 나머지 저장
-        //TODO : String으로 변환해 저장 한 후 데이터 복원시 double로 다시 복원
+        // String으로 변환해 저장 한 후 데이터 복원시 double로 다시 복원
         editor.putString("DISTANCE", Double.toString(distance));
 //        editor.putString("ELAPSEDTIME", Double.toString(elapsedTime));
         editor.putString("CALORIES", Double.toString(calories));
-        //TODO : Date와 Title은 firebase에 Record 객체를 저장하기 전에 설정할것
+        //TODO : Date와 Title설정할것
         editor.putString("STARTTIME", Double.toString(startTime));
         editor.putString("ENDTIME", Double.toString(endTime));
+
+        String currentDateandTime = RecordUtil.getFormattedDate();
+        editor.putString("DATE",currentDateandTime+" RUN");
         editor.commit();
 
         //서비스 종료

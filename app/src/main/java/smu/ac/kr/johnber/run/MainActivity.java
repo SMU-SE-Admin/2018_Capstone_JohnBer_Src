@@ -176,6 +176,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 //                    .addToBackStack(null)
 //                    .commit();
             Intent intent = new Intent(this, RunningActivity.class);
+            //현재위치좌표를 같이 넘겨줌
+            intent.putExtra("latitude", mCurrentLocation.getLatitude());
+            intent.putExtra("longitude", mCurrentLocation.getLongitude());
             startActivity(intent);
         }else
             PermissionUtil.checkPermission(this,PERMISSION,REQUEST_LOCATION_PERMISSION);

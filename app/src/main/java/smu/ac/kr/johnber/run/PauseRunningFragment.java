@@ -5,6 +5,7 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
   private TextView mDistance;
   private TextView mTime;
   private TextView mCalories;
+  private TextView mTitle;
   private Button mResume;
   private Button mStop;
   private Button mReturn;
@@ -68,6 +70,13 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
   }
 
   @Override
+  public void onStart() {
+    super.onStart();
+    //view에 이전 값 불러와  세팅
+    setRecordtoView();
+  }
+
+  @Override
   public void onPause() {
     //fragment를 떠났을 때 유지시킬 데이터 저장
     super.onPause();
@@ -93,12 +102,13 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
 
   public void initView() {
     mMapView = mView.findViewById(R.id.running_mapview);
-    mDistance = mView.findViewById(R.id.tv_run_time);
+    mDistance = mView.findViewById(R.id.tv_run_distance);
     mTime = mView.findViewById(R.id.tv_run_time);
     mCalories = mView.findViewById(R.id.tv_run_calories);
     mResume = mView.findViewById(R.id.btn_resume);
     mStop = mView.findViewById(R.id.btn_stop);
     mReturn = mView.findViewById(R.id.btn_return);
+    mTitle = mView.findViewById(R.id.tv_run_title);
     transitionContainer = mView.findViewById(R.id.run_running_status_container);
     mResume.setOnClickListener(this);
     mStop.setOnClickListener(this);
@@ -128,8 +138,8 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         break;
 
       case R.id.btn_return:
-        //Todo : RunningActivity에서 운동기록 정보를 저장 ->  on Ready callback 메소드 필요
-        //Todo : 달리기 종료버튼 클릭 후 running fragment , pause fragment 모두 스택에서 pop
+        // RunningActivity에서 운동기록 정보를 저장 ->  on Ready callback 메소드 필요
+        //달리기 종료버튼 클릭 후 running fragment , pause fragment 모두 스택에서 pop
         callBackListener.onClickedReturn();
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getActivity().onBackPressed();
@@ -143,12 +153,22 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
     mReturn.setVisibility(view.VISIBLE);
   }
 
+
+  //view에 이전 값 불러와  세팅
+  public void setRecordtoView(){
+    mTime.setText(getArguments().getString("time"));
+    mDistance.setText(getArguments().getString("distance"));
+    mCalories.setText(getArguments().getString("calories"));
+
+    SharedPreferences preferences;
+    preferences = getActivity().getSharedPreferences("saveRecord", Context.MODE_PRIVATE);
+    mTitle.setText(preferences.getString("DATE",""));
+  }
+
   public interface RunFragCallBackListener {
     public void onClickedResume();
 
    public void onClickedReturn();
-
-
 
 }
 }

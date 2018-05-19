@@ -1,5 +1,8 @@
 package smu.ac.kr.johnber.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class RecordUtil {
     /**
      * data format 변경
@@ -42,5 +45,12 @@ public class RecordUtil {
         stringTime += ":" + String.format("%02d", seconds);
 
         return stringTime;
+    }
+
+    public static String getFormattedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/DD/YYYY");
+        String currentDateandTime = sdf.format(new Date());
+
+        return currentDateandTime;
     }
 }
