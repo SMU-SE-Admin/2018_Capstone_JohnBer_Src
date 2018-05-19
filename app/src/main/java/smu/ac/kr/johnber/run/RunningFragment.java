@@ -4,11 +4,13 @@ package smu.ac.kr.johnber.run;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,6 +34,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
 
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.util.RecordUtil;
@@ -60,9 +68,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private View mWeatherWidgetView;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
-    private Marker mMarkerFrom;
-    private Marker mMarkerTo;
-
+    private Marker mMarker;
+    private ArrayList<LatLng> locationArrayList = new ArrayList<>(); //마커, 폴리라인 표시를 위한 좌표 목록
     private boolean isBound;
     // service 객체를 onServiceConnected 에서 받아옴
     private TrackerService mTrackerService;
@@ -250,18 +257,15 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
         }
 
-        /**
-         * @param from last location
-         * @param to current location
-         */
         @Override
-        public void onLocationChanged(LatLng from, LatLng to) {
-            //TODO:폴리라인그리기   https://github.com/googlemaps/android-maps-utils/blob/master/demo/src/com/google/maps/android/utils/demo/DistanceDemoActivity.java
-            //Bundle에 데이터를 담아 message.setData(bundle)후 보내 http://al02000.tistory.com/9
+        public void onLocationChanged(double latitude, double longitude) {
             //TODO: 현재 위치 표시 마커 추가
             Message msg = mHandler.obtainMessage(MSG_LOCATION);
             Bundle bundle = new Bundle();
-//      bundle.put
+            bundle.putDouble("latitude", latitude);
+            bundle.putDouble("longitude", longitude);
+            msg.setData(bundle);
+            mHandler.sendMessage(msg);
         }
 
     };
@@ -272,6 +276,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private static final int MSG_CALORIES = 324;
     private static final int MSG_LOCATION = 325;
     // Service에서 보낸 msg 수신을 위함
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         //메세지 수신
         @Override
@@ -292,6 +297,17 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
                     String calories = bundle.getString("calories");
                     mCalories.setText(calories);
                     break;
+                case MSG_LOCATION:
+//                   if(mState == )
+    LOGD(TAG, "MSGLOCATIONCHANGED");
+                    bundle = msg.getData();
+                    double latitude = bundle.getDouble("latitude");
+                    double longitude = bundle.getDouble("longitude");
+                    locationArrayList.add(new LatLng(latitude, longitude));
+
+                    drawPolylines(locationArrayList);
+
+                    break;
                 default:
                     super.handleMessage(msg);
 
@@ -299,6 +315,19 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
         }
     };
+
+    // 지도에 이동 경로 표시
+    private void drawPolylines(ArrayList<LatLng> locationArrayList) {
+        PolylineOptions options = new PolylineOptions();
+        options.addAll(locationArrayList).width(7).color(Color.RED).geodesic(true);
+        mgoogleMap.addPolyline(options);
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList.get(locationArrayList.size()-1), 8));
+
+    }
+    // 지도에 마커 표시
+    private void setMarker(LatLng currentLocation) {
+
+    }
 
     //bindService
     private void bindTrackerService() {

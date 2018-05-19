@@ -23,12 +23,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.SphericalUtil;
 
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import smu.ac.kr.johnber.util.RecordUtil;
 
@@ -134,7 +130,7 @@ public class TrackerService extends Service {
         public void onDistanceChanged(double value);
         public void onCaloriesChanged(double value);
         public void onElapsedtimeChanged(double value);
-        public void onLocationChanged(LatLng from, LatLng value);
+        public void onLocationChanged(double latitude, double longitude);
     }
 
 //    @SuppressLint("MissingPermission")
@@ -266,7 +262,7 @@ public class TrackerService extends Service {
         //runningfragment에서 콜백 리스너를 호출하여 UI 업데이트
         mtrackerCallback.onCaloriesChanged(calories);
         mtrackerCallback.onDistanceChanged(distance);
-        mtrackerCallback.onLocationChanged(from, to);
+        mtrackerCallback.onLocationChanged(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 //        LOGD(TAG, "[Lap] " +"CurrentLoc: "+to+" LastLoc: "+from+" Dist: "+distance+" ElapsedTime: "+RecordUtil.milliseconsToStringFormat(elapsedTime)+" Cal: "+calories+" Av.Speed: "+averageSpeed+" startTime: "+startTime);
         //LastLocation 업데이트
         mLastLocation = mCurrentLocation;

@@ -29,7 +29,7 @@ public class RecordUtil {
     }
 
     public static String distanceToStringFormat(double distance) {
-        String formmatedString = String.format("%.f", distance);
+        String formmatedString = String.format("%.2f", distance);
         return formmatedString;
     }
 

@@ -47,7 +47,6 @@ public class Timer {
                 ;
 
     }
-//TODO : 같은 쓰레드를 참조할수있도록 , thread 종료
     private static final String TAG = makeLogTag(Timer.class);
     public void start(Handler handler, int action) {
         LOGD(TAG,"startTimer, action : "+action);
@@ -68,7 +67,6 @@ public class Timer {
             elapsedTimeBuff = 0;
         }
         if (mSTATE == RESUME) {
-            //TODO : reload elapsedTimeBuff & startTime
             resume();
             LOGD(TAG,"RESUME TIMER " + elapsedTimeBuff);
         }
