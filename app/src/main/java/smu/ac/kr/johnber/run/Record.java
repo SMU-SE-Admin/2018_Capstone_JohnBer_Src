@@ -1,9 +1,10 @@
 package smu.ac.kr.johnber.run;
 
-import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import smu.ac.kr.johnber.map.JBLocation;
 
 /**
  * 운동기록 Model
@@ -13,7 +14,8 @@ public class Record {
     private double distance;
     private double elapsedTime;
     private double calories;
-    private ArrayList<Location> location;
+    // android.JBLocation 대신 커스텀 JBLocation 사용
+    private ArrayList<JBLocation> JBLocation;
     private Date date;
     private double startTime;
     private double endTime;
@@ -23,11 +25,11 @@ public class Record {
 
     }
 
-    public Record(double distance, double elapsedTime, double calories, ArrayList<Location> location, Date date, double startTime, double endTime, String title) {
+    public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime, String title) {
         this.distance = distance;
         this.elapsedTime = elapsedTime;
         this.calories = calories;
-        this.location = location;
+        this.JBLocation = JBLocation;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -58,12 +60,12 @@ public class Record {
         this.calories = calories;
     }
 
-    public ArrayList<Location> getLocation() {
-        return location;
+    public ArrayList<JBLocation> getJBLocation() {
+        return JBLocation;
     }
 
-    public void setLocation(ArrayList<Location> location) {
-        this.location = location;
+    public void setJBLocation(ArrayList<JBLocation> JBLocation) {
+        this.JBLocation = JBLocation;
     }
 
     public Date getDate() {

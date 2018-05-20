@@ -4,24 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:id="@+id/run_running_status_container"
     android:orientation="vertical"
-    tools:context=".run.RunningFragment">
-
+    android:background="@color/colorPrimaryDark"
+    tools:context="run.PauseRunningFragment">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/paused_mapview"
-        android:name=" smu.ac.kr.johnber.run.RunningFragment"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        map:cameraZoom="15"
+        map:mapType="normal"
+        map:liteMode="true"
+        />
 
     <android.support.constraint.ConstraintLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:id="@+id/run_paused_status_container2"
+        android:id="@+id/run_running_status_container2"
         android:background="@color/white">
 
         <TextView

@@ -4,14 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Required to show current location -->
+    <!-- Required to show current JBLocation -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
+         JBLocation permissions for the 'MyLocation' functionality.
     -->
     <application
         android:icon="@mipmap/ic_launcher"
@@ -42,8 +42,7 @@
         <activity android:name=".course.CourseActivity" />
         <activity android:name=".my.MyActivity" />
         <activity android:name=".run.RunningActivity"
-            android:hardwareAccelerated="false">
-        </activity>
+            />
         <activity android:name=".account.loginActivity" />
         <activity android:name=".account.SignUpActivity" />
 

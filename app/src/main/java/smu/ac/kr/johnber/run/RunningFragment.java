@@ -192,10 +192,14 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         //TODO : 기본위치 - 현재위치로
         // GPS : 확인
         mgoogleMap = googleMap;
-        googleMap.setMinZoomPreference(17);
-        LatLng defaultLatLng = new LatLng(37.5665, 126.9780);
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng, 3));
-//        mgoogleMap.setMyLocationEnabled(true);
+        googleMap.setMinZoomPreference(19);
+
+        // Main화면에서 넘긴 좌표 꺼내기
+        Intent intent = getActivity().getIntent();
+        Double latitude = intent.getExtras().getDouble("latitude");
+        Double longitude = intent.getExtras().getDouble("longitude");
+        LatLng defaultLatLng = new LatLng(latitude,longitude);
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(defaultLatLng));
     }
 
 //  private void hideActivityContainer() {
@@ -373,7 +377,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         }
 
         // 카메라 이동
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList.get(locationArrayList.size()-1), 3));
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng
+                (locationArrayList.get(locationArrayList.size()-1)));
     }
 
     //bindService

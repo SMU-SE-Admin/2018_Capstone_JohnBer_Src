@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import smu.ac.kr.johnber.map.JBLocation;
+import smu.ac.kr.johnber.util.LocationUtil;
 import smu.ac.kr.johnber.util.RecordUtil;
 
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
@@ -62,14 +64,14 @@ public class TrackerService extends Service {
     private Location mCurrentLocation;
     private Location mLastLocation;
     private Location mActivityLastLocation; // 처음 start할때 location
-    private ArrayList<Location> locationArrayList = new ArrayList<Location>();
+    private ArrayList<JBLocation> locationArrayList = new ArrayList<JBLocation>();
     private Date date;
     private double startTime;
     private double currentTime;
     private String title;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
-    //    private Location mCurrentLocation;
+    //    private JBLocation mCurrentLocation;
     private LocationCallback mLocationCallback;
     private Handler mHandler;
     //TODO : user 객체를 앱 로그인 성공후 사용자 만들어 놓고 weight만 getter로 받아와서 사용할 수 있도록 하기
@@ -151,9 +153,9 @@ public class TrackerService extends Service {
     private LocationRequest getLocationRequest() {
         @SuppressLint("RestrictedApi")
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
+        locationRequest.setInterval(5000);
         //5 seconds
-        locationRequest.setFastestInterval(1000);
+        locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }
@@ -174,7 +176,7 @@ public class TrackerService extends Service {
                     mActivityLastLocation = locationResult.getLastLocation();
                     //ArrayList에 시작 location 저장
                     mLastLocation = mActivityLastLocation;
-                    locationArrayList.add(mLastLocation);
+                    locationArrayList.add(LocationUtil.locationTojbLocation(mLastLocation));
                 }
                 startImpl(locationResult);
             }
@@ -245,7 +247,7 @@ public class TrackerService extends Service {
         //거리 측정
         mCurrentLocation = locationResult.getLastLocation();
         //ArrayList에 location 저장
-        locationArrayList.add(mCurrentLocation);
+        locationArrayList.add(LocationUtil.locationTojbLocation(mCurrentLocation));
         LOGD(TAG, "size of location list : " + locationArrayList.size());
         LatLng from = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         LatLng to = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -295,10 +297,11 @@ public class TrackerService extends Service {
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
         Gson gson = builder.create();
-        locationArrayList = gson.fromJson(response, new TypeToken<ArrayList<Location>>() {
+        locationArrayList = gson.fromJson(response, new TypeToken<ArrayList<JBLocation>>() {
         }.getType());
         LOGD(TAG, "saved locationList size :  " + locationArrayList.size());
-        mLastLocation = locationArrayList.get(locationArrayList.size() - 1);
+        JBLocation jbLastlocation =  locationArrayList.get(locationArrayList.size() - 1);
+        mLastLocation = LocationUtil.jbLocationToLocation(jbLastlocation);
         LOGD(TAG, "saved LastLoc: " + mLastLocation+" get lat " + mLastLocation.getLatitude());
 
         // 나머지 복원

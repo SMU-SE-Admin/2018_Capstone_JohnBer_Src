@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.map.JBLocation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -134,7 +135,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 
     Gson gson = new Gson();
     String response = preferences.getString("LOCATIONLIST", "");
-      ArrayList<Location> locationArrayList = gson.fromJson(response, new TypeToken<List<Location>>(){}.getType());
+      ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
 
     // 나머지 복원
     double distance = Double.parseDouble(preferences.getString("DISTANCE", "0"));

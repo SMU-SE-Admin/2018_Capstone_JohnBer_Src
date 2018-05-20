@@ -4,8 +4,10 @@ package smu.ac.kr.johnber.run;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +26,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,6 +37,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.map.JBLocation;
+import smu.ac.kr.johnber.util.LocationUtil;
+import smu.ac.kr.johnber.util.LogUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,7 +62,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
 
   private RunFragCallBackListener callBackListener;
   private SharedPreferences preferences;
-  private ArrayList<Location> locationArrayList;
+  private ArrayList<JBLocation> locationArrayList;
   private LatLng mLatLng;
   public PauseRunningFragment() {
     // Required empty public constructor
@@ -72,13 +79,13 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
        * view 초기화 및 MapView 추가
        */
       initView();
-      mMapView = mView.findViewById(R.id.paused_mapview);
+
+//      mMapView = mView.findViewById(R.id.paused_mapview);
       mMapView.onCreate(savedInstanceState);
       mMapView.onResume();
       mMapView.getMapAsync(this);
 
     }
-
 
     return mView;
   }
@@ -103,6 +110,8 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
     super.onStart();
     //view에 이전 값 불러와  세팅
     setRecordtoView();
+
+
   }
 
   @Override
@@ -197,43 +206,57 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
 
   }
 
-  public ArrayList<Location> getRoute() {
+  public ArrayList<JBLocation> getRoute() {
     //TODO : preference Util  만들기
     //저장된 루트 받아오기
-    ArrayList<Location> locationArrayList = new ArrayList<>();
+    locationArrayList = new ArrayList<>();
     if (preferences != null) {
       String response = preferences.getString("LOCATIONLIST", "");
       GsonBuilder builder = new GsonBuilder();
       builder.serializeNulls();
       Gson gson = builder.create();
-      locationArrayList = gson.fromJson(response, new TypeToken<ArrayList<Location>>() {}.getType());
+      locationArrayList = gson.fromJson(response, new TypeToken<ArrayList<JBLocation>>() {}.getType());
     }
     LOGD(TAG,"getROute");
     return locationArrayList;
   }
 
-  public PolylineOptions setPolylineOptions(ArrayList<Location> list) {
+  public PolylineOptions setPolylineOptions(ArrayList<JBLocation> list) {
     PolylineOptions options = new PolylineOptions();
-    for (Location location : list) {
-      options.add(new LatLng(location.getLatitude(), location.getLongitude()));
+    for (JBLocation location : list) {
+      options.add(LocationUtil.jbLocationToLatLng(location));
+      LOGD(TAG, "[location] "+LocationUtil.jbLocationToLatLng(location));
     }
-  options.width(25).color(R.color.polyline).geodesic(true);
+  options.width(15).color(Color.RED).geodesic(true);
     LOGD(TAG, "sizeof array" + list.size());
     return options;
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   public void onMapReady(GoogleMap googleMap) {
     LOGD(TAG, "onMapReady");
     //TODO : 기본위치 - 현재위치로
      //GPS : 확인
     mgoogleMap = googleMap;
-    googleMap.setMinZoomPreference(17);
-    ArrayList<Location> route = getRoute();
+    googleMap.setMinZoomPreference(12);
+    ArrayList<JBLocation> route = getRoute();
     mgoogleMap.addPolyline(setPolylineOptions(route));
-    LatLng zommLatlng = new LatLng(route.get(route.size() - 3).getLatitude(),
-            route.get(route.size() - 3).getLongitude());
-    mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(zommLatlng));
+
+    MarkerOptions startMarker = new MarkerOptions();
+    startMarker.position(LocationUtil.jbLocationToLatLng(locationArrayList.get(0)));
+    mgoogleMap.addMarker(startMarker);
+
+    MarkerOptions endMarker = new MarkerOptions();
+    endMarker.position(LocationUtil.jbLocationToLatLng(locationArrayList.get(locationArrayList.size()-1)));
+    mgoogleMap.addMarker(endMarker);
+
+    mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(LocationUtil.jbLocationToLatLng(locationArrayList.get(locationArrayList.size()-1))));
+
+//    mgoogleMap = googleMap;
+//    googleMap.setMinZoomPreference(17);
+//    LatLng defaultLatLng = new LatLng(37.5665, 126.9780);
+//    mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng, 3));
   }
 
   public interface RunFragCallBackListener {
