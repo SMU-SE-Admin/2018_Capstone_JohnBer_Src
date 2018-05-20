@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".account.loginActivity">
@@ -13,8 +14,8 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom"
         android:layout_marginTop="8dp"
-        android:text="회원가입"
         android:background="@color/darkgrey"
+        android:text="회원가입"
         app:layout_constraintEnd_toEndOf="@+id/btn_singnup"
         app:layout_constraintStart_toStartOf="@+id/btn_singnup"
         app:layout_constraintTop_toBottomOf="@+id/btn_singnup" />
@@ -25,8 +26,8 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom"
         android:layout_marginTop="32dp"
-        android:text="로그인"
         android:background="@drawable/btn_border"
+        android:text="로그인"
         app:layout_constraintEnd_toEndOf="@+id/password_input"
         app:layout_constraintStart_toStartOf="@+id/password_input"
         app:layout_constraintTop_toBottomOf="@+id/password_input" />

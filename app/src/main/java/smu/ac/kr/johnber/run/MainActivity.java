@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     WeatherForecast.loadWeatherData(this);
     LOGD(TAG, "onCreate");
 
+    //로그인 state 확인.
     mAuthStateListener = new FirebaseAuth.AuthStateListener() {
       @Override
       public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
