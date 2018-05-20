@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.RecordUtil;
 
 /**
@@ -73,7 +75,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private View mWeatherWidgetView;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
-    private Marker mMarker;                     // 현재 위치를 표시할 마
+    private Marker mMarker;                     // 현재 위치를 표시할 마커
     private ArrayList<LatLng> locationArrayList = new ArrayList<>(); //마커, 폴리라인 표시를 위한 좌표 목록
     private boolean isBound;
     // service 객체를 onServiceConnected 에서 받아옴
@@ -167,7 +169,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         if (mTrackerService != null) {
             mTrackerService.stop();
         }
-        
+
         //PauseFragment의 km, time, cal View에 세팅할 값 넘겨주기
         Bundle bundle = new Bundle();
         PauseRunningFragment pauseRunningFragment = new PauseRunningFragment();
@@ -293,7 +295,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
     };
 
-
     private static final int MSG_DISTANCE = 322;
     private static final int MSG_TIME = 323;
     private static final int MSG_CALORIES = 324;
@@ -321,6 +322,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
                 case MSG_CALORIES:
                     bundle = msg.getData();
                     txtCalories = bundle.getString("calories");
+
                     mCalories.setText(txtCalories);
                     break;
                 case MSG_LOCATION:
@@ -344,7 +346,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     // 지도에 이동 경로 표시
     private void drawPolylines(ArrayList<LatLng> locationArrayList) {
         PolylineOptions options = new PolylineOptions();
-        options.addAll(locationArrayList).width(25).color(R.color.polyline).geodesic(true);
+        options.addAll(locationArrayList).width(25).color(Color.parseColor("#1D8BF8")).geodesic(true);
         mgoogleMap.addPolyline(options);
 
 
@@ -361,7 +363,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         //시작 지점
         MarkerOptions options1 = new MarkerOptions();
         options1.position(markerList.get(0)).title("start");
-        options1.icon(getBitmapDescriptor(R.drawable.ic_marker_flag));
+        options1.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_flag,mActivity));
         mgoogleMap.addMarker(options1);
 
         //현재 지점
@@ -372,7 +374,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
             }
             MarkerOptions options2 = new MarkerOptions();
             options2.position(markerList.get(1)).title("end");
-            options2.icon(getBitmapDescriptor(R.drawable.ic_marker_current));
+            options2.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current,mActivity));
             mMarker = mgoogleMap.addMarker(options2);
         }
 
@@ -420,25 +422,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         }
     }
 
-    private BitmapDescriptor getBitmapDescriptor(int id) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            VectorDrawable vectorDrawable = (VectorDrawable) mActivity.getDrawable(id);
-
-            int h = vectorDrawable.getIntrinsicHeight();
-            int w = vectorDrawable.getIntrinsicWidth();
-
-            vectorDrawable.setBounds(0, 0, w, h);
-
-            Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bm);
-            vectorDrawable.draw(canvas);
-
-            return BitmapDescriptorFactory.fromBitmap(bm);
-
-        } else {
-            return BitmapDescriptorFactory.fromResource(id);
-        }
-    }
 
 }
 

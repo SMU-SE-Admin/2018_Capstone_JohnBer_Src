@@ -77,8 +77,8 @@ public class Timer {
             mthread = new Thread(new TimerThread());
 //            LOGD(TAG, "Thread is alive? : " + mthread.isAlive());
             mthread.start();
-            LOGD(TAG, "starttimerthread");
-            LOGD(TAG, "timer state is : " + mSTATE);
+//            LOGD(TAG, "starttimerthread");
+//            LOGD(TAG, "timer state is : " + mSTATE);
 //        }
     }
 
@@ -101,7 +101,7 @@ public class Timer {
 //      double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
         elapsedTimeBuff = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
         elapsedTime = 0;
-        LOGD(TAG, "restored elapsedBuff: " + RecordUtil.milliseconsToStringFormat(elapsedTimeBuff));
+//        LOGD(TAG, "restored elapsedBuff: " + RecordUtil.milliseconsToStringFormat(elapsedTimeBuff));
     }
 
   class TimerThread implements Runnable {
@@ -112,7 +112,7 @@ public class Timer {
 
             while(mSTATE == START) {
                 timeInterval = SystemClock.elapsedRealtime() - startTime;
-                LOGD(TAG, "stat time! : " + startTime);
+//                LOGD(TAG, "stat time! : " + startTime);
                 // 현재 시간 = 측정 재개(시작) 시간으로 부터 경과한 시간 + 이전 시간기록
                 elapsedTime = timeInterval+elapsedTimeBuff;
                 String stringTime = RecordUtil.milliseconsToStringFormat(elapsedTime);
