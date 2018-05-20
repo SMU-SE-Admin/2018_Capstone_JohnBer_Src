@@ -41,7 +41,9 @@
 
         <activity android:name=".course.CourseActivity" />
         <activity android:name=".my.MyActivity" />
-        <activity android:name=".run.RunningActivity" />
+        <activity android:name=".run.RunningActivity"
+            android:hardwareAccelerated="false">
+        </activity>
         <activity android:name=".account.loginActivity" />
         <activity android:name=".account.SignUpActivity" />
 

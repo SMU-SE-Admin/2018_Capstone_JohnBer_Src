@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.util.RecordUtil;
@@ -107,6 +109,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
             /**
              * view 초기화 및 MapView 추가
              */
+            //TODO : initview 오버라이딩
             initView();
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume();
@@ -171,6 +174,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         bundle.putString("time", txtTime);
         bundle.putString("distance", txtDistance);
         bundle.putString("calories",txtCalories);
+
         //TODO : 오늘 날짜 넘겨주기 + 포맷형식은 Util에 구현?~  tracker Service에서 sharedPreferences에 저장한것을 PauseRunningFrragment에서 불러와서 세팅
         pauseRunningFragment.setArguments(bundle);
 
