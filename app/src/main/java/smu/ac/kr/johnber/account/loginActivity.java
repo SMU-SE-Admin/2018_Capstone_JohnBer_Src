@@ -18,16 +18,18 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.run.MainActivity;
 import smu.ac.kr.johnber.util.LogUtils;
 
+import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 
 public class loginActivity extends AppCompatActivity {
         private static final String TAG = LogUtils.makeLogTag(loginActivity.class);
-        private EditText text_id = findViewById(R.id.input_id);
-        private EditText text_password = findViewById(R.id.input_password);
+        private EditText text_id = findViewById(R.id.login_id);
+        private EditText text_password = findViewById(R.id.login_password);
         private Button btn_login = (Button)findViewById(R.id.btn_login);
-        private Button btn_signup = (Button)findViewById(R.id.btn_singup);
+        private Button btn_sign = (Button)findViewById(R.id.btn_singup);
 
         // [START declare_auth]
         private FirebaseAuth mAuth;
@@ -37,6 +39,7 @@ public class loginActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
+            LOGD(TAG, "메시지");
 
             mAuth = FirebaseAuth.getInstance();
 
@@ -47,10 +50,10 @@ public class loginActivity extends AppCompatActivity {
                 }
             });
 
-            btn_signup.setOnClickListener(new View.OnClickListener() {
+            btn_sign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), NextToSignup.class);
+                    Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
                     startActivity(intent);
                 }
             });
@@ -68,7 +71,8 @@ public class loginActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                setContentView(R.layout.activity_run_main);
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());

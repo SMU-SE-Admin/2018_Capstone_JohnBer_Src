@@ -22,8 +22,8 @@ public class SignUpActivity extends AppCompatActivity {
     // [START declare_auth]
     private FirebaseAuth mAuth;
 
-    private EditText text_id = (EditText)findViewById(R.id.input_id);
-    private EditText text_password = (EditText)findViewById(R.id.input_password);
+    private EditText text_id = (EditText)findViewById(R.id.signup_id);
+    private EditText text_password = (EditText)findViewById(R.id.signup_password);
     private Button button = (Button)findViewById(R.id.signup);
 
 
@@ -61,6 +61,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",

@@ -1,7 +1,6 @@
 package smu.ac.kr.johnber.run;
 
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
-import static smu.ac.kr.johnber.util.LogUtils.LOGV;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,16 +12,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
 
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.account.loginActivity;
 import smu.ac.kr.johnber.opendata.WeatherForecast;
 import smu.ac.kr.johnber.util.LogUtils;
 
@@ -83,7 +81,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         } else {
           // User is signed out activity_login 화면으로 이동.
           Log.d(TAG, "onAuthStateChanged:signed_out");
-          setContentView(R.layout.activity_login);
+          Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+          startActivity(intent);
         }
         // ...
       }
