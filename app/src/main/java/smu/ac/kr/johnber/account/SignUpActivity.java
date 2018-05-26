@@ -22,9 +22,9 @@ public class SignUpActivity extends AppCompatActivity {
     // [START declare_auth]
     private FirebaseAuth mAuth;
 
-    private EditText text_id = (EditText)findViewById(R.id.signup_id);
-    private EditText text_password = (EditText)findViewById(R.id.signup_password);
-    private Button button = (Button)findViewById(R.id.signup);
+    private EditText text_id;
+    private EditText text_password;
+    private Button button;
 
 
 
@@ -35,19 +35,17 @@ public class SignUpActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        text_id = (EditText)findViewById(R.id.signup_id);
+        text_password = (EditText)findViewById(R.id.signup_password);
+        button = (Button)findViewById(R.id.signup);
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createUser(text_id.toString(), text_password.toString());
+                createUser(text_id.getText().toString(), text_password.getText().toString());
             }
         });
-
-
-
-
-
-
-
 
     }
 

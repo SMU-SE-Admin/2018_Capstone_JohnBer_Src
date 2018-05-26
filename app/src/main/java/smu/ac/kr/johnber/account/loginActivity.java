@@ -26,10 +26,10 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 public class loginActivity extends AppCompatActivity {
         private static final String TAG = LogUtils.makeLogTag(loginActivity.class);
-        private EditText text_id = findViewById(R.id.login_id);
-        private EditText text_password = findViewById(R.id.login_password);
-        private Button btn_login = (Button)findViewById(R.id.btn_login);
-        private Button btn_sign = (Button)findViewById(R.id.btn_singup);
+        private EditText text_id;
+        private EditText text_password;
+        private Button button_login;
+        private Button button_sign;
 
         // [START declare_auth]
         private FirebaseAuth mAuth;
@@ -43,14 +43,19 @@ public class loginActivity extends AppCompatActivity {
 
             mAuth = FirebaseAuth.getInstance();
 
-            btn_login.setOnClickListener(new View.OnClickListener() {
+            text_id = (EditText)findViewById(R.id.login_id);
+            text_password = (EditText)findViewById(R.id.login_password);
+            button_login = (Button)findViewById(R.id.btn_login);
+            button_sign = (Button)findViewById(R.id.btn_signup);
+
+            button_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    loginUser(text_id.toString(), text_password.toString());
+                    loginUser(text_id.getText().toString(), text_password.getText().toString());
                 }
             });
 
-            btn_sign.setOnClickListener(new View.OnClickListener() {
+            button_sign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
