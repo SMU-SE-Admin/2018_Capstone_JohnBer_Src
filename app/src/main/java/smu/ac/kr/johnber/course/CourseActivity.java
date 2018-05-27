@@ -8,16 +8,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 import smu.ac.kr.johnber.opendata.CourseRequest;
 
 public class CourseActivity extends BaseActivity {
 
   private final static String TAG = makeLogTag(CourseActivity.class);
-  //TODO : 테스트용, api 데이터 다운로드 -> 기능 구현 후 앱 최초 실행 시 다운로드 하도록 구현할것 
+  //TODO : 테스트용, api 데이터 다운로드 -> 기능 구현 후 앱 최초 실행 시 다운로드 하도록 구현할것
   private Button mButton;
+  private Button mButton2;
   private Realm mRealm;
 
   @Override
@@ -26,7 +31,16 @@ public class CourseActivity extends BaseActivity {
     setContentView(R.layout.course_act);
     LOGD(TAG, "onCreate");
     initView();
-    mRealm.getDefaultInstance();
+    //RecyclerView 설정
+    Realm.init(this);
+   RealmConfiguration config = new RealmConfiguration.Builder()
+            .build();
+    mRealm = Realm.getInstance(config);
+    RealmResults<RunningCourse> courseItems = mRealm
+            .where(RunningCourse.class).findAll();
+    CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false);
+    RealmRecyclerView recyclerView = (RealmRecyclerView)findViewById(R.id.rv_course);
+    recyclerView.setAdapter(adapter);
   }
 
   @Override
@@ -84,6 +98,18 @@ private void initView(){
     @Override
     public void onClick(View view) {
       new CourseRequest(getApplicationContext()).loadCourseData();
+    }
+  });
+  mButton2 = findViewById(R.id.btn_apitest2);
+  mButton2.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      mRealm.beginTransaction();
+      final RealmResults<RunningCourse> results = mRealm.where(RunningCourse.class).findAll();
+      results.deleteAllFromRealm();
+
+      LOGD(TAG,"db has been cleared"+mRealm.where(RunningCourse.class).findAll().size());
+      mRealm.commitTransaction();
     }
   });
 }

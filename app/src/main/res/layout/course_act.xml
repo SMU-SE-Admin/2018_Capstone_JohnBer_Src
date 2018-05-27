@@ -78,21 +78,22 @@
         app:layout_constraintStart_toEndOf="@+id/sp_course_search_si"
         app:layout_constraintTop_toTopOf="@+id/sp_course_search_si"/>
 
-    <android.support.v7.widget.RecyclerView
+    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
         android:id="@+id/rv_course"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_gravity="center_vertical"
         android:elevation="4dp"
         android:scrollbars="vertical"
+        app:rrvLayoutType="LinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sp_course_search_si"
-        tools:listitem="@layout/course_item_collapsed"/>
+        app:rrvEmptyLayoutId="@layout/course_item_collapsed"/>
 
     <Button
         android:id="@+id/btn_apitest"
@@ -102,6 +103,16 @@
         tools:layout_editor_absoluteX="237dp"
         tools:layout_editor_absoluteY="13dp"
         tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btn_apitest2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="db 리셋"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="117dp" />
   </android.support.constraint.ConstraintLayout>
 
   <!--bottom navigationbar-->

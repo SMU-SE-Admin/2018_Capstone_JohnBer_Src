@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import io.realm.RealmObject;
 import io.realm.annotations.Required;
 
-public class RunningCourseResponse extends RealmObject {
+public class RunningCourse extends RealmObject {
 
-    public RunningCourseResponse() {
+    public RunningCourse() {
     }
 //    @SerializedName("시작지점명")
     private String startPoint;

@@ -3,10 +3,8 @@ package smu.ac.kr.johnber.opendata.network;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import smu.ac.kr.johnber.opendata.APImodel.RunningCourseResponse;
 import smu.ac.kr.johnber.opendata.APImodel.WeatherResponse;
 
 
