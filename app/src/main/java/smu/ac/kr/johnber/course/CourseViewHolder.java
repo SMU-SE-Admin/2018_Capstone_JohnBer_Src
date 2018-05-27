@@ -2,7 +2,6 @@ package smu.ac.kr.johnber.course;
 
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,8 +26,9 @@ public class CourseViewHolder extends RealmViewHolder {
   public TextView lbCalories;
   //TODO : thumnail view  설정
   public ImageView thumnail;
+  private itemClickListener listener;
 
-  public CourseViewHolder(View view) {
+  public CourseViewHolder(View view, final itemClickListener listener) {
     super(view);
     courseName = view.findViewById(R.id.tv_course_name);
     startPoint = view.findViewById(R.id.tv_cousrse_start_point);
@@ -40,6 +40,14 @@ public class CourseViewHolder extends RealmViewHolder {
 //    lbCalories = view.findViewById(R.id.tv_course_calories_text);
     thumnail = view.findViewById(R.id.iv_course_map_thumbnail);
     setLabel();
+
+    this.listener = listener;
+    view.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        listener.onItemClicked(view, getAdapterPosition());
+      }
+    });
   }
 
   public void setLabel() {
@@ -47,4 +55,9 @@ public class CourseViewHolder extends RealmViewHolder {
 //    lbDistance.setText("KM");
 //    lbCalories.setText("CAL");
   }
+
+  public interface itemClickListener {
+    public void onItemClicked(View view, int position);
+  }
+
 }

@@ -15,13 +15,17 @@
     android:id="@+id/toolbar"
     app:layout_scrollFlags="scroll|enterAlways"
     layout="@layout/toolbar"/>
-</android.support.design.widget.AppBarLayout>
 
+</android.support.design.widget.AppBarLayout>
+  <FrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:id="@+id/course_item_container">
   <android.support.constraint.ConstraintLayout
-      android:id="@+id/constraint"
+
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="1">
+      android:layout_height="wrap_content">
     <TextView
         android:id="@+id/tv_course_recommendation_title"
         android:textStyle="bold"
@@ -114,7 +118,7 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="117dp" />
   </android.support.constraint.ConstraintLayout>
-
+  </FrameLayout>
   <!--bottom navigationbar-->
   <include
     android:id="@+id/bottomNavigationView"

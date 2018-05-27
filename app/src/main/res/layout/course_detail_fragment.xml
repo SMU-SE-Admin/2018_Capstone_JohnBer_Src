@@ -170,32 +170,42 @@
           android:textSize="16sp"
           app:layout_constraintStart_toStartOf="@+id/guideline3"
           app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-          android:id="@+id/textView"
-          android:layout_width="0dp"
-          android:layout_height="44dp"
-          android:layout_marginTop="8dp"
-          android:lineSpacingExtra="8sp"
-          android:text="TextView"
-          app:layout_constraintEnd_toStartOf="@+id/guideline6"
-          app:layout_constraintStart_toStartOf="@+id/guideline3"
-          app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_title"
-          tools:text="@string/course_info_route_toolstext"/>
 
         <TextView
-          android:id="@+id/tv_course_detail_info_content"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="32dp"
-          android:layout_marginBottom="32dp"
-          android:freezesText="false"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toStartOf="@+id/guideline6"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintStart_toStartOf="@+id/guideline3"
-          app:layout_constraintTop_toBottomOf="@+id/textView"
-          tools:text="@string/course_info_toolstext"/>
+            android:id="@+id/tv_course_detail_info"
+            android:layout_width="wrap_content"
+      android:layout_paddingLeft="20dp"
+            android:layout_paddingRight="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:gravity="center"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="8sp"
+            android:maxLines="100"
+            android:scrollHorizontally="false"
+            android:singleLine="false"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_title"
+            tools:text="@string/course_info_route_toolstext" />
+
+        <TextView
+            android:id="@+id/tv_course_detail_info_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
+            android:scrollHorizontally="false"
+            android:freezesText="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info"
+            tools:text="@string/course_info_toolstext" />
 
 
         <android.support.constraint.Guideline

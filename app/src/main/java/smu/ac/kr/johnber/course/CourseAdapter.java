@@ -8,6 +8,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -18,15 +19,17 @@ import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
  * Created by yj34 on 22/03/2018.
  */
 
-public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, CourseViewHolder> {
+public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, CourseViewHolder>{
 
   private final static String TAG = makeLogTag(CourseAdapter.class);
   private RealmResults<RunningCourse> data;
+  private CourseViewHolder.itemClickListener listener;
 
   public CourseAdapter(Context context, RealmResults<RunningCourse> data, boolean automaticUpdate,
-                       boolean animateResults) {
+                       boolean animateResults,CourseViewHolder.itemClickListener listener) {
       super(context, data, automaticUpdate, animateResults);
       this.data  = data;
+      this.listener = listener;
   }
 
   @Override
@@ -35,7 +38,7 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
 
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
     View view = inflater.inflate(R.layout.course_item_collapsed, parent, false);
-    CourseViewHolder viewHolder = new CourseViewHolder(view);
+    CourseViewHolder viewHolder = new CourseViewHolder(view, listener);
     return viewHolder;
   }
 
@@ -52,4 +55,5 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
   public int getItemCount() {
       return data.size();
   }
+
 }

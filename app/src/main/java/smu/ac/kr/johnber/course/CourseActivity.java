@@ -3,6 +3,8 @@ package smu.ac.kr.johnber.course;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,21 +18,23 @@ import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 import smu.ac.kr.johnber.opendata.CourseRequest;
+import smu.ac.kr.johnber.run.RunningFragment;
 
-public class CourseActivity extends BaseActivity {
+public class CourseActivity extends BaseActivity implements CourseViewHolder.itemClickListener {
 
   private final static String TAG = makeLogTag(CourseActivity.class);
   //TODO : 테스트용, api 데이터 다운로드 -> 기능 구현 후 앱 최초 실행 시 다운로드 하도록 구현할것
   private Button mButton;
   private Button mButton2;
   private Realm mRealm;
-
+  private CourseViewHolder.itemClickListener listener;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.course_act);
     LOGD(TAG, "onCreate");
     initView();
+
     //RecyclerView 설정
     Realm.init(this);
    RealmConfiguration config = new RealmConfiguration.Builder()
@@ -38,9 +42,11 @@ public class CourseActivity extends BaseActivity {
     mRealm = Realm.getInstance(config);
     RealmResults<RunningCourse> courseItems = mRealm
             .where(RunningCourse.class).findAll();
-    CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false);
+    CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false
+            , this);
     RealmRecyclerView recyclerView = (RealmRecyclerView)findViewById(R.id.rv_course);
     recyclerView.setAdapter(adapter);
+
   }
 
   @Override
@@ -114,4 +120,25 @@ private void initView(){
   });
 }
 
+// recyclerView 클릭 리스너
+  @Override
+  public void onItemClicked(View view, int position) {
+    LOGD(TAG,"CLICKED!"+position);
+    //코스 detail fragment inflate
+    showDeatilView(position,view);
+
+
+  }
+
+  public void showDeatilView(int position, View view) {
+    Bundle data = new Bundle();
+    data.putInt("position", position);
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    CourseDetailFragment fragment = new CourseDetailFragment();
+    fragment.setArguments(data);
+    fragmentTransaction.add(R.id.course_item_container,fragment,"COURSEDETAILFRAGMENT")
+            .addToBackStack(null)
+            .commit();
+  }
 }
