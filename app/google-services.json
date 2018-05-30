@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "818050285963",
-    "firebase_url": "https://johnber-197110.firebaseio.com",
-    "project_id": "johnber-197110",
-    "storage_bucket": "johnber-197110.appspot.com"
+    "project_number": "401505618038",
+    "firebase_url": "https://capstonejohnbersrc.firebaseio.com",
+    "project_id": "capstonejohnbersrc",
+    "storage_bucket": "capstonejohnbersrc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:818050285963:android:380fb50cabb07f96",
+        "mobilesdk_app_id": "1:401505618038:android:380fb50cabb07f96",
         "android_client_info": {
           "package_name": "smu.ac.kr.johnber"
         }
       },
       "oauth_client": [
         {
-          "client_id": "818050285963-4nqvqpsqkhldhuvmbi7ed6aigeecr3sh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "smu.ac.kr.johnber",
-            "certificate_hash": "bdf642cbf6bdebb88290e396197d3dd5e3201409"
-          }
-        },
-        {
-          "client_id": "818050285963-khp0hst945dt6id0n7nv0c9n3parvim1.apps.googleusercontent.com",
+          "client_id": "401505618038-bm9eahc485vnubn3j88pq8863o9gom0m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDGggXas5DP4_yauiF4sgXAzZgz4jW2M4U"
+          "current_key": "AIzaSyAyvFyU3cj7aEuqphxJ-vVwAXX6G3TAH6s"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "818050285963-khp0hst945dt6id0n7nv0c9n3parvim1.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

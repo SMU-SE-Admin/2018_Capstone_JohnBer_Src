@@ -28,9 +28,9 @@ android {
 
 dependencies {
     //Google Maps, Location
-    implementation 'com.google.android.gms:play-services-maps:12.0.0'
+    implementation 'com.google.android.gms:play-services-maps:15.0.0'
     implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.google.android.gms:play-services-location:12.0.0'
+    implementation 'com.google.android.gms:play-services-location:15.0.0'
 
     // Retrofit & OkHttp
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -39,7 +39,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-database:12.0.0'
+    implementation 'com.google.firebase:firebase-database:15.0.0'
+    implementation 'com.google.firebase:firebase-auth:15.0.0'
+    implementation 'com.google.firebase:firebase-core:15.0.0'
+
 
     //Design
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -51,6 +54,7 @@ dependencies {
     //Default
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
