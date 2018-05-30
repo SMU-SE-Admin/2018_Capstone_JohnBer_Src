@@ -11,12 +11,13 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,9 +30,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.account.loginActivity;
 import smu.ac.kr.johnber.opendata.WeatherForecast;
 import smu.ac.kr.johnber.util.LogUtils;
 import smu.ac.kr.johnber.util.PermissionUtil;
@@ -63,7 +67,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
-
+   //FirebaseAuth 사용자 로그인 여부 확인 변수
+  private FirebaseAuth mAuth;
+  private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         setContentView(R.layout.activity_run_main);
         initView();
         seListeners();
+        mAuth = FirebaseAuth.getInstance();
+
+    checkUserlogin();
         //TODO: 일정 시간마다 데이터를 갱신해야함
 
         /**
@@ -102,6 +111,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     protected void onStart() {
         super.onStart();
         mMapview.onStart();
+         mAuth.addAuthStateListener(mAuthListener);
         LOGD(TAG, "onStart");
 
     }
@@ -127,6 +137,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     protected void onStop() {
         super.onStop();
         mMapview.onStop();
+         mAuth.removeAuthStateListener(mAuthListener);
         LOGD(TAG, "onStop");
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
@@ -293,5 +304,25 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
     }
 
+ //로그인 여부 확인 함수.
+  private void checkUserlogin(){
+    mAuthListener = new FirebaseAuth.AuthStateListener() {
+      @Override
+      public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+          // User is signed in
+          Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
+
+        } else {
+          // User is signed out activity_login 화면으로 이동.
+          Log.d(TAG, "onAuthStateChanged:signed_out");
+          Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+          startActivity(intent);
+        }
+        // ...
+      }
+    };
+  }
 }
