@@ -1,147 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:context=".run.RunningFragment">
-
-  <!--<com.google.android.gms.maps.MapView-->
-    <!--android:id="@+id/running_mapview"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
-
-  <android.support.constraint.ConstraintLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:id="@+id/run_running_status_container"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:background="@color/white">
-    <TextView
-      android:id="@+id/tv_run_title"
-      android:textStyle="bold"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context="run.PauseRunningFragment">
 
-      android:layout_marginTop="24dp"
-      android:textAlignment="center"
-      android:textAppearance="@style/TextAppearance.AppCompat"
-      android:textColor="@color/black"
-      android:textSize="14sp"
-      app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintStart_toStartOf="@+id/guideline13"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="01/29/2018/Run"/>
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/paused_mapview"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        map:cameraZoom="15"
+        map:mapType="normal"
+        map:liteMode="true"
+        />
 
-    <TextView
-            android:id="@+id/tv_run_distance"
-            android:textStyle="bold"
+    <android.support.constraint.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:id="@+id/run_running_status_container2"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_run_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/guideline14"
+            app:layout_constraintStart_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="01/29/2018/Run" />
+
+        <TextView
+            android:id="@+id/tv_run_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="@color/black"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/tv_run_time"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@+id/guideline13"
             app:layout_constraintTop_toBottomOf="@+id/tv_run_title"
-            tools:text="26.4"/>
+            tools:text="26.4" />
 
 
-    <TextView
-      android:id="@+id/tv_run_time"
-      android:textStyle="bold"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textAlignment="center"
-      android:textAppearance="@style/TextAppearance.AppCompat"
-      android:textColor="@color/black"
-      android:textSize="24sp"
-      app:layout_constraintEnd_toStartOf="@+id/tv_run_calories"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/tv_run_distance"
-      app:layout_constraintTop_toTopOf="@+id/tv_run_distance"
-      tools:text="04:50"/>
+        <TextView
+            android:id="@+id/tv_run_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_run_calories"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_run_distance"
+            app:layout_constraintTop_toTopOf="@+id/tv_run_distance"
+            tools:text="04:50" />
 
 
-    <TextView
-      android:id="@+id/tv_run_calories"
-      android:textStyle="bold"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="24dp"
-      android:textAlignment="center"
-      android:textAppearance="@style/TextAppearance.AppCompat"
-      android:textColor="@color/black"
-      android:textSize="24sp"
-      app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/tv_run_time"
-      app:layout_constraintTop_toTopOf="@+id/tv_run_distance"
-      tools:text="2,560"/>
+        <TextView
+            android:id="@+id/tv_run_calories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/guideline14"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_run_time"
+            app:layout_constraintTop_toTopOf="@+id/tv_run_distance"
+            tools:text="2,560" />
 
-    <TextView
+        <TextView
             android:id="@+id/tv_run_distance_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="KM"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/tv_run_distance"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@+id/tv_run_distance"
-            app:layout_constraintTop_toBottomOf="@+id/tv_run_distance"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_distance" />
 
 
-    <TextView
+        <TextView
             android:id="@+id/tv_run_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="TIME"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/tv_run_time"
+            app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toStartOf="@+id/tv_run_time"
-            app:layout_constraintTop_toBottomOf="@+id/tv_run_time" app:layout_constraintHorizontal_bias="0.52"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_time" />
 
 
-    <TextView
+        <TextView
             android:id="@+id/tv_run_calories_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="CAL"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/tv_run_calories"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/tv_run_calories"
-            app:layout_constraintTop_toBottomOf="@+id/tv_run_calories"/>
-    <android.support.constraint.Guideline
-      android:id="@+id/guideline13"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      app:layout_constraintGuide_begin="16dp"/>
-    <android.support.constraint.Guideline
-      android:id="@+id/guideline14"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      app:layout_constraintGuide_end="16dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_calories" />
 
-    <Button
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
+        <Button
             android:id="@+id/btn_resume"
             style="@style/RunButtonDarkTheme"
             android:layout_width="match_parent"
@@ -149,43 +164,47 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/btn_run_dark_bg"
             android:text="Resume"
+            android:textAlignment="center"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_run_time_text"
-            android:textAlignment="center"/>
-    <Button
+            app:layout_constraintTop_toBottomOf="@+id/tv_run_time_text" />
+
+        <Button
             android:id="@+id/btn_stop"
             style="@style/RunButtonLightTheme"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginTop="4dp"
             android:layout_marginBottom="24dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/btn_run_light_bg"
             android:text="Stop"
+            android:textAlignment="center"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_resume"
-            app:layout_constraintVertical_bias="0.0" android:textAlignment="center"/>
-    <Button
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
             android:id="@+id/btn_return"
             style="@style/RunButtonDarkTheme"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/btn_run_dark_bg"
             android:text="Return"
+            android:textAlignment="center"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_run_time_text"
-            app:layout_constraintVertical_bias="0.0" android:textAlignment="center"/>
+            app:layout_constraintVertical_bias="0.0" />
 
-  </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
-</FrameLayout>
+</LinearLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="30dp"
+    android:viewportWidth="33.26"
+    android:viewportHeight="40.207">
+
+    <group
+        android:name="Group_190"
+        android:translateX="1"
+        android:translateY="1">
+        <path
+            android:name="Exclusion_1"
+            android:fillColor="#1d8bf8"
+            android:strokeColor="#2263cb"
+            android:strokeWidth="2"
+            android:strokeLineJoin="round"
+            android:strokeMiterLimit="10"
+            android:strokeLineCap="round"
+            android:pathData="M 5.3 34 L 5.3 6.2 L 25.5 6.2 C 26.9 6.2 28 7.3 28 8.6 L 28 20.1 C 28 21.5 26.9 22.6 25.6 22.6 L 5.3 22.6" />
+    </group>
+</vector>

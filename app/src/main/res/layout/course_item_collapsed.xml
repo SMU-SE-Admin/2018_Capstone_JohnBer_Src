@@ -10,10 +10,9 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:layout_marginBottom="2dp"
-  android:background="@color/cardview_light_background"
-  android:elevation="4dp">
+  android:background="@color/lightgrey">
     <ImageView
-      android:id="@+id/iv_course_map_thumnail"
+      android:id="@+id/iv_course_map_thumbnail"
       android:layout_width="0dp"
       android:layout_height="96dp"
       android:layout_marginTop="8dp"
@@ -27,28 +26,31 @@
       card_view:layout_constraintTop_toTopOf="parent"
       card_view:layout_constraintVertical_bias="0.0"
       card_view:srcCompat="@mipmap/map_test_image"/>
-    <TextView
-      android:id="@+id/tv_course_name"
-      android:layout_width="65dp"
-      android:layout_height="19dp"
 
-      android:layout_marginBottom="4dp"
-      card_view:layout_constraintBottom_toTopOf="@+id/tv_cousrse_start_point"
-      card_view:layout_constraintStart_toStartOf="@+id/tv_cousrse_start_point"
-      tools:text="문학둘레길"/>
     <TextView
-      android:id="@+id/tv_cousrse_start_point"
-      android:layout_width="33dp"
-      android:layout_height="16dp"
-      android:layout_marginStart="16dp"
-      android:freezesText="false"
-      android:textAlignment="viewStart"
-      android:textColor="@color/darkgrey"
-      android:textSize="12sp"
-      card_view:layout_constraintBottom_toBottomOf="parent"
-      card_view:layout_constraintStart_toEndOf="@+id/iv_course_map_thumnail"
-      card_view:layout_constraintTop_toTopOf="parent"
-      tools:text="부암동"/>
+        android:id="@+id/tv_course_name"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        card_view:layout_constraintBottom_toTopOf="@+id/tv_cousrse_start_point"
+        card_view:layout_constraintStart_toStartOf="@+id/tv_cousrse_start_point"
+        tools:text="문학둘레길" />
+
+    <TextView
+        android:id="@+id/tv_cousrse_start_point"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginStart="16dp"
+        android:freezesText="false"
+        android:textAlignment="viewStart"
+        android:textColor="@color/darkgrey"
+        android:textSize="12sp"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintStart_toEndOf="@+id/iv_course_map_thumbnail"
+        card_view:layout_constraintTop_toTopOf="parent"
+        tools:text="부암동" />
     <TextView
       android:id="@+id/tv_course_distance"
       android:layout_width="24dp"
