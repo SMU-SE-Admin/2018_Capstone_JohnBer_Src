@@ -4,6 +4,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/snackbar_view"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
@@ -147,14 +148,19 @@
               app:layout_constraintEnd_toEndOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
-    <fragment
-            android:id="@+id/fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:layout_gravity="center_horizontal"
-            class="com.google.android.gms.maps.SupportMapFragment"
-    />
+    <!--<fragment-->
+            <!--android:id="@+id/fragment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="0"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--class="com.google.android.gms.maps.SupportMapFragment"-->
+    <!--/>-->
+    <com.google.android.gms.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main_mapview"
+        />
 
     <Button
             android:layout_width="match_parent"

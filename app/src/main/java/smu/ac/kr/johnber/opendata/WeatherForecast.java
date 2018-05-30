@@ -13,7 +13,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import smu.ac.kr.johnber.opendata.network.ApiService;
 import smu.ac.kr.johnber.opendata.network.ApiServiceGenerator;
-import smu.ac.kr.johnber.opendata.weatherforecastmodel.WeatherResponse;
+import smu.ac.kr.johnber.opendata.APImodel.WeatherResponse;
 
 /**
  * Created by yj34 on 25/03/2018.

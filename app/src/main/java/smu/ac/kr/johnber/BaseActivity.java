@@ -3,6 +3,7 @@ package smu.ac.kr.johnber;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+
 import smu.ac.kr.johnber.course.CourseActivity;
 import smu.ac.kr.johnber.my.MyActivity;
 import smu.ac.kr.johnber.run.MainActivity;
@@ -42,7 +47,12 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     LOGD(TAG, "oncreate");
+
+
+
   }
+
+
 
   @Override
   protected void onStart() {
@@ -86,7 +96,16 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    return super.onOptionsItemSelected(item);
+    switch (item.getItemId()) {
+
+      case R.id.action_logout:
+        FirebaseAuth.getInstance().signOut();
+        Toast.makeText(this, "logout is completed", Toast.LENGTH_SHORT).show();
+        return true;
+
+        default:
+          return super.onOptionsItemSelected(item);
+    }
   }
 
   @Override
@@ -109,6 +128,8 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
         finish();
         break;
     }
+
+
 
     return false;
   }
