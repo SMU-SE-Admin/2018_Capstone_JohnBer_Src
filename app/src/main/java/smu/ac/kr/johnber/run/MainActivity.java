@@ -219,7 +219,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     public void onMapReady(GoogleMap googleMap) {
         mgoogleMap = googleMap;
         // Map style 바꾸기 - 한국은 현행법상 적용이안된다...
-        // mgoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.style_json));
+//        mgoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.style_json));
         if (PermissionUtil.shouldAskPermission(this, PERMISSION)) {
             //권한없는경우 default 서울로 설정 + 안내 문구
             googleMap.setMinZoomPreference(17);

@@ -38,7 +38,9 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     //RecyclerView 설정
     Realm.init(this);
    RealmConfiguration config = new RealmConfiguration.Builder()
-            .build();
+           .deleteRealmIfMigrationNeeded()
+           .build();
+    mRealm.setDefaultConfiguration(config);
     mRealm = Realm.getInstance(config);
     RealmResults<RunningCourse> courseItems = mRealm
             .where(RunningCourse.class).findAll();

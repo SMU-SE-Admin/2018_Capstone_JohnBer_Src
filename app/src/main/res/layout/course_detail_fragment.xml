@@ -74,8 +74,8 @@
         <!--운동기록-->
         <TextView
           android:id="@+id/tv_course_distance"
-          android:layout_width="24dp"
-          android:layout_height="16dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
           android:layout_marginBottom="16dp"
           android:textColor="@color/darkergrey"
@@ -84,19 +84,20 @@
           app:layout_constraintStart_toStartOf="@+id/guideline7"
           app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_summary_end_point"
           tools:text="26.4"/>
+
         <TextView
-          android:id="@+id/tv_course_time"
-          android:layout_width="24dp"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:textColor="@color/darkergrey"
-          android:textSize="12sp"
-          app:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-          app:layout_constraintStart_toEndOf="@+id/tv_cousrse_km_text"
-          tools:text="4:50"/>
+            android:id="@+id/tv_course_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/darkergrey"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
+            app:layout_constraintStart_toEndOf="@+id/tv_cousrse_km_text"
+            tools:text="4:50dfdfddfdf" />
         <TextView
           android:id="@+id/tv_course_calories"
-          android:layout_width="0dp"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="16dp"
           android:textColor="@color/darkergrey"
@@ -173,17 +174,11 @@
 
         <TextView
             android:id="@+id/tv_course_detail_info"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_weight="1"
             android:ellipsize="none"
-            android:gravity="center"
-            android:inputType="textMultiLine"
-            android:lineSpacingExtra="8sp"
-            android:maxLines="100"
             android:scrollHorizontally="false"
-            android:singleLine="false"
             app:layout_constraintEnd_toStartOf="@+id/guideline6"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_title"
