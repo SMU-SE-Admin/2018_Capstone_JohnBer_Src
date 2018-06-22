@@ -349,7 +349,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         options.addAll(locationArrayList).width(25).color(Color.parseColor("#1D8BF8")).geodesic(true);
         mgoogleMap.addPolyline(options);
 
-
     }
     // 지도에 마커 표시
     // 시작점, 끝점(현재위치)

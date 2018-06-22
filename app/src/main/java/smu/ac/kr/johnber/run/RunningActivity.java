@@ -13,7 +13,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -135,7 +141,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 
     Gson gson = new Gson();
     String response = preferences.getString("LOCATIONLIST", "");
-      ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
+      // ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
 
     // 나머지 복원
     double distance = Double.parseDouble(preferences.getString("DISTANCE", "0"));
@@ -148,9 +154,34 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     double endTime = 0;
     String title = null;   // date를 변환해서 우선 넣기로함
 
-    mRecord = new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime, title);
+    // mRecord = new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime, title);
     //TODO : 파이어베이스와 연동
+
+    // Write a message to the database
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
+
+    myRef.setValue("Hello, World!");
+
+    // Read from the database
+    myRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        // This method is called once with the initial value and again
+        // whenever data at this location is updated.
+        String value = dataSnapshot.getValue(String.class);
+        Log.d(TAG, "Value is: " + value);
+      }
+
+      @Override
+      public void onCancelled(DatabaseError error) {
+        // Failed to read value
+        Log.w(TAG, "Failed to read value.", error.toException());
+      }
+    });
   }
+
+
 
 
 }
