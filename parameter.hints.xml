@@ -3,6 +3,7 @@
     <blacklists>
       <blacklist language="Java">
         <added pattern="android.support.v4.app.ActivityCompat.requestPermissions(activity,permissions,requestCode)" />
+        <added pattern="android.location.Geocoder.Geocoder(context)" />
       </blacklist>
       <blacklist language="Groovy" />
       <blacklist language="Kotlin" />
