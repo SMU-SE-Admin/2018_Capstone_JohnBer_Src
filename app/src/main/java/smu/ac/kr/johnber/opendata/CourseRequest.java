@@ -89,13 +89,14 @@ public class CourseRequest {
             runningCourse.setCourse(jsonObject.get("경로정보").toString());
             runningCourse.setCourseInfo(jsonObject.get("길소개").toString());
             runningCourse.setCourseName(jsonObject.get("길명").toString());
-            // TOdo: 시간, 길이 데이터 포맷이 모두 달라 정규화가 필요함 + null 인경우가 더 많음 -> 직접 계산할것
-            runningCourse.setTime(3000);
-            runningCourse.setDistance(1000);
+            runningCourse.setTime(jsonObject.get("총소요시간").toString());
+            runningCourse.setDistance(jsonObject.get("총길이").toString());
             runningCourse.setEndpointAddr(jsonObject.get("종료지점소재지지번주소").toString());
             runningCourse.setStartPointAddr(jsonObject.get("시작지점소재지지번주소").toString());
-//                        LOGD(TAG,"object : "+jsonObject.toString());
-        } catch (JSONException e) {}
+            LOGD(TAG, runningCourse.getStartPointAddr());
+            runningCourse.setStartPointRoadAddr(jsonObject.get("시작지점소재지도로명주소").toString());
+            LOGD(TAG, runningCourse.getStartPointRoadAddr());
+            runningCourse.setEndPointRoadAddr(jsonObject.get("종료지점소재지도로명주소").toString());        } catch (JSONException e) {}
         mRealm.commitTransaction();
     }
 
