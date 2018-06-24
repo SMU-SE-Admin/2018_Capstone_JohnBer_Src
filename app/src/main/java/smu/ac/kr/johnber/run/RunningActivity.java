@@ -15,6 +15,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -145,13 +148,35 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
        ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
 
     // 나머지 복원
+    double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
     double distance = Double.parseDouble(preferences.getString("DISTANCE", "0"));
     double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", "0"));
     double calories = Double.parseDouble(preferences.getString("CALORIES", "0"));
     double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
     double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
 
+    //현재 시간 받아오기.
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+    //date format은 0000-00-00
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String getTime = sdf.format(date);
+
+    //nodeId로 사용할 startTime변환.
+    SimpleDateFormat t_sdf = new SimpleDateFormat("HH:mm:ss");
+    String stringStartTime = t_sdf.format(now);
+
     //TODO : date, endTime, Title 받아오기
+
+
+    String title = null;   // date를 변환해서 우선 넣기로함
+
+    Record record = new Record(distance, elapsedTime, calories, startTime, endTime);
+
+    //firebase.auth를 이용한 user id가져오기.
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+
     Date date = null;
     String title = null;   // date를 변환해서 우선 넣기로함
 
@@ -165,30 +190,15 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
      //
     //TODO : 파이어베이스와 연동
 
-    // Write a message to the database
+    // Write data to the database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("message");
+    DatabaseReference myRef = database.getReference();
 
-    myRef.setValue("Hello, World!");
+    myRef.child(uid).child(getTime).child(stringStartTime).setValue(record);
 
-    // Read from the database
-    myRef.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot) {
-        // This method is called once with the initial value and again
-        // whenever data at this location is updated.
-        String value = dataSnapshot.getValue(String.class);
-        Log.d(TAG, "Value is: " + value);
-      }
+    //myRef.child("users").child(date).setValue(record);
 
-      @Override
-      public void onCancelled(DatabaseError error) {
-        // Failed to read value
-        Log.w(TAG, "Failed to read value.", error.toException());
-      }
-    });
   }
-
 
 
 

@@ -16,43 +16,43 @@ public class Record {
     private double elapsedTime;
     private double calories;
     // android.JBLocation 대신 커스텀 JBLocation 사용
-    private ArrayList<JBLocation> JBLocation;
-    private Date date;
+    //private ArrayList<JBLocation> JBLocation;
+    //private Date date;
     private double startTime;
     private double endTime;
-    private String title;
+    //private String title;
 
 
 
-    public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime, String title) {
+    public Record(double distance, double elapsedTime, double calories, double startTime, double endTime) {
         this.distance = distance;
         this.elapsedTime = elapsedTime;
         this.calories = calories;
-        this.JBLocation = JBLocation;
-        this.date = date;
+        //this.JBLocation = JBLocation;
+        //this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.title = title;
+        //this.title = title;
     }
     public double getDistance() {
         return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
     }
 
     public double getElapsedTime() {
         return elapsedTime;
     }
 
-    public void setElapsedTime(double elapsedTime) {
-        this.elapsedTime = elapsedTime;
-    }
-
     public double getCalories() {
         return calories;
     }
+
+
+    public double getStartTime() {
+        return startTime;
+    }
+
+    public double getEndTime() {
+        return endTime;
 
     public void setCalories(double calories) {
         this.calories = calories;
@@ -64,18 +64,19 @@ public class Record {
 
     public void setJBLocation(ArrayList<smu.ac.kr.johnber.map.JBLocation> JBLocation) {
         this.JBLocation = JBLocation;
+
     }
 
-    public Date getDate() {
-        return date;
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setElapsedTime(double elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
-    public double getStartTime() {
-        return startTime;
+    public void setCalories(double calories) {
+        this.calories = calories;
     }
 
     public void setStartTime(double startTime) {
@@ -101,5 +102,6 @@ public class Record {
     public Record() {
 
     }
+
 
 }

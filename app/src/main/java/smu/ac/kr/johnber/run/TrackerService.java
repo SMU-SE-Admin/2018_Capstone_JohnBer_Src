@@ -328,7 +328,7 @@ public class TrackerService extends Service {
         //locaitonArrayList저장
         SharedPreferences preferences;
         SharedPreferences.Editor editor;
-        preferences = getApplicationContext().getSharedPreferences("saveRecord", Context.MODE_PRIVATE);
+        preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
