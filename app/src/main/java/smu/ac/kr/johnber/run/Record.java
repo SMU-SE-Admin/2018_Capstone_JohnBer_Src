@@ -4,6 +4,7 @@ package smu.ac.kr.johnber.run;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.realm.RealmObject;
 import smu.ac.kr.johnber.map.JBLocation;
 
 /**
@@ -21,11 +22,8 @@ public class Record {
     private double endTime;
     private String title;
 
-    public Record() {
 
-    }
-
-    public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime, String title) {
+    public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime,String title) {
         this.distance = distance;
         this.elapsedTime = elapsedTime;
         this.calories = calories;
@@ -40,63 +38,62 @@ public class Record {
         return distance;
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
     public double getElapsedTime() {
         return elapsedTime;
-    }
-
-    public void setElapsedTime(double elapsedTime) {
-        this.elapsedTime = elapsedTime;
     }
 
     public double getCalories() {
         return calories;
     }
 
-    public void setCalories(double calories) {
-        this.calories = calories;
-    }
-
-    public ArrayList<JBLocation> getJBLocation() {
-        return JBLocation;
-    }
-
-    public void setJBLocation(ArrayList<JBLocation> JBLocation) {
-        this.JBLocation = JBLocation;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public double getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(int startTime) {
-        this.startTime = startTime;
+
+        public void setCalories ( double calories){
+            this.calories = calories;
+        }
+
+        public ArrayList<smu.ac.kr.johnber.map.JBLocation> getJBLocation () {
+            return JBLocation;
+        }
+
+        public void setJBLocation (ArrayList < smu.ac.kr.johnber.map.JBLocation > JBLocation) {
+            this.JBLocation = JBLocation;
+
+        }
+
+        public void setDistance ( double distance){
+            this.distance = distance;
+        }
+
+        public void setElapsedTime ( double elapsedTime){
+            this.elapsedTime = elapsedTime;
+        }
+
+
+        public void setStartTime ( double startTime){
+            this.startTime = startTime;
+        }
+
+        public double getEndTime () {
+            return endTime;
+        }
+
+        public void setEndTime ( double endTime){
+            this.endTime = endTime;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle (String title){
+            this.title = title;
+        }
+
+
     }
 
-    public double getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(int endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-}

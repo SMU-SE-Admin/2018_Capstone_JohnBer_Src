@@ -15,6 +15,7 @@ import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
@@ -39,17 +40,25 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
     //RecyclerView 설정
     Realm.init(this);
-   RealmConfiguration config6 = new RealmConfiguration.Builder()
+   RealmConfiguration config8 = new RealmConfiguration.Builder()
            .deleteRealmIfMigrationNeeded()
            .build();
-    mRealm.setDefaultConfiguration(config6);
-    mRealm = Realm.getInstance(config6);
-    RealmResults<RunningCourse> courseItems = mRealm
-            .where(RunningCourse.class).findAll();
-    CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false
-            , this);
+    mRealm.setDefaultConfiguration(config8);
+    mRealm = Realm.getInstance(config8);
+
     prefs = getSharedPreferences("Pref", MODE_PRIVATE);
     checkFirstRun();
+
+    RealmResults<RunningCourse> courseItems = mRealm
+            .where(RunningCourse.class).findAll();
+
+//    RealmResults<RunningCourse> courseItems = mRealm
+//            .where(RunningCourse.class).not()
+//            .beginGroup().equalTo("distance", "null").and().equalTo("time","null").endGroup()
+//            .sort("length", Sort.DESCENDING ).findAllAsync();
+
+    CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false
+            , this);
     RealmRecyclerView recyclerView = (RealmRecyclerView)findViewById(R.id.rv_course);
     recyclerView.setAdapter(adapter);
 
@@ -128,7 +137,7 @@ private void initView(){
 // recyclerView 클릭 리스너
   @Override
   public void onItemClicked(View view, int position) {
-    LOGD(TAG,"CLICKED!"+position);
+     LOGD(TAG,"CLICKED!"+position);
     //코스 detail fragment inflate
     showDeatilView(position,view);
 

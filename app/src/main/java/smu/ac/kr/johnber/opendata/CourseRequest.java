@@ -26,7 +26,7 @@ public class CourseRequest {
 
 
     private static final int pageNo = 1;
-    private static final int listNo = 10;
+    private static final int listNo = 800;
     private static final String responseType = "json";
 
     private Realm mRealm;
@@ -59,7 +59,11 @@ public class CourseRequest {
                     for (int i = 0; i< jsonArray.length();i++){
                         //Array안의 각 코스 Ojbect를 꺼낸다.
                         jsonObject = jsonArray.getJSONObject(i);
-                        insertCourseData();
+                        //TODO:
+                        if(!jsonObject.get("총길이").toString().equals("null")
+                                &&!jsonObject.get("총소요시간").toString().equals("null")
+                                &&jsonObject.get("길소개").toString().length()>50){
+                        insertCourseData();}
                     }
                     LOGD(TAG, "category: "+jsonArray.length()
                     );
@@ -88,15 +92,15 @@ public class CourseRequest {
             runningCourse.setStartPoint(jsonObject.get("시작지점명").toString());
             runningCourse.setCourse(jsonObject.get("경로정보").toString());
             runningCourse.setCourseInfo(jsonObject.get("길소개").toString());
+            runningCourse.setDistance(jsonObject.get("총길이").toString());
             runningCourse.setCourseName(jsonObject.get("길명").toString());
             runningCourse.setTime(jsonObject.get("총소요시간").toString());
-            runningCourse.setDistance(jsonObject.get("총길이").toString());
-            runningCourse.setEndpointAddr(jsonObject.get("종료지점소재지지번주소").toString());
             runningCourse.setStartPointAddr(jsonObject.get("시작지점소재지지번주소").toString());
-            LOGD(TAG, runningCourse.getStartPointAddr());
-            runningCourse.setStartPointRoadAddr(jsonObject.get("시작지점소재지도로명주소").toString());
-            LOGD(TAG, runningCourse.getStartPointRoadAddr());
-            runningCourse.setEndPointRoadAddr(jsonObject.get("종료지점소재지도로명주소").toString());        } catch (JSONException e) {}
+            runningCourse.setStartPointRoadAddr(jsonObject.get("시작지점도로명주소").toString());
+            runningCourse.setEndPointAddr(jsonObject.get("종료지점소재지지번주소").toString());
+            runningCourse.setEndPointRoadAddr(jsonObject.get("종료지점소재지도로명주소").toString());
+
+        } catch (JSONException e) {}
         mRealm.commitTransaction();
     }
 

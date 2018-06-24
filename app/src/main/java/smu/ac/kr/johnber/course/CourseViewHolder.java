@@ -40,7 +40,6 @@ public class CourseViewHolder extends RealmViewHolder {
 //    lbCalories = view.findViewById(R.id.tv_course_calories_text);
     thumnail = view.findViewById(R.id.iv_course_map_thumbnail);
     setLabel();
-
     this.listener = listener;
     view.setOnClickListener(new View.OnClickListener() {
       @Override
