@@ -8,14 +8,19 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +41,9 @@ import java.util.zip.Inflater;
 import io.realm.Realm;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
+import smu.ac.kr.johnber.run.RunningActivity;
 import smu.ac.kr.johnber.util.BitmapUtil;
+import smu.ac.kr.johnber.util.PermissionUtil;
 
 
 /**
@@ -43,8 +51,10 @@ import smu.ac.kr.johnber.util.BitmapUtil;
  */
 
 //Todo : MAPVIEW setting
-public class CourseDetailFragment extends Fragment implements OnMapReadyCallback {
+public class CourseDetailFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private final static String TAG = makeLogTag(CourseDetailFragment.class);
+    private static final int REQUEST_LOCATION_PERMISSION = 101;
+    private static final String PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     private TextView courseName;
     public TextView startPoint;
     public TextView endPoint;
@@ -60,8 +70,9 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     private Marker mMarker;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
-
-
+    private Button mRun;
+    private ScrollView scrollView;
+    private FusedLocationProviderClient mFusedLocationClient;
     public CourseDetailFragment() {
         // Required empty public constructor
     }
@@ -80,6 +91,9 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         endPoint = mView.findViewById(R.id.tv_course_detail_summary_end_point);
         distance = mView.findViewById(R.id.tv_course_distance);
         calories = mView.findViewById(R.id.tv_course_calories);
+        mRun = mView.findViewById(R.id.btn_course_run);  //TODO !!!!!달리기 실행으로 연결
+        mRun.setOnClickListener(this);
+        scrollView = mView.findViewById(R.id.scrollview);
         time = mView.findViewById(R.id.tv_course_time);
         course = mView.findViewById(R.id.tv_course_detail_info);
         courseInfo = mView.findViewById(R.id.tv_course_detail_info_content);
@@ -92,10 +106,24 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         endPoint.setText(mcourseData.getEndPoint());
         time.setText(mcourseData.getTime());
         distance.setText(mcourseData.getDistance());
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         mMapView.getMapAsync(this);
 
+
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY > oldScrollY) {
+                    mRun.setVisibility(View.GONE);
+                } else if (scrollY <oldScrollY) {
+                    mRun.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
 
         return mView;
     }
@@ -177,5 +205,44 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         }
 
 
+    }
+
+    //RUN 버튼 눌렀을 때
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onClick(View view) {
+        if(!PermissionUtil.shouldAskPermission(getActivity(),PERMISSION)){
+            //권한 있음
+//            mRun.setVisibility(view.GONE);
+//            RunningFragment runningFragment = new RunningFragment();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.homeContainer, runningFragment, "RUNNINGFRAGMENT")
+//                    .addToBackStack(null)
+//                    .commit();
+
+            //get the last known location
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(getActivity(),new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+
+                            if (location != null) {
+                                Location mCurrentLocation = new Location(location.getProvider());
+                                mCurrentLocation.setLatitude(location.getLatitude());
+                                mCurrentLocation.setLongitude(location.getLongitude());
+                                Intent intent = new Intent(getActivity(), RunningActivity.class);
+                                //현재위치좌표를 같이 넘겨줌
+                                intent.putExtra("latitude", mCurrentLocation.getLatitude());
+                                intent.putExtra("longitude", mCurrentLocation.getLongitude());
+                                startActivity(intent);
+
+                            }
+                        }
+                    });
+
+
+        }else
+            PermissionUtil.checkPermission(getActivity(),PERMISSION,REQUEST_LOCATION_PERMISSION);
     }
 }

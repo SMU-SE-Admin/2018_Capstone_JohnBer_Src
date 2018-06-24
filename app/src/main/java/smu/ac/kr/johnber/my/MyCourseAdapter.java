@@ -13,6 +13,7 @@ import io.realm.RealmResults;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.my.MyCourseViewHolder;
 import smu.ac.kr.johnber.run.Record;
+import smu.ac.kr.johnber.util.LocationUtil;
 
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
@@ -21,10 +22,11 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
   private List<Record> data;
   private MyCourseViewHolder.itemClickListener listener;
 
-
+  private Context context;
   public MyCourseAdapter(Context context, List<Record> data, MyCourseViewHolder.itemClickListener listener) {
     this.data = data;
     this.listener = listener;
+    this.context = context;
   }
 
   @Override
@@ -42,6 +44,7 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     holder.calories.setText(Double.toString(courseItem.getCalories()));
     holder.distance.setText(Double.toString(courseItem.getDistance()));
     holder.time.setText(Double.toString(courseItem.getElapsedTime()));
+    holder.startPoint.setText(LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context));
 
   }
 

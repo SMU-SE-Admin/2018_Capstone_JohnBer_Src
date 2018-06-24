@@ -50,7 +50,6 @@ import smu.ac.kr.johnber.util.PermissionUtil;
  * - 현재 위치 표시
  * - 위도 경도값 알아내기
  */
-//TODO: 지도 처리
 public class MainActivity extends BaseActivity implements OnClickListener, OnMapReadyCallback {
 
     private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
@@ -70,9 +69,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
-   //FirebaseAuth 사용자 로그인 여부 확인 변수
-  private FirebaseAuth mAuth;
-  private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth mAuth; //FirebaseAuth 사용자 로그인 여부 확인 변수
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
 
     @Override
@@ -249,7 +247,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
                 //TODO : request current location
                 LOGD(TAG, "Start location tracking");
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-
                 return;
             }
         }
