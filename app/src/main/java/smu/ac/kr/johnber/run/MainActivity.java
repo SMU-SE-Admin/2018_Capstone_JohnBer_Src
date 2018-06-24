@@ -4,6 +4,7 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.account.loginActivity;
+import smu.ac.kr.johnber.opendata.CourseRequest;
 import smu.ac.kr.johnber.opendata.WeatherForecast;
 import smu.ac.kr.johnber.util.LogUtils;
 import smu.ac.kr.johnber.util.PermissionUtil;
@@ -61,6 +63,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
     private Button mRun;
 
+
     private MapView mMapview;
     private GoogleMap mgoogleMap;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -71,6 +74,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
   private FirebaseAuth mAuth;
   private FirebaseAuth.AuthStateListener mAuthListener;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +84,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         mAuth = FirebaseAuth.getInstance();
 
     checkUserlogin();
-        //TODO: 일정 시간마다 데이터를 갱신해야함
 
         /**
          * 지도 설정 & 위치 트래킹
@@ -325,4 +328,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
       }
     };
   }
+
+
+
 }

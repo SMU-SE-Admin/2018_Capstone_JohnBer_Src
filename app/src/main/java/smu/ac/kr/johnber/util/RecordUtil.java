@@ -48,7 +48,7 @@ public class RecordUtil {
     }
 
     public static String getFormattedDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/DD/YYYY");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         String currentDateandTime = sdf.format(new Date());
 
         return currentDateandTime;

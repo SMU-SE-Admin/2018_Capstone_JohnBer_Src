@@ -45,10 +45,10 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
   @Override
   public void onBindRealmViewHolder(CourseViewHolder holder, int position) {
       final RunningCourse courseItem = data.get(position);
-      LOGD(TAG,courseItem.getCourseName());
       holder.courseName.setText(courseItem.getCourseName());
       holder.startPoint.setText(courseItem.getStartPoint());
-      //TODO : 시간, 거리, 칼로리 계싼
+      holder.distance.setText(courseItem.getDistance());
+      holder.time.setText(courseItem.getTime());
   }
 
   @Override
