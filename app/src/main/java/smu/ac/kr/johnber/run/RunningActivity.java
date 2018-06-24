@@ -170,12 +170,12 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 
     String title = null;   // date를 변환해서 우선 넣기로함
 
-    Record record = new Record(distance, elapsedTime, calories, startTime, endTime);
+    Record record = new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime,title);
 
     //firebase.auth를 이용한 user id가져오기.
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
-    
+
 
     LOGD(TAG, "!!!!"+preferences.getString("CALORIES", "0")+
     "\n"+preferences.getString("DISTANCE", "0")+
@@ -192,7 +192,8 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     DatabaseReference myRef = database.getReference();
 
     myRef.child(uid).child(getTime).child(stringStartTime).setValue(record);
-
+ //TODO : 여기서 setValue(record)객체를 넘기는데... 이렇게 말고 ... setValue(distance) , 이런식으로 각각 넘겨서 저장해도 똑같나??
+    // ㄱmfjaus 그러면 record의 locationArrayList를 못넘기잖아... 그래서 setValue(response)는 스트링이니깐 가능하지 않을까해서
     //myRef.child("users").child(date).setValue(record);
 
   }
