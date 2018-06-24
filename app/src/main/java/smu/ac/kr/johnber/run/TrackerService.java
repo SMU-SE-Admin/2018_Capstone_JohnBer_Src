@@ -283,7 +283,7 @@ public class TrackerService extends Service {
      */
     public void resume() {
         SharedPreferences preferences;
-        preferences = getApplicationContext().getSharedPreferences("saveRecord", Context.MODE_PRIVATE);
+        preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
 
 //        Gson gson = new Gson();
         String response = preferences.getString("LOCATIONLIST", "");
@@ -348,7 +348,7 @@ public class TrackerService extends Service {
         editor.putString("ENDTIME", Double.toString(endTime));
 
         String currentDateandTime = RecordUtil.getFormattedDate();
-        editor.putString("DATE",currentDateandTime+" RUN");
+        editor.putString("DATE",currentDateandTime);
         editor.commit();
 
         //서비스 종료

@@ -128,7 +128,7 @@ private void initView(){
 // recyclerView 클릭 리스너
   @Override
   public void onItemClicked(View view, int position) {
-    LOGD(TAG,"CLICKED!"+position);
+     LOGD(TAG,"CLICKED!"+position);
     //코스 detail fragment inflate
     showDeatilView(position,view);
 

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.map.JBLocation;
 
@@ -141,20 +142,27 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 
     Gson gson = new Gson();
     String response = preferences.getString("LOCATIONLIST", "");
-      // ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
+       ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
 
     // 나머지 복원
     double distance = Double.parseDouble(preferences.getString("DISTANCE", "0"));
     double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", "0"));
     double calories = Double.parseDouble(preferences.getString("CALORIES", "0"));
     double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
+    double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
 
     //TODO : date, endTime, Title 받아오기
     Date date = null;
-    double endTime = 0;
     String title = null;   // date를 변환해서 우선 넣기로함
 
-    // mRecord = new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime, title);
+    LOGD(TAG, "!!!!"+preferences.getString("CALORIES", "0")+
+    "\n"+preferences.getString("DISTANCE", "0")+
+            "\n"+preferences.getString("ELAPSEDTIME", "0") +
+            "\n"+preferences.getString("ENDTIME", "0")+
+    "\n"+preferences.getString("STARTTIME", "0"));
+
+
+     //
     //TODO : 파이어베이스와 연동
 
     // Write a message to the database

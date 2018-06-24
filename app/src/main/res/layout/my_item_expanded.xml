@@ -70,37 +70,42 @@
         app:layout_constraintStart_toStartOf="parent"/>
       <!--운동기록-->
       <TextView
-        android:id="@+id/tv_my_course_distance"
-        android:layout_width="24dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:textColor="@color/darkergrey"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/tv_my_course_detail_summary_end_point"
-        tools:text="26.4"/>
+          android:id="@+id/tv_my_course_distance"
+          android:layout_width="24dp"
+          android:layout_height="16dp"
+          android:layout_marginBottom="16dp"
+          android:layout_marginTop="8dp"
+          android:text="-"
+          android:textColor="@color/darkergrey"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="@+id/guideline7"
+          app:layout_constraintTop_toBottomOf="@+id/tv_my_course_detail_summary_end_point"
+          tools:text="26.4" />
+
       <TextView
-        android:id="@+id/tv_my_course_time"
-        android:layout_width="24dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/darkergrey"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
-        app:layout_constraintStart_toEndOf="@+id/tv_my_cousrse_km_text"
-        tools:text="4:50"/>
+          android:id="@+id/tv_my_course_time"
+          android:layout_width="24dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:text="-"
+          android:textColor="@color/darkergrey"
+          android:textSize="12sp"
+          app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
+          app:layout_constraintStart_toEndOf="@+id/tv_my_cousrse_km_text"
+          tools:text="4:50" />
+
       <TextView
-        android:id="@+id/tv_my_course_calories"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textColor="@color/darkergrey"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
-        app:layout_constraintStart_toEndOf="@+id/tv_my_course_time_text"
-        tools:text="4403"/>
+          android:id="@+id/tv_my_course_calories"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:textColor="@color/darkergrey"
+          android:textSize="12sp"
+          android:visibility="gone"
+          app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
+          app:layout_constraintStart_toEndOf="@+id/tv_my_course_time_text"
+          tools:text="4403" />
 
       <!--text view for measurement-->
       <TextView
@@ -127,19 +132,21 @@
         android:textSize="12sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
         app:layout_constraintStart_toEndOf="@+id/tv_my_course_time"/>
+
       <TextView
-        android:id="@+id/tv_my_course_calories_text"
-        android:layout_width="23dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="4dp"
-        android:freezesText="false"
-        android:text="CAL"
-        android:textAlignment="viewStart"
-        android:textColor="@color/darkgrey"
-        android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_my_course_calories"
-        app:layout_constraintTop_toTopOf="@+id/tv_my_course_distance"/>
+          android:id="@+id/tv_my_course_calories_text"
+          android:layout_width="23dp"
+          android:layout_height="17dp"
+          android:layout_marginStart="4dp"
+          android:freezesText="false"
+          android:text="CAL"
+          android:textAlignment="viewStart"
+          android:textColor="@color/darkgrey"
+          android:textSize="12sp"
+          android:visibility="gone"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/tv_my_course_calories"
+          app:layout_constraintTop_toTopOf="@+id/tv_my_course_distance" />
 
     </android.support.constraint.ConstraintLayout>
   </android.support.v7.widget.CardView>

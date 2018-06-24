@@ -47,6 +47,8 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
       final RunningCourse courseItem = data.get(position);
       holder.courseName.setText(courseItem.getCourseName());
       holder.startPoint.setText(courseItem.getStartPoint());
+      holder.distance.setText(courseItem.getDistance());
+      holder.time.setText(courseItem.getTime());
   }
 
   @Override
