@@ -29,7 +29,10 @@ public class RunningCourse extends RealmObject {
     private String startPointAddr;
     @SerializedName("종료지점소재지도로명주소")
     private String endPointRoadAddr;
+
+    private String length;
     public RunningCourse() {
+
     }
 
     public String getStartPoint() {
@@ -61,7 +64,9 @@ public class RunningCourse extends RealmObject {
     }
 
     public void setCourseInfo(String courseInfo) {
+
         this.courseInfo = courseInfo;
+        this.length = Integer.toString( courseInfo.length() + course.length());
     }
 
     public String getCourseName() {
