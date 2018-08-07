@@ -4,10 +4,26 @@ import static android.provider.Settings.Global.getString;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.run.Record;
 
 /**
  * Created by yj34 on 26/03/2018.
@@ -27,6 +43,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
   public int getCount() {
     return 3;
   }
+  HashMap<String, Record> mapRecord = new HashMap<>();
 
   @Override
   public Object instantiateItem(ViewGroup container, int position) {
@@ -38,6 +55,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     switch (position) {
       case 0:
         viewId = R.layout.my_statistics_daily_view;
+        getRecord();
         break;
       case 1:
         viewId = R.layout.my_statistics_weekly_view;
@@ -52,6 +70,32 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     return view;
 
   }
+
+  public void getRecord(){
+
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
+
+    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+          Log.d("MainActivity", "Single ValueEventListener : " + snapshot.child(uid).getValue());
+
+
+        }
+      }
+
+      @Override
+      public void onCancelled(DatabaseError databaseError) {
+
+      }
+    });
+  }
+
 
   @Override
   public void destroyItem(ViewGroup container, int position, Object object) {
