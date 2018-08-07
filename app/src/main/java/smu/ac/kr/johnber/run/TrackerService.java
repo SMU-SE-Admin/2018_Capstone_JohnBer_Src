@@ -348,7 +348,7 @@ public class TrackerService extends Service {
         editor.putString("ENDTIME", Double.toString(endTime));
 
         String currentDateandTime = RecordUtil.getFormattedDate();
-        editor.putString("DATE",currentDateandTime+" RUN");
+        editor.putString("DATE",currentDateandTime);
         editor.commit();
 
         //서비스 종료

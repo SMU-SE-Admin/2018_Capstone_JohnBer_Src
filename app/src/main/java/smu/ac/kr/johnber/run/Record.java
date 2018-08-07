@@ -4,6 +4,7 @@ package smu.ac.kr.johnber.run;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.realm.RealmObject;
 import smu.ac.kr.johnber.map.JBLocation;
 
 /**
@@ -33,7 +34,6 @@ public class Record {
         this.endTime = endTime;
         //this.title = title;
     }
-
     public double getDistance() {
         return distance;
     }
@@ -46,12 +46,25 @@ public class Record {
         return calories;
     }
 
+
     public double getStartTime() {
         return startTime;
     }
 
     public double getEndTime() {
         return endTime;
+
+    public void setCalories(double calories) {
+        this.calories = calories;
+    }
+
+    public ArrayList<smu.ac.kr.johnber.map.JBLocation> getJBLocation() {
+        return JBLocation;
+    }
+
+    public void setJBLocation(ArrayList<smu.ac.kr.johnber.map.JBLocation> JBLocation) {
+        this.JBLocation = JBLocation;
+
     }
 
     public void setDistance(double distance) {
@@ -70,7 +83,25 @@ public class Record {
         this.startTime = startTime;
     }
 
+    public double getEndTime() {
+        return endTime;
+    }
+
     public void setEndTime(double endTime) {
         this.endTime = endTime;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Record() {
+
+    }
+
+
 }

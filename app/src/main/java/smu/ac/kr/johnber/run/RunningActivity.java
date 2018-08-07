@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.map.JBLocation;
 
@@ -144,7 +145,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 
     Gson gson = new Gson();
     String response = preferences.getString("LOCATIONLIST", "");
-      // ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
+       ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>(){}.getType());
 
     // 나머지 복원
     double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
@@ -152,6 +153,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", "0"));
     double calories = Double.parseDouble(preferences.getString("CALORIES", "0"));
     double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
+    double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
 
     //현재 시간 받아오기.
     long now = System.currentTimeMillis();
@@ -166,6 +168,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 
     //TODO : date, endTime, Title 받아오기
 
+
     String title = null;   // date를 변환해서 우선 넣기로함
 
     Record record = new Record(distance, elapsedTime, calories, startTime, endTime);
@@ -173,6 +176,19 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     //firebase.auth를 이용한 user id가져오기.
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+
+    Date date = null;
+    String title = null;   // date를 변환해서 우선 넣기로함
+
+    LOGD(TAG, "!!!!"+preferences.getString("CALORIES", "0")+
+    "\n"+preferences.getString("DISTANCE", "0")+
+            "\n"+preferences.getString("ELAPSEDTIME", "0") +
+            "\n"+preferences.getString("ENDTIME", "0")+
+    "\n"+preferences.getString("STARTTIME", "0"));
+
+
+     //
+    //TODO : 파이어베이스와 연동
 
     // Write data to the database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
