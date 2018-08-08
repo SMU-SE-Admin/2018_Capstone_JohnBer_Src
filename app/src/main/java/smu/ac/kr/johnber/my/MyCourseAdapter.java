@@ -15,6 +15,7 @@ import smu.ac.kr.johnber.my.MyCourseViewHolder;
 import smu.ac.kr.johnber.run.Record;
 import smu.ac.kr.johnber.util.LocationUtil;
 
+
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
@@ -22,6 +23,9 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
   private List<Record> data;
   private MyCourseViewHolder.itemClickListener listener;
 
+  public MyCourseAdapter(Context context, List<Record> data, MyCourseViewHolder.itemClickListener listener) {
+    this.data = data;
+    this.listener = listener;
   private Context context;
   public MyCourseAdapter(Context context, List<Record> data, MyCourseViewHolder.itemClickListener listener) {
     this.data = data;

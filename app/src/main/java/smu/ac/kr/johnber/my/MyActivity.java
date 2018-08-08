@@ -64,12 +64,14 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     if (mockRecords != null) {
       mockRecords.clear();
     }
+
     mockRecords = generateMockRecords();
     MyCourseAdapter adapter = new MyCourseAdapter(this, mockRecords, this);
     RecyclerView recyclerView = findViewById(R.id.my_rv_course);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     recyclerView.setHasFixedSize(true);
     recyclerView.setAdapter(adapter);
+
 
   }
 

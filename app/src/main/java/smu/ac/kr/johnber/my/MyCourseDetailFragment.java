@@ -152,6 +152,24 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
     }
 
 
+
+    public String latlngtoStringLocation(JBLocation location) {
+        String stringLocation=null;
+        Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
+        List <Address> address;
+
+        try {
+            address = mGeoCoder.getFromLocation(location.getmLatitude(), location.getmLongitude(), 1);
+            if(address != null &&address.size()>0){
+                stringLocation = address.get(0).getAddressLine(0).toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return stringLocation;
+    }
+
 //    public String latlngtoStringLocation(JBLocation location) {
 //        String stringLocation=null;
 //        Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
@@ -168,4 +186,5 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
 //
 //        return stringLocation;
 //    }
+
 }

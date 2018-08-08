@@ -153,6 +153,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", "0"));
     double calories = Double.parseDouble(preferences.getString("CALORIES", "0"));
     double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
+    double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
 
     //현재 시간 받아오기.
     long now = System.currentTimeMillis();
@@ -175,6 +176,9 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     //firebase.auth를 이용한 user id가져오기.
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+
+    Date date = null;
+    String title = null;   // date를 변환해서 우선 넣기로함
 
 
     LOGD(TAG, "!!!!"+preferences.getString("CALORIES", "0")+
