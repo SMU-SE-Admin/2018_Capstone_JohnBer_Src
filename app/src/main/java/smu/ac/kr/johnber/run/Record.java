@@ -23,7 +23,7 @@ public class Record {
     private String title;
 
 
-    public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime,String title) {
+    public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime, String title) {
         this.distance = distance;
         this.elapsedTime = elapsedTime;
         this.calories = calories;
@@ -34,29 +34,28 @@ public class Record {
         this.title = title;
     }
 
-    public Record(){}
-
+    public Record() {
+    }
 
     public double getDistance() {
         return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     public double getElapsedTime() {
         return elapsedTime;
     }
 
+    public void setElapsedTime(double elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
+
     public double getCalories() {
         return calories;
     }
-
-
-    public double getStartTime() {
-        return startTime;
-    }
-
-
-    public double getEndTime() {
-        return endTime;
 
     public void setCalories(double calories) {
         this.calories = calories;
@@ -68,53 +67,39 @@ public class Record {
 
     public void setJBLocation(ArrayList<smu.ac.kr.johnber.map.JBLocation> JBLocation) {
         this.JBLocation = JBLocation;
-
     }
 
+    public Date getDate() {
+        return date;
+    }
 
-        public void setCalories ( double calories){
-            this.calories = calories;
-        }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-        public ArrayList<smu.ac.kr.johnber.map.JBLocation> getJBLocation () {
-            return JBLocation;
-        }
+    public double getStartTime() {
+        return startTime;
+    }
 
-        public void setJBLocation (ArrayList < smu.ac.kr.johnber.map.JBLocation > JBLocation) {
-            this.JBLocation = JBLocation;
+    public void setStartTime(double startTime) {
+        this.startTime = startTime;
+    }
 
-        }
+    public double getEndTime() {
+        return endTime;
+    }
 
-        public void setDistance ( double distance){
-            this.distance = distance;
-        }
+    public void setEndTime(double endTime) {
+        this.endTime = endTime;
+    }
 
-        public void setElapsedTime ( double elapsedTime){
-            this.elapsedTime = elapsedTime;
-        }
+    public String getTitle() {
+        return title;
+    }
 
-
-        public void setStartTime ( double startTime){
-            this.startTime = startTime;
-        }
-
-        public double getEndTime () {
-            return endTime;
-        }
-
-        public void setEndTime ( double endTime){
-            this.endTime = endTime;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle (String title){
-            this.title = title;
-        }
-
-
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
 
     

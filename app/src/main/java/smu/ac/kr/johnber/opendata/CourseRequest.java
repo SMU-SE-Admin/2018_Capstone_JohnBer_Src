@@ -26,7 +26,7 @@ public class CourseRequest {
 
 
     private static final int pageNo = 1;
-    private static final int listNo = 500;
+//    private static final int listNo = 500;
     private static final int listNo = 800;
     private static final String responseType = "json";
 

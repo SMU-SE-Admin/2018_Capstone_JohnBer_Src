@@ -22,11 +22,8 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
   private final static String TAG = makeLogTag(MyCourseAdapter.class);
   private List<Record> data;
   private MyCourseViewHolder.itemClickListener listener;
-
-  public MyCourseAdapter(Context context, List<Record> data, MyCourseViewHolder.itemClickListener listener) {
-    this.data = data;
-    this.listener = listener;
   private Context context;
+
   public MyCourseAdapter(Context context, List<Record> data, MyCourseViewHolder.itemClickListener listener) {
     this.data = data;
     this.listener = listener;
