@@ -1,8 +1,15 @@
 package smu.ac.kr.johnber.util;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import smu.ac.kr.johnber.map.JBLocation;
 
@@ -46,5 +53,20 @@ public class LocationUtil {
 
     // LatLang to Location
 
+    public static String latlngtoStringLocation(JBLocation location, Context context) {
+        String stringLocation=null;
+        Geocoder mGeoCoder = new Geocoder(context, Locale.KOREA);
+        List<Address> address;
 
+        try {
+            address = mGeoCoder.getFromLocation(location.getmLatitude(), location.getmLongitude(), 1);
+            if(address != null &&address.size()>0){
+                stringLocation = address.get(0).getAddressLine(0).toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return stringLocation;
+    }
 }

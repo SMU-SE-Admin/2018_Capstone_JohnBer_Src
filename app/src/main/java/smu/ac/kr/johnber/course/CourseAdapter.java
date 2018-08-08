@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 
@@ -30,6 +32,12 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
       super(context, data, automaticUpdate, animateResults);
       this.data  = data;
       this.listener = listener;
+//      Realm realm = Realm.getDefaultInstance();
+//      this.data= realm
+//              .where(RunningCourse.class).not()
+//              .beginGroup().equalTo("distance", "null").and().equalTo("time","null").endGroup()
+//              .sort("length", Sort.DESCENDING ).findAllAsync();
+
   }
 
   @Override
@@ -49,10 +57,12 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
       holder.startPoint.setText(courseItem.getStartPoint());
       holder.distance.setText(courseItem.getDistance());
       holder.time.setText(courseItem.getTime());
+
   }
 
   @Override
   public int getItemCount() {
+      LOGD(TAG,"item size :  "+data.size());
       return data.size();
   }
 

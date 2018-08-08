@@ -61,6 +61,10 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
 
     //        set on page listener 구현?
     //TODO : 리사이클러뷰 어댑터에 데이터 넘겨줌(Record)
+    if (mockRecords != null) {
+      mockRecords.clear();
+    }
+
     mockRecords = generateMockRecords();
     MyCourseAdapter adapter = new MyCourseAdapter(this, mockRecords, this);
     RecyclerView recyclerView = findViewById(R.id.my_rv_course);

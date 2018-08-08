@@ -179,6 +179,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(8);
         ArrayList<JBLocation> route = getRoute();
+        LOGD(TAG, "getRoute: "+route);
         mgoogleMap.addPolyline(setPolylineOptions(route));
 
         //마커 설정
@@ -235,7 +236,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         mDistance.setText(getArguments().getString("distance"));
         mCalories.setText(getArguments().getString("calories"));
 
-        preferences = getActivity().getSharedPreferences("saveRecord", Context.MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
         mTitle.setText(preferences.getString("DATE", ""));
 
     }
@@ -252,7 +253,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
             locationArrayList = gson.fromJson(response, new TypeToken<ArrayList<JBLocation>>() {
             }.getType());
         }
-        LOGD(TAG, "getROute");
+        LOGD(TAG, "getRoute");
         return locationArrayList;
     }
 

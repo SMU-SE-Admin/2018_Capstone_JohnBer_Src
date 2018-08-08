@@ -77,8 +77,8 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         record = data.get(getArguments().getInt("position"));
         courseName.setText(record.getTitle());
 
-        startPoint.setText(latlngtoStringLocation(record.getJBLocation().get(0)));
-        endPoint.setText(latlngtoStringLocation(record.getJBLocation().get(record.getJBLocation().size() - 1)));
+        startPoint.setText(LocationUtil.latlngtoStringLocation(record.getJBLocation().get(0),getActivity().getApplicationContext()));
+        endPoint.setText(LocationUtil.latlngtoStringLocation(record.getJBLocation().get(record.getJBLocation().size() - 1),getActivity().getApplicationContext()));
         distance.setText(Double.toString(record.getDistance()));
         calories.setText(Double.toString(record.getCalories()));
         time.setText(Double.toString(record.getElapsedTime()));
@@ -152,6 +152,7 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
     }
 
 
+
     public String latlngtoStringLocation(JBLocation location) {
         String stringLocation=null;
         Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
@@ -168,4 +169,22 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
 
         return stringLocation;
     }
+
+//    public String latlngtoStringLocation(JBLocation location) {
+//        String stringLocation=null;
+//        Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
+//        List <Address> address;
+//
+//        try {
+//            address = mGeoCoder.getFromLocation(location.getmLatitude(), location.getmLongitude(), 1);
+//            if(address != null &&address.size()>0){
+//                stringLocation = address.get(0).getAddressLine(0).toString();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return stringLocation;
+//    }
+
 }

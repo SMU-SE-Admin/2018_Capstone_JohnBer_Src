@@ -39,6 +39,8 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
    *
    * @return
    */
+  private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
+
   @Override
   public int getCount() {
     return 3;
@@ -77,15 +79,27 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
-    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    myRef.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
+
+        //DB에 저장된 데이터 HashMap에 저장.
         for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-          Log.d("MainActivity", "Single ValueEventListener : " + snapshot.child(uid).getValue());
-
-
+          //DB에서 로그인한 아이디와 일치하는지 확인 후 해당 데이터만 읽어옴.
+          if (snapshot.getKey().toString().equals(uid)){
+            Log.d("MainActivity", "Single ValueEventListener : " + snapshot.getValue());
+            String keyDate1 = "";
+            for (DataSnapshot snapshot1 : snapshot.getChildren()){
+              keyDate1 = snapshot1.getKey().toString();
+              for (DataSnapshot snapshot2 : snapshot1.getChildren()){
+                String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
+                recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
+                Log.d("mainactivity", "hashMap"+recordHashMap.toString());
+              }
+            }
+          }
         }
       }
 

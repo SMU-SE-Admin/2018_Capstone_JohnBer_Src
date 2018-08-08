@@ -69,6 +69,7 @@
       android:layout_marginStart="16dp"
       android:textColor="@color/darkergrey"
       android:textSize="12sp"
+        android:visibility="gone"
       card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
       card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories_text"
       tools:text="4:50"/>
@@ -103,24 +104,26 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="4dp"
       android:freezesText="false"
-      android:text="TIME"
-      android:textAlignment="viewStart"
-      android:textColor="@color/darkgrey"
-      android:textSize="12sp"
-      card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-      card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories"/>
-    <TextView
-      android:id="@+id/tv_course_calories_text"
-      android:layout_width="23dp"
-      android:layout_height="17dp"
-      android:layout_marginStart="4dp"
-      android:freezesText="false"
+        android:visibility="gone"
       android:text="CAL"
       android:textAlignment="viewStart"
       android:textColor="@color/darkgrey"
       android:textSize="12sp"
       card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-      card_view:layout_constraintStart_toEndOf="@+id/tv_course_time"/>
+      card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories"/>
+
+    <TextView
+        android:id="@+id/tv_course_calories_text"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:layout_marginStart="4dp"
+        android:freezesText="false"
+        android:text="TIME"
+        android:textAlignment="viewStart"
+        android:textColor="@color/darkgrey"
+        android:textSize="12sp"
+        card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
+        card_view:layout_constraintStart_toEndOf="@+id/tv_course_time" />
     <android.support.constraint.Guideline
       android:id="@+id/guideline4"
       android:layout_width="wrap_content"
