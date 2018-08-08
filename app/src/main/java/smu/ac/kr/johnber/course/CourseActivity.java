@@ -3,6 +3,7 @@ package smu.ac.kr.johnber.course;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
@@ -27,6 +29,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
   private Button mButton;
   private Button mButton2;
   private Realm mRealm;
+  public SharedPreferences prefs;
   private CourseViewHolder.itemClickListener listener;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +40,23 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
     //RecyclerView 설정
     Realm.init(this);
-   RealmConfiguration config = new RealmConfiguration.Builder()
+   RealmConfiguration config8 = new RealmConfiguration.Builder()
            .deleteRealmIfMigrationNeeded()
            .build();
-    mRealm.setDefaultConfiguration(config);
-    mRealm = Realm.getInstance(config);
+    mRealm.setDefaultConfiguration(config8);
+    mRealm = Realm.getInstance(config8);
+
+    prefs = getSharedPreferences("Pref", MODE_PRIVATE);
+    checkFirstRun();
+
     RealmResults<RunningCourse> courseItems = mRealm
             .where(RunningCourse.class).findAll();
+
+//    RealmResults<RunningCourse> courseItems = mRealm
+//            .where(RunningCourse.class).not()
+//            .beginGroup().equalTo("distance", "null").and().equalTo("time","null").endGroup()
+//            .sort("length", Sort.DESCENDING ).findAllAsync();
+
     CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false
             , this);
     RealmRecyclerView recyclerView = (RealmRecyclerView)findViewById(R.id.rv_course);
@@ -101,7 +114,6 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
 private void initView(){
   mButton = findViewById(R.id.btn_apitest);
-  //테스트
   mButton.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
@@ -125,7 +137,7 @@ private void initView(){
 // recyclerView 클릭 리스너
   @Override
   public void onItemClicked(View view, int position) {
-    LOGD(TAG,"CLICKED!"+position);
+     LOGD(TAG,"CLICKED!"+position);
     //코스 detail fragment inflate
     showDeatilView(position,view);
 
@@ -142,5 +154,14 @@ private void initView(){
     fragmentTransaction.add(R.id.course_item_container,fragment,"COURSEDETAILFRAGMENT")
             .addToBackStack(null)
             .commit();
+  }
+
+  public void checkFirstRun(){
+    boolean isFirstRun = prefs.getBoolean("isFirstRun",true);
+    if(isFirstRun)
+    {
+      new CourseRequest(getApplicationContext()).loadCourseData();
+      prefs.edit().putBoolean("isFirstRun",false).apply();
+    }
   }
 }

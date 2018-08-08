@@ -4,6 +4,7 @@ package smu.ac.kr.johnber.run;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.realm.RealmObject;
 import smu.ac.kr.johnber.map.JBLocation;
 
 /**
@@ -15,23 +16,22 @@ public class Record {
     private double elapsedTime;
     private double calories;
     // android.JBLocation 대신 커스텀 JBLocation 사용
-    //private ArrayList<JBLocation> JBLocation;
-    //private Date date;
+    private ArrayList<JBLocation> JBLocation;
+    private Date date;
     private double startTime;
     private double endTime;
-    //private String title;
+    private String title;
 
 
-
-    public Record(double distance, double elapsedTime, double calories, double startTime, double endTime) {
+    public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime,String title) {
         this.distance = distance;
         this.elapsedTime = elapsedTime;
         this.calories = calories;
-        //this.JBLocation = JBLocation;
-        //this.date = date;
+        this.JBLocation = JBLocation;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        //this.title = title;
+        this.title = title;
     }
 
     public Record(){}
@@ -48,31 +48,54 @@ public class Record {
         return calories;
     }
 
+
     public double getStartTime() {
         return startTime;
     }
 
-    public double getEndTime() {
-        return endTime;
+
+        public void setCalories ( double calories){
+            this.calories = calories;
+        }
+
+        public ArrayList<smu.ac.kr.johnber.map.JBLocation> getJBLocation () {
+            return JBLocation;
+        }
+
+        public void setJBLocation (ArrayList < smu.ac.kr.johnber.map.JBLocation > JBLocation) {
+            this.JBLocation = JBLocation;
+
+        }
+
+        public void setDistance ( double distance){
+            this.distance = distance;
+        }
+
+        public void setElapsedTime ( double elapsedTime){
+            this.elapsedTime = elapsedTime;
+        }
+
+
+        public void setStartTime ( double startTime){
+            this.startTime = startTime;
+        }
+
+        public double getEndTime () {
+            return endTime;
+        }
+
+        public void setEndTime ( double endTime){
+            this.endTime = endTime;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle (String title){
+            this.title = title;
+        }
+
+
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public void setElapsedTime(double elapsedTime) {
-        this.elapsedTime = elapsedTime;
-    }
-
-    public void setCalories(double calories) {
-        this.calories = calories;
-    }
-
-    public void setStartTime(double startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(double endTime) {
-        this.endTime = endTime;
-    }
-}

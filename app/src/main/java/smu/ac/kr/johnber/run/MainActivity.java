@@ -4,6 +4,7 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.account.loginActivity;
+import smu.ac.kr.johnber.opendata.CourseRequest;
 import smu.ac.kr.johnber.opendata.WeatherForecast;
 import smu.ac.kr.johnber.util.LogUtils;
 import smu.ac.kr.johnber.util.PermissionUtil;
@@ -48,7 +50,6 @@ import smu.ac.kr.johnber.util.PermissionUtil;
  * - 현재 위치 표시
  * - 위도 경도값 알아내기
  */
-//TODO: 지도 처리
 public class MainActivity extends BaseActivity implements OnClickListener, OnMapReadyCallback {
 
     private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
@@ -61,15 +62,16 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
     private Button mRun;
 
+
     private MapView mMapview;
     private GoogleMap mgoogleMap;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
-   //FirebaseAuth 사용자 로그인 여부 확인 변수
-  private FirebaseAuth mAuth;
-  private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth mAuth; //FirebaseAuth 사용자 로그인 여부 확인 변수
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         mAuth = FirebaseAuth.getInstance();
 
     checkUserlogin();
-        //TODO: 일정 시간마다 데이터를 갱신해야함
 
         /**
          * 지도 설정 & 위치 트래킹
@@ -246,7 +247,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
                 //TODO : request current location
                 LOGD(TAG, "Start location tracking");
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-
                 return;
             }
         }
@@ -325,4 +325,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
       }
     };
   }
+
+
+
 }

@@ -306,7 +306,7 @@ public class TrackerService extends Service {
 
         // 나머지 복원
         distance = Double.parseDouble(preferences.getString("DISTANCE", ""));
-//        elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
+        elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", ""));
         calories = Double.parseDouble(preferences.getString("CALORIES", ""));
         startTime = Double.parseDouble(preferences.getString("STARTTIME", ""));
 //        LOGD(TAG, "[Restored Lap] " +"CurrentLoc: "+mCurrentLocation+" LastLoc: "+mLastLocation+" Dist: "+distance+" ElapsedTime: "+RecordUtil.milliseconsToStringFormat(elapsedTime)+" Cal: "+" startTime: "+startTime);
@@ -341,14 +341,14 @@ public class TrackerService extends Service {
         // 나머지 저장
         // String으로 변환해 저장 한 후 데이터 복원시 double로 다시 복원
         editor.putString("DISTANCE", Double.toString(distance));
-//        editor.putString("ELAPSEDTIME", Double.toString(elapsedTime));
+        editor.putString("ELAPSEDTIME", Double.toString(elapsedTime));
         editor.putString("CALORIES", Double.toString(calories));
         //TODO : Date와 Title설정할것
         editor.putString("STARTTIME", Double.toString(startTime));
         editor.putString("ENDTIME", Double.toString(endTime));
 
         String currentDateandTime = RecordUtil.getFormattedDate();
-        editor.putString("DATE",currentDateandTime+" RUN");
+        editor.putString("DATE",currentDateandTime);
         editor.commit();
 
         //서비스 종료
