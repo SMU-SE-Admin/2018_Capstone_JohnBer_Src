@@ -34,6 +34,8 @@ public class Record {
         //this.title = title;
     }
 
+    public Record(){}
+
     public double getDistance() {
         return distance;
     }
