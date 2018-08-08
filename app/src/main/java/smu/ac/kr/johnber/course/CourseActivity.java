@@ -49,6 +49,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     prefs = getSharedPreferences("Pref", MODE_PRIVATE);
     checkFirstRun();
 
+
     RealmResults<RunningCourse> courseItems = mRealm
             .where(RunningCourse.class).findAll();
 
@@ -59,6 +60,8 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
     CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false
             , this);
+    prefs = getSharedPreferences("Pref", MODE_PRIVATE);
+    checkFirstRun();
     RealmRecyclerView recyclerView = (RealmRecyclerView)findViewById(R.id.rv_course);
     recyclerView.setAdapter(adapter);
 

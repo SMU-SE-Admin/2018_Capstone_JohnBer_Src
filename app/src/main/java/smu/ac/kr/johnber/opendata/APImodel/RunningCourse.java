@@ -29,6 +29,9 @@ public class RunningCourse extends RealmObject {
     private String startPointAddr;
     @SerializedName("종료지점소재지도로명주소")
     private String endPointRoadAddr;
+  
+  public RunningCourse() {
+
 
     private String length;
     public RunningCourse() {

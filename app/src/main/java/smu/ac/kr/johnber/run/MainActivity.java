@@ -73,6 +73,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private FirebaseAuth.AuthStateListener mAuthListener;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

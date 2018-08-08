@@ -36,6 +36,7 @@ public class Record {
 
     public Record(){}
 
+
     public double getDistance() {
         return distance;
     }
@@ -51,6 +52,23 @@ public class Record {
 
     public double getStartTime() {
         return startTime;
+    }
+
+
+    public double getEndTime() {
+        return endTime;
+
+    public void setCalories(double calories) {
+        this.calories = calories;
+    }
+
+    public ArrayList<smu.ac.kr.johnber.map.JBLocation> getJBLocation() {
+        return JBLocation;
+    }
+
+    public void setJBLocation(ArrayList<smu.ac.kr.johnber.map.JBLocation> JBLocation) {
+        this.JBLocation = JBLocation;
+
     }
 
 
@@ -97,5 +115,6 @@ public class Record {
         }
 
 
-    }
+}
 
+    
