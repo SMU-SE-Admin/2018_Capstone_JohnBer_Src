@@ -71,6 +71,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     recyclerView.setHasFixedSize(true);
     recyclerView.setAdapter(adapter);
 
+
   }
 
   @Override
