@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,6 +20,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Marker;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -26,6 +34,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -50,6 +59,11 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
   private Realm mRealm;
   private MyCourseViewHolder.itemClickListener listener;
   private List<Record> mockRecords ;
+  private List<Record> recordItems;
+  private MyCourseAdapter adapter;
+
+  private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -65,12 +79,18 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
       mockRecords.clear();
     }
 
-    mockRecords = generateMockRecords();
-    MyCourseAdapter adapter = new MyCourseAdapter(this, mockRecords, this);
+      recordItems = new ArrayList<>();
+//    mockRecords = generateMockRecords();
+
+    this.getRecord();
+    if (recordItems != null) {
+    adapter = new MyCourseAdapter(this, recordItems, this);
     RecyclerView recyclerView = findViewById(R.id.my_rv_course);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     recyclerView.setHasFixedSize(true);
     recyclerView.setAdapter(adapter);
+
+    }
 
 
   }
@@ -114,14 +134,62 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
 
   }
 
-  public List<Record> getMockRecords(){
-    return this.mockRecords;
+  public void getRecord(){
+
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
+
+    myRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
+        //DB에 저장된 데이터 HashMap에 저장.
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+          //DB에서 로그인한 아이디와 일치하는지 확인 후 해당 데이터만 읽어옴.
+          if (snapshot.getKey().toString().equals(uid)){
+            Log.d("MainActivity", "Single ValueEventListener : " + snapshot.getValue());
+            String keyDate1 = "";
+            for (DataSnapshot snapshot1 : snapshot.getChildren()){
+              keyDate1 = snapshot1.getKey().toString();
+              for (DataSnapshot snapshot2 : snapshot1.getChildren()){
+                String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
+                recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
+                recordItems.add(snapshot2.getValue(Record.class));
+//             LOGD(TAG,"HASHMAPSIZE0 : "+recordHashMap.size());
+//             LOGD(TAG,"record-location : "+ recordHashMap.get(keyDate).getJBLocation().get(0).getmLatitude());
+              }
+            }
+          }
+//         recordItems = (List<Record>) recordHashMap.values();
+
+//          LOGD(TAG,"Size : "+recordItems.size();
+          if (adapter != null) {
+
+          adapter.notifyDataSetChanged();
+          }
+
+        }
+      }
+
+      @Override
+      public void onCancelled(DatabaseError databaseError) {
+
+      }
+    });
+  }
+
+  public List<Record> getRecordsItems(){
+    return this.recordItems;
   }
   @Override
   public void onItemClicked(View view, int position) {
     LOGD(TAG,"CLICKED!"+position);
     showDeatilView(position,view);
   }
+
 
   public void showDeatilView(int position, View view) {
     Bundle data = new Bundle();

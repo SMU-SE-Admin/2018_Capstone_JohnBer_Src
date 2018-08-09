@@ -53,6 +53,9 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     RealmResults<RunningCourse> courseItems = mRealm
             .where(RunningCourse.class).findAll();
 
+    //TODO : 삭제할것 - for realmBrowser
+    LOGD("RealmManager", mRealm.getPath());
+
 //    RealmResults<RunningCourse> courseItems = mRealm
 //            .where(RunningCourse.class).not()
 //            .beginGroup().equalTo("distance", "null").and().equalTo("time","null").endGroup()

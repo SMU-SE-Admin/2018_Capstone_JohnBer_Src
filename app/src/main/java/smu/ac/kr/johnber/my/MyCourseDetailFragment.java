@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Locale;
 
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.course.CourseDetailFragment;
 import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.run.Record;
 import smu.ac.kr.johnber.util.BitmapUtil;
@@ -73,7 +71,7 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         time = mView.findViewById(R.id.tv_my_course_time);
         mMapView = this.mView.findViewById(R.id.mycourse_map_view);
 
-        data = ((MyActivity)getActivity()).getMockRecords();
+        data = ((MyActivity)getActivity()).getRecordsItems();
         record = data.get(getArguments().getInt("position"));
         courseName.setText(record.getTitle());
 
