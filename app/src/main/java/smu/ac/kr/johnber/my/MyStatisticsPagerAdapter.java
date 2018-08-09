@@ -44,7 +44,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
    *
    * @return
    */
-  private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
+
 
   @Override
   public int getCount() {
@@ -61,7 +61,6 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     switch (position) {
       case 0:
         viewId = R.layout.my_statistics_daily_view;
-        getRecord();
         break;
       case 1:
         viewId = R.layout.my_statistics_weekly_view;
@@ -76,6 +75,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     return view;
 
   }
+
 
   public void getRecord(){
 
