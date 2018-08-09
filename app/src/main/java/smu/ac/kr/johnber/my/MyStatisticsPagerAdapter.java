@@ -1,6 +1,8 @@
 package smu.ac.kr.johnber.my;
 
 import static android.provider.Settings.Global.getString;
+import static android.util.Config.LOGD;
+import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -18,8 +20,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import smu.ac.kr.johnber.R;
@@ -49,7 +54,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
   @Override
   public Object instantiateItem(ViewGroup container, int position) {
     LayoutInflater inflater = (LayoutInflater) container.getContext().getSystemService(
-        Context.LAYOUT_INFLATER_SERVICE);
+            Context.LAYOUT_INFLATER_SERVICE);
 
     int viewId = 0;
 
@@ -72,6 +77,43 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
   }
 
 
+  public void getRecord(){
+
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
+
+    myRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
+        //DB에 저장된 데이터 HashMap에 저장.
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+          //DB에서 로그인한 아이디와 일치하는지 확인 후 해당 데이터만 읽어옴.
+          if (snapshot.getKey().toString().equals(uid)){
+            //Log.d("MainActivity", "Single ValueEventListener : " + snapshot.getValue());
+            String keyDate1 = "";
+            for (DataSnapshot snapshot1 : snapshot.getChildren()){
+              keyDate1 = snapshot1.getKey().toString();
+              for (DataSnapshot snapshot2 : snapshot1.getChildren()){
+                String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
+                recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
+                //Log.d("mainactivity", "hashMap"+recordHashMap.toString());
+              }
+            }
+          }
+        }
+        dailyStats(recordHashMap);
+      }
+
+      @Override
+      public void onCancelled(DatabaseError databaseError) {
+
+      }
+    });
+  }
 
 
   @Override
@@ -97,5 +139,42 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
         return "Monthly";
     }
     return super.getPageTitle(position);
+  }
+
+  //JGH
+  public void dailyStats(HashMap<String, Record> recordHashMap) {
+    //현재 시간 받아오기.
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String todayDate = sdf.format(date);
+
+    List<Double> dailyKM = new ArrayList<Double>();
+    List<Double> dailyTime = new ArrayList<Double>();
+    List<Double> dailyCal = new ArrayList<Double>();
+
+
+    Iterator<String> iter = recordHashMap.keySet().iterator();
+    while(iter.hasNext()){
+      //Log.d("mainactivity", "dkdkdkdkdkdkdkd : " + recordHashMap.keySet());
+      String keys = (String) iter.next();
+      String dates = keys.split("/")[0];
+      String times = keys.split("/")[1];
+
+      //Log.d("mainactivity", "keys, dates, times: " + dates.toString());
+
+
+      if (todayDate.equals(dates)){
+        Record dailyRecord = recordHashMap.get(keys);
+
+        dailyKM.add(dailyRecord.getDistance());
+        dailyTime.add(dailyRecord.getElapsedTime());
+        dailyCal.add(dailyRecord.getCalories());
+
+        Log.d("mainactivity", "daily: " + dailyKM.toString());
+      }
+    }
+
   }
 }

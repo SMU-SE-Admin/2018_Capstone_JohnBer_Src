@@ -169,7 +169,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     //TODO : date, endTime, Title 받아오기
 
 
-    String title = null;   // date를 변환해서 우선 넣기로함
+    String title = getTime + "/" +stringStartTime;   // date를 변환해서 우선 넣기로함
 
     Record record = new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime,title);
 
