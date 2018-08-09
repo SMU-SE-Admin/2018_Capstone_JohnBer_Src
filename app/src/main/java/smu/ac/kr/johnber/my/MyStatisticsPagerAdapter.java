@@ -45,7 +45,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
    * @return
    */
 
-
+  private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
   @Override
   public int getCount() {
     return 3;
