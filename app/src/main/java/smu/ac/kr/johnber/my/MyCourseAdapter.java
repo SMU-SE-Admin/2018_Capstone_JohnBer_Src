@@ -14,8 +14,10 @@ import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.my.MyCourseViewHolder;
 import smu.ac.kr.johnber.run.Record;
 import smu.ac.kr.johnber.util.LocationUtil;
+import smu.ac.kr.johnber.util.RecordUtil;
 
 
+import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
@@ -44,9 +46,12 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     holder.courseName.setText(courseItem.getTitle());
     holder.calories.setText(Double.toString(courseItem.getCalories()));
     holder.distance.setText(Double.toString(courseItem.getDistance()));
-    holder.time.setText(Double.toString(courseItem.getElapsedTime()));
-    holder.startPoint.setText(LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context));
-
+    String time = RecordUtil.milliseconsToStringFormat(courseItem.getElapsedTime());
+    holder.time.setText(time);
+    String startPoint = LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context);
+    String startPointAddress[] = startPoint.split(" ");
+    startPoint = startPointAddress[2] + " " + startPointAddress[3];
+    holder.startPoint.setText(startPoint);
   }
 
   @Override

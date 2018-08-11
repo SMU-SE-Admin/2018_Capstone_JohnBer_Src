@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout android:layout_width="match_parent"
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:id="@+id/courseContainer"
     android:layout_height="match_parent"
     android:layout_weight="1"
@@ -45,6 +47,7 @@
       <android.support.constraint.ConstraintLayout
         android:id="@+id/cv_course_detail_summary"
         android:layout_width="match_parent"
+          android:layout_weight="1"
         android:layout_height="match_parent">
 
         <TextView
@@ -75,6 +78,40 @@
           app:layout_constraintStart_toStartOf="@+id/guideline8"
           app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_summary_title"
           tools:text="윤동주 문학관"/>
+
+        <View
+            android:id="@+id/spointMarker"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/ic_point_marker"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_course_detail_summary_start_point"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            />
+
+        <View
+            android:id="@+id/epointMarker"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/ic_point_marker"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_course_detail_summary_end_point"
+            app:layout_constraintTop_toTopOf="@+id/tv_course_detail_summary_end_point"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toBottomOf="@+id/epointMarker"
+            app:layout_constraintBottom_toTopOf="@+id/epointMarker"
+            app:layout_constraintEnd_toEndOf="@+id/spointMarker"
+            app:layout_constraintTop_toBottomOf="@+id/spointMarker"
+            />
+
         <android.support.constraint.Guideline
           android:id="@+id/guideline7"
           android:layout_width="0dp"
@@ -129,31 +166,35 @@
             app:layout_constraintStart_toEndOf="@+id/tv_course_time_text"
             tools:text="4403" />
 
+
         <!--text view for measurement-->
         <TextView
-          android:id="@+id/tv_cousrse_km_text"
-          android:layout_width="19dp"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="4dp"
-          android:freezesText="false"
-          android:text="KM"
-          android:textAlignment="viewStart"
-          android:textColor="@color/darkgrey"
-          android:textSize="12sp"
-          app:layout_constraintStart_toEndOf="@+id/tv_course_distance"
-          app:layout_constraintTop_toTopOf="@+id/tv_course_distance"/>
+            android:id="@+id/tv_cousrse_km_text"
+            android:layout_width="19dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:freezesText="false"
+            android:text="KM"
+            android:textAlignment="viewStart"
+            android:textColor="@color/darkgrey"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tv_course_distance"
+            app:layout_constraintTop_toTopOf="@+id/tv_course_distance" />
+
         <TextView
-          android:id="@+id/tv_course_time_text"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="4dp"
-          android:freezesText="false"
-          android:text="TIME"
-          android:textAlignment="viewStart"
-          android:textColor="@color/darkgrey"
-          android:textSize="12sp"
-          app:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-          app:layout_constraintStart_toEndOf="@+id/tv_course_time"/>
+            android:id="@+id/tv_course_time_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:freezesText="false"
+            android:text="TIME"
+            android:textAlignment="viewStart"
+            android:textColor="@color/darkgrey"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
+            app:layout_constraintStart_toEndOf="@+id/tv_course_time" />
 
         <TextView
             android:id="@+id/tv_course_calories_text"
@@ -174,37 +215,43 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:layout_marginTop="4dp"
-      android:background="@color/white">
-      <android.support.constraint.ConstraintLayout
-        android:id="@+id/cv_course_detail_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
+        android:background="@color/white">
+
+      <android.support.constraint.ConstraintLayout
+          android:id="@+id/cv_course_detail_info"
+          android:layout_width="match_parent"
+          android:layout_weight="1"
+          android:layout_height="match_parent">
+
         <TextView
-          android:id="@+id/tv_course_detail_info_title"
-          android:textStyle="bold"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
-          android:text="코스정보"
-          android:textAppearance="@style/TextAppearance.AppCompat"
-          android:textColor="@color/black"
-          android:textSize="16sp"
-          app:layout_constraintStart_toStartOf="@+id/guideline3"
-          app:layout_constraintTop_toTopOf="parent"/>
+            android:id="@+id/tv_course_detail_info_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="코스정보"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_course_detail_info"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
+            android:freezesText="true"
             android:lineSpacingExtra="8sp"
             android:textAlignment="viewStart"
-            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintRight_toLeftOf="@id/guideline6"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_title"
             tools:text="@string/course_info_route_toolstext" />
@@ -213,36 +260,47 @@
             android:id="@+id/tv_course_detail_info_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="fill"
             android:layout_marginBottom="32dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="32dp"
-            android:freezesText="false"
+            android:layout_weight="1"
             android:lineSpacingExtra="8sp"
             android:scrollHorizontally="false"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info"
             tools:text="@string/course_info_toolstext" />
 
 
         <android.support.constraint.Guideline
-          android:id="@+id/guideline3"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:orientation="vertical"
-          app:layout_constraintGuide_begin="20dp"
-          app:layout_constraintStart_toStartOf="parent"/>
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <android.support.constraint.Guideline
-          android:id="@+id/guideline6"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:orientation="vertical"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintGuide_begin="395dp"/>
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_begin="395dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text=" "
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            tools:layout_editor_absoluteY="96dp" />
 
       </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

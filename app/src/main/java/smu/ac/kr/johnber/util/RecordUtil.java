@@ -39,9 +39,11 @@ public class RecordUtil {
     public static String milliseconsToStringFormat(double ms) {
         int seconds = (int) ((ms) / 1000);
         int minutes = (seconds / 60) % 60;
+        int hours = (minutes/60)%60;
         seconds = seconds % 60;
         String stringTime = "";
-        stringTime += "" + String.format("%02d", minutes);
+        stringTime +="" +String.format("%02d", hours);
+        stringTime += ":" + String.format("%02d", minutes);
         stringTime += ":" + String.format("%02d", seconds);
 
         return stringTime;

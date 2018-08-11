@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -31,6 +32,7 @@ import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.run.Record;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.LocationUtil;
+import smu.ac.kr.johnber.util.RecordUtil;
 
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
@@ -77,9 +79,11 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
 
         startPoint.setText(LocationUtil.latlngtoStringLocation(record.getJBLocation().get(0),getActivity().getApplicationContext()));
         endPoint.setText(LocationUtil.latlngtoStringLocation(record.getJBLocation().get(record.getJBLocation().size() - 1),getActivity().getApplicationContext()));
-        distance.setText(Double.toString(record.getDistance()));
+        String dist = RecordUtil.distanceToStringFormat(record.getDistance());
+        distance.setText(dist);
         calories.setText(Double.toString(record.getCalories()));
-        time.setText(Double.toString(record.getElapsedTime()));
+        String stime = RecordUtil.milliseconsToStringFormat(record.getElapsedTime());
+        time.setText(stime);
 
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -110,7 +114,7 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mgoogleMap = googleMap;
-        googleMap.setMinZoomPreference(8);
+//        googleMap.setMinZoomPreference(8);
         ArrayList<JBLocation> route = record.getJBLocation();
         mgoogleMap.addPolyline(setPolylineOptions(route));
 
@@ -129,13 +133,19 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
                 .title("end")
                 .icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, getActivity()));
         mgoogleMap.addMarker(endMarker).showInfoWindow();
-
+    //
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(start).include(end);
-
+        for(JBLocation jbPoint : route) {
+            LatLng point = LocationUtil.jbLocationToLatLng(jbPoint);
+            builder.include(point);
+        }
         //bound로 애니메이션
         LatLngBounds bounds = builder.build();
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(bounds.getCenter()));
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = 300;
+        int padding = 50;
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
+        mgoogleMap.moveCamera(cu);
     }
 
     public PolylineOptions setPolylineOptions(ArrayList<JBLocation> list) {
