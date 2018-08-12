@@ -6,10 +6,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -24,21 +27,41 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import io.realm.Case;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.account.loginActivity;
+import smu.ac.kr.johnber.map.JBLocation;
+import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 import smu.ac.kr.johnber.opendata.CourseRequest;
 import smu.ac.kr.johnber.opendata.WeatherForecast;
+import smu.ac.kr.johnber.util.BitmapUtil;
+import smu.ac.kr.johnber.util.LocationUtil;
 import smu.ac.kr.johnber.util.LogUtils;
 import smu.ac.kr.johnber.util.PermissionUtil;
 
@@ -56,13 +79,11 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private static final int REQUEST_LOCATION_PERMISSION = 101;
     private static final String PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-    private TextView mRegion;
-    private TextView mSky;
-    private TextView mCelcius;
+    private Realm mRealm;
 
     private Button mRun;
 
-
+    private FloatingActionButton mFindCourse;
     private MapView mMapview;
     private GoogleMap mgoogleMap;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -96,6 +117,15 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         mMapview.getMapAsync(this);
 
         WeatherForecast.loadWeatherData(this);
+
+        Realm.init(this);
+        RealmConfiguration config12 = new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(1)
+                .build();
+        mRealm.setDefaultConfiguration(config12);
+        mRealm = Realm.getInstance(config12);
+
         LOGD(TAG, "onCreate");
 
 
@@ -170,7 +200,18 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     public void initView() {
         mRun = findViewById(R.id.btn_run);
         mMapview = findViewById(R.id.main_mapview);
+        mFindCourse = findViewById(R.id.btn_find_course);
+        mFindCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findCourse();
+            }
+        });
+
     }
+
+
+
 
     public void seListeners() {
         mRun.setOnClickListener(this);
@@ -298,13 +339,145 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         //update UI
         LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         mgoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
-
-
-//        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
         LOGD(TAG, "Lattitude : " + latitude + "/Longtitude : " + longtitude);
 
     }
 
+    //내 현재 위치를 중심으로 일정 반경 내의 코스를 지도에 마커로 표시
+    private void findCourse() {
+        //현재 위치 좌표 -> 시, 군
+        // 시, Realm에서 검색
+        // 필터링된 데이터들의 위,경도구하기
+        // 현위치 좌표~검색된 좌표 거리계산
+        // 반경 xkm 내의 위치좌표만 표시
+
+        Geocoder mGeoCoder = new Geocoder(getApplicationContext(), Locale.KOREA);
+        List<Address> currentLocationName = null;
+        String locality = null;
+        ArrayList<LatLng> markerList = new ArrayList<>();
+        try {
+            currentLocationName = mGeoCoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+            //TODO : 검색범위에 시+군 검색 : 정규식
+            locality = currentLocationName.get(0).getLocality() ;
+            LOGD(TAG,locality);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RealmResults<RunningCourse> query = filterResults(locality);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        //각 코스의 출발지~도착치 모두 비교
+        // integer : primary key of course
+        HashMap<Integer, LatLng> courseMap = new HashMap<>();
+        HashMap<Integer, String> courseName = new HashMap<>();
+
+
+        LOGD(TAG,"query resuㅣt : "+query.size());
+        //현재 좌표와 검색결과 좌표 거리 계산
+        for (RunningCourse course : query) {
+            List<LatLng> latlist = getLatLangFromAddr(course);
+            LatLng sPoint = latlist.get(0);
+            LatLng ePoint = latlist.get(1);
+            if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), sPoint)<5000){
+                courseMap.put(course.getId(), sPoint);
+                courseName.put(course.getId(), course.getCourseName());
+            }
+            else if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), ePoint)<5000){
+                courseMap.put(course.getId(), ePoint);
+                courseName.put(course.getId(), course.getCourseName());
+            }
+
+        }
+        if (courseMap.size() > 0) {
+            Iterator it = courseMap.entrySet().iterator();
+            for (;it.hasNext();) {
+                Map.Entry pair  = (Map.Entry) it.next();
+
+            MarkerOptions startMarker = new MarkerOptions();
+            startMarker.position((LatLng) pair.getValue())
+                    .title(courseName.get(pair.getKey()))
+                    .icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, this));
+            mgoogleMap.addMarker(startMarker).showInfoWindow();
+
+            builder.include((LatLng) pair.getValue());
+
+            }
+        LatLngBounds bounds = builder.build();
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        int padding = 100;
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
+        mgoogleMap.moveCamera(cu);
+        }
+
+
+        //bound로 애니메이션
+    }
+
+
+    public RealmResults<RunningCourse> filterResults(String text) {
+        RealmResults<RunningCourse> query = mRealm.where(RunningCourse.class)
+                .contains("startPointRoadAddr",text)
+                .or()
+                .contains("startPointAddr",text)
+                .or()
+                .contains("endPointRoadAddr",text)
+                .or()
+                .contains("endPointAddr",text)
+                .findAll();
+        return query;
+    }
+
+
+    private List<LatLng> getLatLangFromAddr(RunningCourse mcourseData) {
+        List<LatLng> latlng = new ArrayList<>();
+        if(mcourseData == null)
+            LOGD(TAG,"mcourseData is empty");
+        try {
+            //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
+            Geocoder mGeoCoder = new Geocoder(this, Locale.KOREA);
+            List<Address> startLocation = null;
+            List<Address> endLocation = null;
+            if (!(mcourseData.getStartPointAddr().equals("null")||mcourseData.getStartPointAddr().equals("해당 없음"))) {
+                //지번주소
+                LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
+                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1);
+                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1).toString());
+            } else if (!(mcourseData.getStartPointRoadAddr().equals("null")||mcourseData.getStartPointRoadAddr().equals("해당 없음"))) {
+                //도로명주소
+                LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
+                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1);
+                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1).toString());
+            }
+
+            if (!(mcourseData.getEndPointAddr().equals("null")||mcourseData.getEndPointAddr().equals("해당 없음"))) {
+                //지번주소
+                LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
+                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
+                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
+                if (endLocation.size() <= 0) {
+                    endLocation = startLocation;
+                }
+            } else if (!(mcourseData.getEndPointRoadAddr().equals("null")||mcourseData.getEndPointRoadAddr().equals("해당 없음"))) {
+                //도로명주소
+                LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
+                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1);
+                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1).toString());
+            }
+            LatLng start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
+            LatLng end =new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude());
+            latlng.add(start);
+            latlng.add(end);
+            LOGD(TAG, "size of lsitsts : " + latlng.size());
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGD(TAG, "cannot find location info" + mcourseData.getCourseName() + " " + mcourseData.getStartPointAddr() + " " + mcourseData.getStartPointRoadAddr() + " " + mcourseData.getEndPointAddr() + " " + mcourseData.getEndPointRoadAddr());
+        }
+
+        return latlng;
+    }
  //로그인 여부 확인 함수.
   private void checkUserlogin(){
     mAuthListener = new FirebaseAuth.AuthStateListener() {

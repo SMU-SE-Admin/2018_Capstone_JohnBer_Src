@@ -117,6 +117,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="117dp" />
+
+
   </android.support.constraint.ConstraintLayout>
   </FrameLayout>
   <!--bottom navigationbar-->

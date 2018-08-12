@@ -4,12 +4,26 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.Realm;
@@ -20,6 +34,7 @@ import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 import smu.ac.kr.johnber.opendata.CourseRequest;
+import smu.ac.kr.johnber.run.MainActivity;
 import smu.ac.kr.johnber.run.RunningFragment;
 
 public class CourseActivity extends BaseActivity implements CourseViewHolder.itemClickListener {
@@ -30,6 +45,9 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
   private Button mButton2;
   private Realm mRealm;
   public SharedPreferences prefs;
+  private FusedLocationProviderClient mFusedLocationClient;
+  private FloatingActionButton mFindCourse;
+  private Location mCurrentLocation;
   private CourseViewHolder.itemClickListener listener;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -40,21 +58,13 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
     //RecyclerView 설정
     Realm.init(this);
-   RealmConfiguration config8 = new RealmConfiguration.Builder()
-           .deleteRealmIfMigrationNeeded()
-           .build();
-    mRealm.setDefaultConfiguration(config8);
-    mRealm = Realm.getInstance(config8);
+    mRealm = Realm.getDefaultInstance();
 
     prefs = getSharedPreferences("Pref", MODE_PRIVATE);
     checkFirstRun();
 
-
     RealmResults<RunningCourse> courseItems = mRealm
             .where(RunningCourse.class).findAll();
-
-    //TODO : 삭제할것 - for realmBrowser
-    LOGD("RealmManager", mRealm.getPath());
 
 //    RealmResults<RunningCourse> courseItems = mRealm
 //            .where(RunningCourse.class).not()
@@ -67,6 +77,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     checkFirstRun();
     RealmRecyclerView recyclerView = (RealmRecyclerView)findViewById(R.id.rv_course);
     recyclerView.setAdapter(adapter);
+
 
   }
 
@@ -138,6 +149,7 @@ private void initView(){
       mRealm.commitTransaction();
     }
   });
+
 }
 
 // recyclerView 클릭 리스너
@@ -170,4 +182,55 @@ private void initView(){
       prefs.edit().putBoolean("isFirstRun",false).apply();
     }
   }
+
+  private List<LatLng> getLatLangFromAddr(RunningCourse mcourseData) {
+    List<LatLng> latlng = new ArrayList<>();
+    if(mcourseData == null)
+      LOGD(TAG,"mcourseData is empty");
+    try {
+      //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
+      Geocoder mGeoCoder = new Geocoder(this, Locale.KOREA);
+      List<Address> startLocation = null;
+      List<Address> endLocation = null;
+      if (!(mcourseData.getStartPointAddr().equals("null")||mcourseData.getStartPointAddr().equals("해당 없음"))) {
+        //지번주소
+        LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
+        startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1);
+        LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1).toString());
+      } else if (!(mcourseData.getStartPointRoadAddr().equals("null")||mcourseData.getStartPointRoadAddr().equals("해당 없음"))) {
+        //도로명주소
+        LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
+        startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1);
+        LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1).toString());
+      }
+
+      if (!(mcourseData.getEndPointAddr().equals("null")||mcourseData.getEndPointAddr().equals("해당 없음"))) {
+        //지번주소
+        LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
+        endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
+        LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
+        if (endLocation.size() <= 0) {
+          endLocation = startLocation;
+        }
+      } else if (!(mcourseData.getEndPointRoadAddr().equals("null")||mcourseData.getEndPointRoadAddr().equals("해당 없음"))) {
+        //도로명주소
+        LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
+        endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1);
+        LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1).toString());
+      }
+      LatLng start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
+      LatLng end =new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude());
+      latlng.add(start);
+      latlng.add(end);
+      LOGD(TAG, "size of lsitsts : " + latlng.size());
+
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      LOGD(TAG, "cannot find location info" + mcourseData.getCourseName() + " " + mcourseData.getStartPointAddr() + " " + mcourseData.getStartPointRoadAddr() + " " + mcourseData.getEndPointAddr() + " " + mcourseData.getEndPointRoadAddr());
+    }
+
+    return latlng;
+  }
+
 }

@@ -1,5 +1,6 @@
 package smu.ac.kr.johnber.opendata.APImodel;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
@@ -31,101 +32,146 @@ public class RunningCourse extends RealmObject {
     private String endPointRoadAddr;
     private String length;
 
+
+    private int id;
+    private double sLat;
+    private double sLng;
+    private double eLat;
+    private double eLng;
+
+
     public RunningCourse() {
 
 
-        }
-
-        public String getStartPoint () {
-            return startPoint;
-        }
-
-        public void setStartPoint (String startPoint){
-            this.startPoint = startPoint;
-        }
-
-        public String getEndPoint () {
-            return endPoint;
-        }
-
-        public void setEndPoint (String endPoint){
-            this.endPoint = endPoint;
-        }
-
-        public String getCourse () {
-            return course;
-        }
-
-        public void setCourse (String course){
-            this.course = course;
-        }
-
-        public String getCourseInfo () {
-            return courseInfo;
-        }
-
-        public void setCourseInfo (String courseInfo){
-
-            this.courseInfo = courseInfo;
-            this.length = Integer.toString(courseInfo.length() + course.length());
-        }
-
-        public String getCourseName () {
-            return courseName;
-        }
-
-        public void setCourseName (String courseName){
-            this.courseName = courseName;
-        }
-
-        public String getTime () {
-            return time;
-        }
-
-        public void setTime (String time){
-            this.time = time;
-        }
-
-        public String getDistance () {
-            return distance;
-        }
-
-        public void setDistance (String distance){
-            this.distance = distance;
-        }
-
-        public String getEndPointAddr () {
-            return endPointAddr;
-        }
-
-        public void setEndPointAddr (String endPointAddr){
-            this.endPointAddr = endPointAddr;
-        }
-
-        public String getStartPointAddr () {
-            return startPointAddr;
-        }
-
-        public void setStartPointAddr (String startPointAddr){
-            this.startPointAddr = startPointAddr;
-        }
-
-        public String getStartPointRoadAddr () {
-            return startPointRoadAddr;
-        }
-
-        public void setStartPointRoadAddr (String startPointRoadAddr){
-            this.startPointRoadAddr = startPointRoadAddr;
-        }
-
-        public String getEndPointRoadAddr () {
-            return endPointRoadAddr;
-        }
-
-        public void setEndPointRoadAddr (String endPointRoadAddr){
-            this.endPointRoadAddr = endPointRoadAddr;
-        }
-
-
     }
+
+    public String getStartPoint() {
+        return startPoint;
+    }
+
+    public void setStartPoint(String startPoint) {
+        this.startPoint = startPoint;
+    }
+
+    public String getEndPoint() {
+        return endPoint;
+    }
+
+    public void setEndPoint(String endPoint) {
+        this.endPoint = endPoint;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getCourseInfo() {
+        return courseInfo;
+    }
+
+    public void setCourseInfo(String courseInfo) {
+
+        this.courseInfo = courseInfo;
+        this.length = Integer.toString(courseInfo.length() + course.length());
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getEndPointAddr() {
+        return endPointAddr;
+    }
+
+    public void setEndPointAddr(String endPointAddr) {
+        this.endPointAddr = endPointAddr;
+    }
+
+    public String getStartPointAddr() {
+        return startPointAddr;
+    }
+
+    public void setStartPointAddr(String startPointAddr) {
+        this.startPointAddr = startPointAddr;
+    }
+
+    public String getStartPointRoadAddr() {
+        return startPointRoadAddr;
+    }
+
+    public void setStartPointRoadAddr(String startPointRoadAddr) {
+        this.startPointRoadAddr = startPointRoadAddr;
+    }
+
+    public String getEndPointRoadAddr() {
+        return endPointRoadAddr;
+    }
+
+    public void setEndPointRoadAddr(String endPointRoadAddr) {
+        this.endPointRoadAddr = endPointRoadAddr;
+    }
+    public double getsLat() {
+        return sLat;
+    }
+
+    public void setsLat(double sLat) {
+        this.sLat = sLat;
+    }
+
+    public double getsLng() {
+        return sLng;
+    }
+
+    public void setsLng(double sLng) {
+        this.sLng = sLng;
+    }
+
+    public double geteLat() {
+        return eLat;
+    }
+
+    public void seteLat(double eLat) {
+        this.eLat = eLat;
+    }
+
+    public double geteLng() {
+        return eLng;
+    }
+
+    public void seteLng(double eLng) {
+        this.eLng = eLng;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+}
 
