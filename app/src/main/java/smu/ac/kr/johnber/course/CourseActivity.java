@@ -52,11 +52,6 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     private Button mButton2;
     private Realm mRealm;
     public SharedPreferences prefs;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private FloatingActionButton mFindCourse;
-    private Location mCurrentLocation;
-    private SearchView searchView;
-    private CourseViewHolder.itemClickListener listener;
     CourseAdapter mAdapter;
     private SearchView mSearchView;
 
@@ -76,11 +71,6 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         RealmResults<RunningCourse> courseItems = mRealm
                 .where(RunningCourse.class).findAll();
-
-//    RealmResults<RunningCourse> courseItems = mRealm
-//            .where(RunningCourse.class).not()
-//            .beginGroup().equalTo("distance", "null").and().equalTo("time","null").endGroup()
-//            .sort("length", Sort.DESCENDING ).findAllAsync();
 
         mAdapter = new CourseAdapter(this, courseItems, true, false
                 , this);
@@ -282,7 +272,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         } catch (IOException e) {
             e.printStackTrace();
-            LOGD(TAG, "cannot find location info" + mcourseData.getCourseName() + " " + mcourseData.getStartPointAddr() + " " + mcourseData.getStartPointRoadAddr() + " " + mcourseData.getEndPointAddr() + " " + mcourseData.getEndPointRoadAddr());
+            LOGD(TAG, "cannot find location info " + mcourseData.getCourseName() + " " + mcourseData.getStartPointAddr() + " " + mcourseData.getStartPointRoadAddr() + " " + mcourseData.getEndPointAddr() + " " + mcourseData.getEndPointRoadAddr());
         }
 
         return latlng;

@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +68,9 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     private List<Record> recordItems;
     private MyCourseAdapter adapter;
 
+
     private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
+    private SkeletonScreen skeletonScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +96,38 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 //            recyclerView.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
+        /**
+         * skeleton 로딩 구현
+         * option1 : recyclerview - setAdapter 주석처리할것
+         * option2 : View
+         */
+        //*** option1
+//        final SkeletonScreen skeletonScreen = Skeleton.bind(recyclerView)
+//                .adapter(adapter)
+//                .shimmer(true)
+//                .angle(20)
+//                .frozen(false)
+//                .duration(1200)
+//                .count(10)
+//                .load(R.layout.item_skeleton_news)
+//                .show(); //default count is 10
+//        recyclerView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                skeletonScreen.hide();
+//            }
+//        }, 3000);
         recyclerView.setAdapter(adapter);
+        //*** option2
+        View rootView = findViewById(R.id.mycourse_item_container);
+        skeletonScreen = Skeleton.bind(rootView)
+                .shimmer(true)
+                .duration(1000)
+                .color(R.color.shimmer_color)
+                .load(R.layout.activity_view_skeleton)
+                .show();
+        MyHandler myHandler = new MyHandler(this);
+        myHandler.sendEmptyMessageDelayed(1, 1000);
 
 
     }
@@ -205,4 +242,20 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
                 .commit();
     }
 
+    //for skeleton view
+    public static class MyHandler extends android.os.Handler {
+        private final WeakReference<MyActivity> activityWeakReference;
+
+        MyHandler(MyActivity activity) {
+            this.activityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (activityWeakReference.get() != null) {
+                activityWeakReference.get().skeletonScreen.hide();
+            }
+        }
+    }
 }

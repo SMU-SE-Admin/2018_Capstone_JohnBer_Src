@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
 
     implementation 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
+    implementation 'com.ethanhua:skeleton:1.1.1'
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
 
 
     implementation 'io.realm:android-adapters:2.1.1'

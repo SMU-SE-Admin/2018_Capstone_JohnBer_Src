@@ -44,7 +44,6 @@ public class CourseViewHolder extends RealmViewHolder {
 //    lbTime = view.findViewById(R.id.tv_course_time_text);
 //    lbCalories = view.findViewById(R.id.tv_course_calories_text);
     thumnail = view.findViewById(R.id.iv_course_map_thumbnail);
-    setLabel();
     this.listener = listener;
     view.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -52,12 +51,6 @@ public class CourseViewHolder extends RealmViewHolder {
         listener.onItemClicked(view, getAdapterPosition());
       }
     });
-  }
-
-  public void setLabel() {
-//    lbTime.setText("TIME");
-//    lbDistance.setText("KM");
-//    lbCalories.setText("CAL");
   }
 
   public interface itemClickListener {
