@@ -12,10 +12,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -134,12 +137,15 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         });
 
 
+
         return mView;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
 
     }
@@ -200,14 +206,21 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
 
             for (int position = 0; position < markerList.size(); position++) {
-
-                mgoogleMap.addMarker(new MarkerOptions().position(markerList.get(position)).title(position + " ").icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, getActivity())));
+                String title;
+                if(position == 0)
+                    title = "start";
+                else
+                    title = "end";
+                mgoogleMap.addMarker(new MarkerOptions().position(markerList.get(position)).title(title).icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, getActivity())));
             }
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(markerList.get(0)).include(markerList.get(1));
-            googleMap.setMinZoomPreference(13);
             LatLngBounds bounds = builder.build();
-            mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(bounds.getCenter()));
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int height = 300;
+            int padding = 50;
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
+            mgoogleMap.moveCamera(cu);
         } catch (IOException e) {
             e.printStackTrace();
             LOGD(TAG, "cannot find location info");
@@ -254,4 +267,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         }else
             PermissionUtil.checkPermission(getActivity(),PERMISSION,REQUEST_LOCATION_PERMISSION);
     }
+
+
 }

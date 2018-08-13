@@ -43,6 +43,8 @@
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/sp_course_search_gun"
       app:layout_constraintTop_toTopOf="@+id/sp_course_search_si"/>
+
+
     <android.support.constraint.Guideline
       android:id="@+id/guideline"
       android:layout_width="0dp"

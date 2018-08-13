@@ -10,6 +10,7 @@
   android:orientation="vertical">
 
   <!--toolbar-->
+
   <include
     android:id="@+id/toolbar"
     layout="@layout/toolbar"/>
@@ -21,131 +22,141 @@
           android:layout_weight="1" android:visibility="visible">
 
     <!--weather widget-->
+
     <android.support.constraint.ConstraintLayout
-            android:id="@+id/v_weatherWidget_container"
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:layout_gravity="top"
-            android:background="@color/darkgrey"
-            android:elevation="4dp"
-            android:fadingEdge="horizontal">
-      <TextView
-              android:id="@+id/tv_weather_region"
-              android:textStyle="bold"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginEnd="68dp"
-              android:layout_marginLeft="48dp"
-              android:text="동교동삼거리"
-              android:textAlignment="center"
-              app:layout_constraintBaseline_toBaselineOf="@+id/tv_weather_dustConcentrationsons_textlabel"
-              app:layout_constraintEnd_toStartOf="@+id/tv_weather_dustConcentrationsons_textlabel"
-              app:layout_constraintLeft_toLeftOf="parent"/>
-      <TextView
-              android:id="@+id/tv_weather_sky"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="20dp"
-              android:layout_marginStart="48dp"
-              android:text="맑음"
-              android:textAlignment="center"
-              android:textSize="12sp"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintStart_toStartOf="parent"/>
-      <TextView
-              android:id="@+id/tv_weather_celsius"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="20dp"
-              android:layout_marginStart="4dp"
-              android:text="16°C"
-              android:textAlignment="center"
-              android:textSize="12sp"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintStart_toEndOf="@+id/tv_weather_sky"/>
+        android:id="@+id/v_weatherWidget_container"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_gravity="top"
+        android:background="@color/darkgrey"
+        android:elevation="4dp"
+        android:fadingEdge="horizontal"
+        android:visibility="gone">
 
       <TextView
-              android:id="@+id/tv_weather_rain_textLabel"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="20dp"
-              android:layout_marginStart="8dp"
-              android:text="강수확률"
-              android:textAlignment="center"
-              android:textSize="12sp"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintStart_toEndOf="@+id/tv_weather_celsius"/>
+          android:id="@+id/tv_weather_region"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="68dp"
+          android:layout_marginLeft="48dp"
+          android:text="동교동삼거리"
+          android:textAlignment="center"
+          android:textStyle="bold"
+          app:layout_constraintBaseline_toBaselineOf="@+id/tv_weather_dustConcentrationsons_textlabel"
+          app:layout_constraintEnd_toStartOf="@+id/tv_weather_dustConcentrationsons_textlabel"
+          app:layout_constraintLeft_toLeftOf="parent" />
+
       <TextView
-              android:id="@+id/tv_weather_rain_value"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="20dp"
-              android:layout_marginStart="4dp"
-              android:text="10%"
-              android:textAlignment="center"
-              android:textSize="12sp"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintStart_toEndOf="@+id/tv_weather_rain_textLabel"/>
+          android:id="@+id/tv_weather_sky"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dp"
+          android:layout_marginStart="48dp"
+          android:text="맑음"
+          android:textAlignment="center"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
+
       <TextView
-              android:id="@+id/tv_weather_dustConcentrationsons_textlabel"
-              android:layout_width="70dp"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="22dp"
-              android:layout_marginBottom="8dp"
-              android:layout_marginEnd="4dp"
-              android:text="미세먼지 농도"
-              android:textAlignment="center"
-              android:textSize="12sp"
-              app:layout_constraintBottom_toTopOf="@+id/tv_weather_dustConcentrationsons_type"
-              app:layout_constraintEnd_toStartOf="@+id/tv_weather_dustConcentrationsons_value"
-              app:layout_constraintTop_toTopOf="parent"
-              app:layout_constraintVertical_bias="0.0"/>
+          android:id="@+id/tv_weather_celsius"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dp"
+          android:layout_marginStart="4dp"
+          android:text="16°C"
+          android:textAlignment="center"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/tv_weather_sky" />
+
       <TextView
-              android:id="@+id/tv_weather_dustConcentrationsons_type"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="20dp"
-              android:layout_marginEnd="68dp"
-              android:text="보통"
-              android:textAlignment="center"
-              android:textSize="12sp"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"/>
+          android:id="@+id/tv_weather_rain_textLabel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dp"
+          android:layout_marginStart="8dp"
+          android:text="강수확률"
+          android:textAlignment="center"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/tv_weather_celsius" />
+
       <TextView
-              android:id="@+id/tv_weather_dustConcentrationsons_value"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="22dp"
-              android:layout_marginEnd="48dp"
-              android:text="3.6"
-              android:textAlignment="center"
-              android:textSize="12sp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toTopOf="parent"/>
+          android:id="@+id/tv_weather_rain_value"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dp"
+          android:layout_marginStart="4dp"
+          android:text="10%"
+          android:textAlignment="center"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/tv_weather_rain_textLabel" />
+
+      <TextView
+          android:id="@+id/tv_weather_dustConcentrationsons_textlabel"
+          android:layout_width="70dp"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="8dp"
+          android:layout_marginEnd="4dp"
+          android:layout_marginTop="22dp"
+          android:text="미세먼지 농도"
+          android:textAlignment="center"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toTopOf="@+id/tv_weather_dustConcentrationsons_type"
+          app:layout_constraintEnd_toStartOf="@+id/tv_weather_dustConcentrationsons_value"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintVertical_bias="0.0" />
+
+      <TextView
+          android:id="@+id/tv_weather_dustConcentrationsons_type"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dp"
+          android:layout_marginEnd="68dp"
+          android:text="보통"
+          android:textAlignment="center"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent" />
+
+      <TextView
+          android:id="@+id/tv_weather_dustConcentrationsons_value"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="48dp"
+          android:layout_marginTop="22dp"
+          android:text="3.6"
+          android:textAlignment="center"
+          android:textSize="12sp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
       <!--날씨에 맞는 이미지, 미세먼지 농도에 따라 색이 다른 아이콘 설정-->
       <ImageView
-              android:id="@+id/imageView"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginStart="5dp"
-              android:alpha="0.8"
-              android:src="@drawable/ic_weather_test_replacelater"
-              android:tint="@color/white"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"/>
+          android:id="@+id/imageView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="5dp"
+          android:alpha="0.8"
+          android:src="@drawable/ic_weather_test_replacelater"
+          android:tint="@color/white"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
       <ImageView
-              android:id="@+id/imageView2"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginBottom="12dp"
-              android:layout_marginEnd="19dp"
-              android:layout_alignBottom="@+id/v_weatherWidget_container"
-              android:alpha="0.8"
-              android:src="@drawable/ic_dust_testicon_replacelater"
-              android:tint="@color/white"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"/>
+          android:id="@+id/imageView2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignBottom="@+id/v_weatherWidget_container"
+          android:layout_marginBottom="12dp"
+          android:layout_marginEnd="19dp"
+          android:alpha="0.8"
+          android:src="@drawable/ic_dust_testicon_replacelater"
+          android:tint="@color/white"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
     <!--<fragment-->
@@ -157,19 +168,42 @@
             <!--class="com.google.android.gms.maps.SupportMapFragment"-->
     <!--/>-->
     <com.google.android.gms.maps.MapView
+        android:id="@+id/main_mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_mapview"
         />
 
-    <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_run"
-            android:layout_gravity="bottom"
-            android:background="@drawable/btn_run_dark_bg"
-            android:text="Run"
-            style="@style/RunButtonDarkTheme"/>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+      <android.support.design.widget.FloatingActionButton
+          android:id="@+id/btn_find_course"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="24dp"
+          android:src="@drawable/ic_pin_drop_black_16dp"
+          app:backgroundTint="@color/cardview_light_background"
+          app:elevation="4dp"
+          app:layout_constraintBottom_toTopOf="@+id/btn_run"
+          app:layout_constraintEnd_toEndOf="@+id/btn_run" />
+
+      <Button
+          android:id="@+id/btn_run"
+          style="@style/RunButtonDarkTheme"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:layout_marginBottom="8dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginStart="8dp"
+          android:background="@drawable/btn_run_dark_bg"
+          android:text="Run"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
   </FrameLayout>
       <!--bottom navigationbar-->
   <include

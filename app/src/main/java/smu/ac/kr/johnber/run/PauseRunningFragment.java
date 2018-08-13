@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -179,6 +180,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(8);
         ArrayList<JBLocation> route = getRoute();
+
         LOGD(TAG, "getRoute: "+route);
         mgoogleMap.addPolyline(setPolylineOptions(route));
 
@@ -199,11 +201,15 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         mgoogleMap.addMarker(endMarker).showInfoWindow();
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(start).include(end);
-
+        //경로에 맞게 zoomlevel 조정
+        for(JBLocation jbPoint : route) {
+            LatLng point = LocationUtil.jbLocationToLatLng(jbPoint);
+            builder.include(point);
+        }
         //bound로 애니메이션
         LatLngBounds bounds = builder.build();
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(bounds.getCenter()));
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,100);
+        mgoogleMap.moveCamera(cu);
 
 
     }

@@ -26,6 +26,43 @@
 
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/btn_apitest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="30dp"
+        android:text="코스다운로드"
+        app:layout_constraintBottom_toTopOf="@+id/sv_searchView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_apitest2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btn_apitest2"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="db 리셋"
+        app:layout_constraintBottom_toTopOf="@+id/sv_searchView"
+        app:layout_constraintEnd_toStartOf="@+id/btn_apitest"
+        app:layout_constraintStart_toEndOf="@+id/tv_course_recommendation_title"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <SearchView
+        android:id="@+id/sv_searchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/lightgrey"
+        android:iconifiedByDefault="false"
+        android:queryHint="코스 검색..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_course_recommendation_title" />
+
     <TextView
         android:id="@+id/tv_course_recommendation_title"
         android:textStyle="bold"
@@ -37,32 +74,16 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"/>
-    <Spinner
-        android:id="@+id/sp_course_search_si"
-        android:layout_width="48dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/sp_course_search_gun"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/tv_course_recommendation_title"/>
-    <Spinner
-        android:id="@+id/sp_course_search_gu"
-        android:layout_width="48dp"
-        android:layout_height="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sp_course_search_gun"
-        app:layout_constraintTop_toTopOf="@+id/sp_course_search_si"/>
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="27dp"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintGuide_begin="22dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
         android:layout_width="0dp"
@@ -70,53 +91,25 @@
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="382dp"/>
-    <Spinner
-        android:id="@+id/sp_course_search_gun"
-        android:layout_width="48dp"
-        android:layout_height="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/sp_course_search_gu"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sp_course_search_si"
-        app:layout_constraintTop_toTopOf="@+id/sp_course_search_si"/>
+        app:layout_constraintGuide_begin="387dp" />
 
     <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
         android:id="@+id/rv_course"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:layout_gravity="center_vertical"
         android:elevation="4dp"
         android:scrollbars="vertical"
-        app:rrvLayoutType="LinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_course_search_si"
-        app:rrvEmptyLayoutId="@layout/course_item_collapsed"/>
+        app:layout_constraintTop_toBottomOf="@+id/sv_searchView"
+        app:rrvEmptyLayoutId="@layout/course_item_collapsed"
+        app:rrvLayoutType="LinearLayout" />
 
-    <Button
-        android:id="@+id/btn_apitest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="코스다운로드"
-        tools:layout_editor_absoluteX="237dp"
-        tools:layout_editor_absoluteY="13dp"
-        tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/btn_apitest2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="db 리셋"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="117dp" />
   </android.support.constraint.ConstraintLayout>
   </FrameLayout>
   <!--bottom navigationbar-->
