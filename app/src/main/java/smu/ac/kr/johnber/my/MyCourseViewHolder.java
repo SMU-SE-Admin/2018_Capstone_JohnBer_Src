@@ -18,7 +18,8 @@ public class MyCourseViewHolder extends RecyclerView.ViewHolder{
   public TextView calories;
   public TextView time;
   public ImageView thumnail;
-
+  public TextView KM;
+  public TextView TIME;
   private MyCourseViewHolder.itemClickListener listener;
 
   public MyCourseViewHolder(View view, final MyCourseViewHolder.itemClickListener listener) {
@@ -30,7 +31,8 @@ public class MyCourseViewHolder extends RecyclerView.ViewHolder{
     calories = view.findViewById(R.id.tv_my_course_calories);
     time = view.findViewById(R.id.tv_my_course_ime);
     thumnail = view.findViewById(R.id.iv_course_map_thumbnail);
-
+    KM = view.findViewById(R.id.tv_my_course_km_text);
+    TIME = view.findViewById(R.id.tv_my_course_calories_text);
     this.listener = listener;
     view.setOnClickListener(new View.OnClickListener() {
       @Override

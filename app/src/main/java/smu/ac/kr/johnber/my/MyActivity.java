@@ -85,12 +85,12 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
             this.getRecord();
         }
 //    mockRecords = generateMockRecords();
-            adapter = new MyCourseAdapter(this, recordItems, this);
-            RecyclerView recyclerView = findViewById(R.id.my_rv_course);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setHasFixedSize(true);
+        adapter = new MyCourseAdapter(this, recordItems, this);
+        RecyclerView recyclerView = findViewById(R.id.my_rv_course);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
 //            recyclerView.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
-            recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
 
     }

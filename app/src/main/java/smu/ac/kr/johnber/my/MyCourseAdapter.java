@@ -52,6 +52,9 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     String startPointAddress[] = startPoint.split(" ");
     startPoint = startPointAddress[2] + " " + startPointAddress[3];
     holder.startPoint.setText(startPoint);
+
+    holder.KM.setText("KM");
+    holder.TIME.setText("TIME");
   }
 
   @Override

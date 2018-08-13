@@ -17,6 +17,8 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmConfiguration;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import smu.ac.kr.johnber.R;
@@ -26,51 +28,53 @@ import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
  * Created by yj34 on 22/03/2018.
  */
 
-public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, CourseViewHolder> implements Filterable{
+public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, CourseViewHolder> implements Filterable {
 
-  private final static String TAG = makeLogTag(CourseAdapter.class);
-  private RealmResults<RunningCourse> data;
-  private RealmResults<RunningCourse> dataFiltered;
-  private CourseViewHolder.itemClickListener listener;
+    private final static String TAG = makeLogTag(CourseAdapter.class);
+    private RealmResults<RunningCourse> data;
+    private CourseViewHolder.itemClickListener listener;
+    private Realm mRealm;
 
-  public CourseAdapter(Context context, RealmResults<RunningCourse> data, boolean automaticUpdate,
-                       boolean animateResults,CourseViewHolder.itemClickListener listener) {
-      super(context, data, automaticUpdate, animateResults);
-      this.data  = data;
-      this.listener = listener;
-//      Realm realm = Realm.getDefaultInstance();
-//      this.data= realm
-//              .where(RunningCourse.class).not()
-//              .beginGroup().equalTo("distance", "null").and().equalTo("time","null").endGroup()
-//              .sort("length", Sort.DESCENDING ).findAllAsync();
+    public CourseAdapter(Context context, RealmResults<RunningCourse> data, boolean automaticUpdate,
+                         boolean animateResults, CourseViewHolder.itemClickListener listener) {
+        super(context, data, automaticUpdate, animateResults);
+        this.data = data;
+        this.listener = listener;
+        Realm.init(getContext());
+        mRealm = Realm.getDefaultInstance();
 
-  }
 
-  @Override
+    }
 
-  public CourseViewHolder onCreateRealmViewHolder(ViewGroup parent, int viewType) {
+    @Override
 
-    LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-    View view = inflater.inflate(R.layout.course_item_collapsed, parent, false);
-    CourseViewHolder viewHolder = new CourseViewHolder(view, listener);
-    return viewHolder;
-  }
+    public CourseViewHolder onCreateRealmViewHolder(ViewGroup parent, int viewType) {
 
-  @Override
-  public void onBindRealmViewHolder(CourseViewHolder holder, int position) {
-      final RunningCourse courseItem = data.get(position);
-      holder.courseName.setText(courseItem.getCourseName());
-      holder.startPoint.setText(courseItem.getStartPoint());
-      holder.distance.setText(courseItem.getDistance());
-      holder.time.setText(courseItem.getTime());
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.course_item_collapsed, parent, false);
+        CourseViewHolder viewHolder = new CourseViewHolder(view, listener);
+        return viewHolder;
+    }
 
-  }
+    @Override
+    public void onBindRealmViewHolder(CourseViewHolder holder, int position) {
+        final RunningCourse courseItem = data.get(position);
+        holder.courseName.setText(courseItem.getCourseName());
+        holder.startPoint.setText(courseItem.getStartPoint());
+        holder.distance.setText(courseItem.getDistance());
+        holder.time.setText(courseItem.getTime());
 
-  @Override
-  public int getItemCount() {
-      LOGD(TAG,"item size :  "+data.size());
-      return data.size();
-  }
+        holder.KM.setText("KM");
+        holder.TIME.setText("TIME");
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        LOGD(TAG, "item size :  " + data.size());
+        return data.size();
+    }
 
     @Override
     public Filter getFilter() {
@@ -84,29 +88,23 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 String charString = charSequence.toString();
-                if (charString.isEmpty()) {
-                    dataFiltered = data;
-                } else {
-                    List<RunningCourse> filteredList = new ArrayList<>();
-                    for (RunningCourse course : data) {
-
-                        if (course.getStartPointRoadAddr().contains(charString) ||
-                                course.getStartPointAddr().contains(charString) ||
-                                course.getEndPointRoadAddr().contains(charString) ||
-                                course.getEndPointAddr().contains(charString) ||
-                                course.getCourse().contains(charString)) {
-                            filteredList.add(course);
-                        }
-                    }
-
-                    ArrayList<> list = new ArrayList(mRealm.where(People.class).findAll())
-                    dataFiltered = (RealmResults<RunningCourse>) filteredList;
+                if (!charString.isEmpty()) {
+                    RealmResults<RunningCourse> filteredList = mRealm.where(RunningCourse.class)
+                            .contains("startPointRoadAddr", charString)
+                            .or()
+                            .contains("startPointAddr", charString)
+                            .or()
+                            .contains("endPointRoadAddr", charString)
+                            .or()
+                            .contains("endPointAddr", charString)
+                            .or()
+                            .contains("courseName", charString)
+                            .findAll();
+                    data = filteredList;
+                    LOGD(TAG, "filtered result : " + data.size());
                 }
 
-//                FilterResults filterResults = new FilterResults();
-                filterResults.values = dataFiltered;
 
-               dataFiltered = (RealmResults<RunningCourse>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

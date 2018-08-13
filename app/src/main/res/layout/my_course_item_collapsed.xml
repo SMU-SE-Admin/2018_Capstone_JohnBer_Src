@@ -35,7 +35,7 @@
         android:layout_marginBottom="4dp"
         card_view:layout_constraintBottom_toTopOf="@+id/tv_my_course_start_point"
         card_view:layout_constraintStart_toStartOf="@+id/tv_my_course_start_point"
-        tools:text="문학둘레길" />
+        />
 
     <TextView
         android:id="@+id/tv_my_course_start_point"
@@ -49,7 +49,7 @@
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toEndOf="@+id/iv_course_map_thumnail"
         card_view:layout_constraintTop_toTopOf="parent"
-        tools:text="부암동" />
+         />
     <TextView
       android:id="@+id/tv_my_course_distance"
       android:layout_width="24dp"
@@ -60,7 +60,7 @@
       card_view:layout_constraintHorizontal_chainStyle="packed"
       card_view:layout_constraintStart_toStartOf="@+id/tv_my_course_start_point"
       card_view:layout_constraintTop_toBottomOf="@+id/tv_my_course_start_point"
-      tools:text="26.4"/>
+     />
     <TextView
       android:id="@+id/tv_my_course_calories"
       android:layout_width="24dp"
@@ -70,7 +70,7 @@
       android:textSize="12sp"
       card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
       card_view:layout_constraintStart_toEndOf="@+id/tv_my_course_calories_text"
-      tools:text="4:50"/>
+     />
     <TextView
       android:id="@+id/tv_my_course_ime"
       android:layout_width="0dp"
@@ -81,7 +81,7 @@
       card_view:layout_constraintLeft_toLeftOf="parent"
       card_view:layout_constraintStart_toEndOf="@+id/tv_my_course_km_text"
       card_view:layout_constraintTop_toTopOf="@+id/tv_my_course_distance"
-      tools:text="4403"/>
+    />
 
     <!--text view for measurement-->
     <TextView
@@ -90,7 +90,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:freezesText="false"
-        android:text="KM"
         android:textAlignment="viewStart"
         android:textColor="@color/darkgrey"
         android:textSize="12sp"
@@ -116,7 +115,6 @@
         android:layout_height="17dp"
         android:layout_marginStart="4dp"
         android:freezesText="false"
-        android:text="TIME"
         android:textAlignment="viewStart"
         android:textColor="@color/darkgrey"
         android:textSize="12sp"
