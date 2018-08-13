@@ -3,6 +3,8 @@ package smu.ac.kr.johnber.run;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,9 +18,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import android.widget.Toast;
@@ -92,7 +96,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private LocationCallback mLocationCallback;
     private FirebaseAuth mAuth; //FirebaseAuth 사용자 로그인 여부 확인 변수
     private FirebaseAuth.AuthStateListener mAuthListener;
-
+    private SearchView searchView;
 
 
     @Override
@@ -116,7 +120,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         //callback on onMapReady
         mMapview.getMapAsync(this);
 
-        WeatherForecast.loadWeatherData(this);
+//        WeatherForecast.loadWeatherData(this);
 
         Realm.init(this);
         RealmConfiguration config12 = new RealmConfiguration.Builder()
@@ -275,6 +279,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         enableLocationTracking();
         //위치 권한있음
     }
+
+
 
     /**
      * Start location tracking

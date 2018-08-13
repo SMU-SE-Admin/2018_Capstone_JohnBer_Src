@@ -3,6 +3,8 @@ package smu.ac.kr.johnber.course;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
@@ -10,10 +12,15 @@ import android.location.Location;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -48,7 +55,9 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
   private FusedLocationProviderClient mFusedLocationClient;
   private FloatingActionButton mFindCourse;
   private Location mCurrentLocation;
+  private SearchView searchView;
   private CourseViewHolder.itemClickListener listener;
+  CourseAdapter mAdapter;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -71,12 +80,12 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 //            .beginGroup().equalTo("distance", "null").and().equalTo("time","null").endGroup()
 //            .sort("length", Sort.DESCENDING ).findAllAsync();
 
-    CourseAdapter adapter = new CourseAdapter(this, courseItems, true, false
+    mAdapter = new CourseAdapter(this, courseItems, true, false
             , this);
     prefs = getSharedPreferences("Pref", MODE_PRIVATE);
     checkFirstRun();
     RealmRecyclerView recyclerView = (RealmRecyclerView)findViewById(R.id.rv_course);
-    recyclerView.setAdapter(adapter);
+    recyclerView.setAdapter(mAdapter);
 
 
   }
@@ -150,6 +159,7 @@ private void initView(){
     }
   });
 
+
 }
 
 // recyclerView 클릭 리스너
@@ -160,6 +170,37 @@ private void initView(){
     showDeatilView(position,view);
 
 
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.search_menu, menu);
+
+    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+    searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+    searchView.setSearchableInfo(searchManager
+            .getSearchableInfo(getComponentName()));
+    searchView.setMaxWidth(Integer.MAX_VALUE);
+
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String s) {
+        //filter recycler view
+        mAdapter.getFilter().filter(s);
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextChange(String s) {
+        mAdapter.getFilter().filter(s);
+        return false;
+      }
+    });
+
+    return true;
   }
 
   public void showDeatilView(int position, View view) {

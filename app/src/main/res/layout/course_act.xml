@@ -26,6 +26,17 @@
 
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
+
+    <SearchView
+        android:id="@+id/sv_searchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/sp_course_search_gun"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_course_recommendation_title"
         android:textStyle="bold"
@@ -112,11 +123,12 @@
         android:id="@+id/btn_apitest2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
         android:text="db 리셋"
+        app:layout_constraintEnd_toStartOf="@+id/btn_apitest"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="117dp" />
+        tools:ignore="MissingConstraints" />
 
 
   </android.support.constraint.ConstraintLayout>
