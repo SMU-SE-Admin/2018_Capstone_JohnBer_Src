@@ -41,6 +41,7 @@
         android:layout_marginEnd="48dp"
         android:layout_marginStart="48dp"
         android:inputType="textEmailAddress"
+        android:backgroundTint="@color/darkergrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +68,7 @@
         android:inputType="textVisiblePassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        android:backgroundTint="@color/darkergrey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_password_label" />
 
@@ -88,6 +90,7 @@
         android:id="@+id/height_input"
         android:layout_width="90dp"
         android:layout_height="44dp"
+        android:backgroundTint="@color/darkergrey"
         app:layout_constraintStart_toStartOf="@+id/tv_height_label"
         app:layout_constraintTop_toBottomOf="@+id/tv_height_label" />
 
@@ -107,6 +110,7 @@
         android:id="@+id/weightt_input"
         android:layout_width="90dp"
         android:layout_height="44dp"
+        android:backgroundTint="@color/darkergrey"
         app:layout_constraintStart_toStartOf="@+id/tv_weight_label"
         app:layout_constraintTop_toBottomOf="@+id/tv_weight_label" />
 

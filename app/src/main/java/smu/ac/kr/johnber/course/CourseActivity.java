@@ -66,16 +66,11 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
         Realm.init(this);
         mRealm = Realm.getDefaultInstance();
 
-        prefs = getSharedPreferences("Pref", MODE_PRIVATE);
-        checkFirstRun();
-
         RealmResults<RunningCourse> courseItems = mRealm
                 .where(RunningCourse.class).findAll();
 
         mAdapter = new CourseAdapter(this, courseItems, true, false
                 , this);
-        prefs = getSharedPreferences("Pref", MODE_PRIVATE);
-        checkFirstRun();
         RealmRecyclerView recyclerView = (RealmRecyclerView) findViewById(R.id.rv_course);
         recyclerView.setAdapter(mAdapter);
 
@@ -210,7 +205,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
     public void showDeatilView(int position, View view) {
         Bundle data = new Bundle();
-        data.putInt("position", position);
+        data.putInt("position", position); //recycler view상의 포지션
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CourseDetailFragment fragment = new CourseDetailFragment();
@@ -220,13 +215,6 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
                 .commit();
     }
 
-    public void checkFirstRun() {
-        boolean isFirstRun = prefs.getBoolean("isFirstRun", true);
-        if (isFirstRun) {
-            new CourseRequest(getApplicationContext()).loadCourseData();
-            prefs.edit().putBoolean("isFirstRun", false).apply();
-        }
-    }
 
     private List<LatLng> getLatLangFromAddr(RunningCourse mcourseData) {
         List<LatLng> latlng = new ArrayList<>();

@@ -39,6 +39,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,6 +61,7 @@ import io.realm.RealmResults;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.account.loginActivity;
+import smu.ac.kr.johnber.course.CourseDetailFragment;
 import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 import smu.ac.kr.johnber.opendata.CourseRequest;
@@ -86,7 +88,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private Realm mRealm;
 
     private Button mRun;
-
+    public SharedPreferences prefs;
     private FloatingActionButton mFindCourse;
     private MapView mMapview;
     private GoogleMap mgoogleMap;
@@ -132,6 +134,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
         LOGD(TAG, "onCreate");
 
+        prefs = getSharedPreferences("Pref", MODE_PRIVATE);
+        checkFirstRun();
 
     }
 
@@ -265,6 +269,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mgoogleMap = googleMap;
+        mgoogleMap.getUiSettings().setZoomControlsEnabled(false);
         // Map style 바꾸기 - 한국은 현행법상 적용이안된다...
 //        mgoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.style_json));
         if (PermissionUtil.shouldAskPermission(this, PERMISSION)) {
@@ -344,7 +349,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
         //update UI
         LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-        mgoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
         LOGD(TAG, "Lattitude : " + latitude + "/Longtitude : " + longtitude);
 
     }
@@ -376,7 +381,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         // integer : primary key of course
         HashMap<Integer, LatLng> courseMap = new HashMap<>();
         HashMap<Integer, String> courseName = new HashMap<>();
-
+        final double distance = 5000;
 
         LOGD(TAG,"query resuㅣt : "+query.size());
         //현재 좌표와 검색결과 좌표 거리 계산
@@ -384,11 +389,11 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
             List<LatLng> latlist = getLatLangFromAddr(course);
             LatLng sPoint = latlist.get(0);
             LatLng ePoint = latlist.get(1);
-            if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), sPoint)<5000){
+            if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), sPoint)<distance){
                 courseMap.put(course.getId(), sPoint);
                 courseName.put(course.getId(), course.getCourseName());
             }
-            else if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), ePoint)<5000){
+            else if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), ePoint)<distance){
                 courseMap.put(course.getId(), ePoint);
                 courseName.put(course.getId(), course.getCourseName());
             }
@@ -402,6 +407,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
             MarkerOptions startMarker = new MarkerOptions();
             startMarker.position((LatLng) pair.getValue())
                     .title(courseName.get(pair.getKey()))
+                    .snippet(String.valueOf(pair.getKey()))
                     .icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, this));
             mgoogleMap.addMarker(startMarker).showInfoWindow();
 
@@ -414,6 +420,25 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         int padding = 100;
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
         mgoogleMap.moveCamera(cu);
+
+        // 마커의 타이틀 누르면 해당 코스 정보 화면으로 이동
+        mgoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                //get marker's id : snippet = course id
+                int position = Integer.parseInt(marker.getSnippet());
+                Bundle data = new Bundle();
+                //realm id는 1부터시작
+                data.putInt("position", position-1);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                CourseDetailFragment fragment = new CourseDetailFragment();
+                fragment.setArguments(data);
+                fragmentTransaction.add(R.id.homeContainer, fragment, "COURSEDETAILFRAGMENT")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         }
 
 
@@ -505,7 +530,13 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
       }
     };
   }
-
+    public void checkFirstRun() {
+        boolean isFirstRun = prefs.getBoolean("isFirstRun", true);
+        if (isFirstRun) {
+            new CourseRequest(getApplicationContext()).loadCourseData();
+            prefs.edit().putBoolean("isFirstRun", false).apply();
+        }
+    }
 
 
 }
