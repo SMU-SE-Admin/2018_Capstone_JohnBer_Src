@@ -23,6 +23,9 @@ public class Record {
     private String title;
 
 
+    //이미지 url
+    private String imgUrl;
+
     public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime, String title) {
         this.distance = distance;
         this.elapsedTime = elapsedTime;
@@ -100,6 +103,13 @@ public class Record {
     public void setTitle(String title) {
         this.title = title;
     }
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 }
 
-    
+

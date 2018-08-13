@@ -70,6 +70,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
 
 
     private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
+
     private SkeletonScreen skeletonScreen;
 
     @Override
@@ -138,39 +139,39 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     }
 
     //TODO :  여기서 test 용 reocord 객체 생성 !!!!!!!!!!!!!!!!!!!
-    private List<Record> generateMockRecords() {
-
-        List<Record> mock = new ArrayList<>();
-
-        SharedPreferences preferences;
-        preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String response = preferences.getString("LOCATIONLIST", "");
-        ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>() {
-        }.getType());
-
-        double distance = Double.parseDouble(preferences.getString("DISTANCE", "0"));
-        double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", "0"));
-        double calories = Double.parseDouble(preferences.getString("CALORIES", "0"));
-        double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
-        double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
-        String sDate = preferences.getString("DATE", "0");
-        try {
-            Date date = new SimpleDateFormat("MM/dd/yyy").parse(sDate);
-
-            String title = sDate + " RUN";   // date를 변환해서 우선 넣기로함
-
-
-            for (int i = 0; i < 10; i++) {
-                mock.add(new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime, title));
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return mock;
-
-    }
+//    private List<Record> generateMockRecords() {
+//
+//        List<Record> mock = new ArrayList<>();
+//
+//        SharedPreferences preferences;
+//        preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
+//        Gson gson = new Gson();
+//        String response = preferences.getString("LOCATIONLIST", "");
+//        ArrayList<JBLocation> locationArrayList = gson.fromJson(response, new TypeToken<List<JBLocation>>() {
+//        }.getType());
+//
+//        double distance = Double.parseDouble(preferences.getString("DISTANCE", "0"));
+//        double elapsedTime = Double.parseDouble(preferences.getString("ELAPSEDTIME", "0"));
+//        double calories = Double.parseDouble(preferences.getString("CALORIES", "0"));
+//        double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
+//        double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
+//        String sDate = preferences.getString("DATE", "0");
+//        try {
+//            Date date = new SimpleDateFormat("MM/dd/yyy").parse(sDate);
+//
+//            String title = sDate + " RUN";   // date를 변환해서 우선 넣기로함
+//
+//
+//            for (int i = 0; i < 10; i++) {
+//                mock.add(new Record(distance, elapsedTime, calories, locationArrayList, date, startTime, endTime, title,null));
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return mock;
+//
+//    }
 
     public void getRecord() {
 

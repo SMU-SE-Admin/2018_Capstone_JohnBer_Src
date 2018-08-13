@@ -421,6 +421,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         }
     }
 
-
+    public GoogleMap getGooglemap(){
+        return mgoogleMap;
+    }
 }
 
