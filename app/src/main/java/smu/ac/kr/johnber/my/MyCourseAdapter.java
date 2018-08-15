@@ -1,11 +1,22 @@
 package smu.ac.kr.johnber.my;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +36,7 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
   private List<Record> data;
   private MyCourseViewHolder.itemClickListener listener;
   private Context context;
+  private RequestManager glide;
 
   public MyCourseAdapter(Context context, List<Record> data, MyCourseViewHolder.itemClickListener listener) {
     this.data = data;
@@ -50,15 +62,35 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     holder.time.setText(time);
     String startPoint = LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context);
     String startPointAddress[] = startPoint.split(" ");
-    startPoint = startPointAddress[2] + " " + startPointAddress[3];
+    if(startPointAddress[2]!=null)
+      startPoint = startPointAddress[2] + " " + startPointAddress[3];
     holder.startPoint.setText(startPoint);
 
     holder.KM.setText("KM");
     holder.TIME.setText("TIME");
+
+    //썸네일 다운로드
+    Uri uri = Uri.parse(data.get(position).getImgUrl());
+    LOGD(TAG,"DownloadIMG_path : "+ data.get(position).getImgUrl());
+    if (uri != null) {
+      //placeholder : 이미지 로딩중 미리 보여지는 이미지
+    Glide.with(context)
+            .load(uri)
+            .apply(new RequestOptions().centerCrop()
+                            .placeholder(R.drawable.ic_point_marker)
+                      .error(R.drawable.ic_dust_testicon_replacelater)
+            )
+            .thumbnail(0.1f)
+            .into(holder.thumnail);
+    //listener
+    }
   }
 
   @Override
   public int getItemCount() {
     return data.size();
   }
-}
+
+
+  }
+

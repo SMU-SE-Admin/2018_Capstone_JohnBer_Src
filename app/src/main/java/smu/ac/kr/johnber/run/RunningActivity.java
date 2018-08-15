@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -265,7 +266,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
         File file = new File(fileNameSpace);
             Uri fileUri = Uri.fromFile(file);
             //firebase storage에 참조 공간 만들기
-        StorageReference spaceReference = storageReference.child(imgBaseUrl+fileName);
+        final StorageReference spaceReference = storageReference.child(imgBaseUrl+fileName);
         if(!fileName.equals("")){
             //파일 업로드
             UploadTask uploadTask = spaceReference.putFile(fileUri);
@@ -280,16 +281,36 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //성공
                     LOGD(TAG, "uploading img to FB successed ");
+
+                }
+            });
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // 이미지 URL 받아오기
+                    return spaceReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
                     //참조 uri 가저오기
                     if (mRecord != null) {
-                        mRecord.setImgUrl(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
-                    LOGD(TAG, "Downlodable uri : " + mRecord.getImgUrl());
+                        mRecord.setImgUrl(task.getResult().toString());
+                        LOGD(TAG, "Downlodable uri : " + mRecord.getImgUrl());
                         mRecord.setDate(date);
                         mRecord.setTitle(title);
                         uploadRecordtoFirebase(mRecord,uid,getTime,stringStartTime);
                     }
+                    } else { //에러처리
+                    }
                 }
             });
+
 
 
 
