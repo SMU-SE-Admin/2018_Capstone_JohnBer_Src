@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import smu.ac.kr.johnber.account.loginActivity;
 import smu.ac.kr.johnber.course.CourseActivity;
 import smu.ac.kr.johnber.my.MyActivity;
 import smu.ac.kr.johnber.run.MainActivity;
@@ -100,6 +101,10 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
 
       case R.id.action_logout:
         FirebaseAuth.getInstance().signOut();
+        //로그인화면으로 돌아가기
+        Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+        startActivity(intent);
+
         Toast.makeText(this, "logout is completed", Toast.LENGTH_SHORT).show();
         return true;
 

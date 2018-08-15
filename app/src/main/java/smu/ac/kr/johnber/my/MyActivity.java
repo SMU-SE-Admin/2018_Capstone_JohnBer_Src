@@ -53,6 +53,7 @@ import smu.ac.kr.johnber.run.Record;
 public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemClickListener {
     private final static String TAG = makeLogTag(MyActivity.class);
     private TextView courseName;
+    private TextView userName;
     public TextView startPoint;
     public TextView distance;
     public TextView calories;
@@ -63,6 +64,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     private MapView mMapView;
     private GoogleMap mgoogleMap;
     private Realm mRealm;
+    private FirebaseAuth mAuth;
     private MyCourseViewHolder.itemClickListener listener;
     //  private List<Record> mockRecords ;
     private List<Record> recordItems;
@@ -77,6 +79,11 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_act);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        userName = findViewById(R.id.tv_my_username);
+        userName.setText(user.getDisplayName());
+        //TODO : 프로필 사진
 
         MyStatisticsPagerAdapter myStatisticsPagerAdapter = new MyStatisticsPagerAdapter();
         ViewPager myStatisticsviewPager = findViewById(R.id.my_statistics_viewPager);
@@ -182,7 +189,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
 
                 //DB에 저장된 데이터 HashMap에 저장.
