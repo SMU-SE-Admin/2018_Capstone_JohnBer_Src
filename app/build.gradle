@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
-
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
     // Retrofit & OkHttp
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.2'

@@ -21,9 +21,10 @@ public class ApiServiceGenerator {
   public static final int BASE_URL_TYPE_WEATHERFORECAST = 3301;
   public static final int BASE_URL_TYPE_DUSTCONENTRATION = 3302;
   public static final int BASE_URL_TYPE_RUNNINGCOURSE = 3303;
+  public static final int BASE_URL_TYPE_PLACE = 3304;
 
+  private static final String BASE_URL_PLACE = "https://maps.googleapis.com/maps/api/place/";
   private static final String BASE_URL_WEATHERFORECAST="http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/";
-//Todo: url 추가
   private static final String BASE_URL_DUSTCONENTRATION = "";
   private static final String BASE_URL_RUNNINGCOURSE = "http://api.data.go.kr/openapi/";
 
@@ -61,6 +62,9 @@ public class ApiServiceGenerator {
       case (BASE_URL_TYPE_RUNNINGCOURSE):
         BASE_URL = BASE_URL_RUNNINGCOURSE;
         break;
+      case BASE_URL_TYPE_PLACE:
+        BASE_URL = BASE_URL_PLACE;
+        break;
       default:
         throw new UnsupportedOperationException(baseURLType+":"+" / "+BASE_URL);
     }
@@ -80,5 +84,6 @@ public class ApiServiceGenerator {
     apiService = retrofit.create(ApiService.class);
     return apiService;
   }
+
 
 }
