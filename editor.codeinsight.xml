@@ -1,0 +1,5 @@
+<application>
+  <component name="CodeInsightSettings">
+    <EXCLUDED_PACKAGE NAME="android.net.Uri" />
+  </component>
+</application>
