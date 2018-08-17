@@ -25,6 +25,8 @@ import android.widget.SearchView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -54,6 +56,8 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     public SharedPreferences prefs;
     CourseAdapter mAdapter;
     private SearchView mSearchView;
+    private GeoDataClient mGeoDataClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +72,11 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         RealmResults<RunningCourse> courseItems = mRealm
                 .where(RunningCourse.class).findAll();
+        mGeoDataClient = Places.getGeoDataClient(this);
+
 
         mAdapter = new CourseAdapter(this, courseItems, true, false
-                , this);
+                , this,mGeoDataClient);
         RealmRecyclerView recyclerView = (RealmRecyclerView) findViewById(R.id.rv_course);
         recyclerView.setAdapter(mAdapter);
 

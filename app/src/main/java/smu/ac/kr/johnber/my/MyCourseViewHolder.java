@@ -30,7 +30,7 @@ public class MyCourseViewHolder extends RecyclerView.ViewHolder{
     distance = view.findViewById(R.id.tv_my_course_distance);
     calories = view.findViewById(R.id.tv_my_course_calories);
     time = view.findViewById(R.id.tv_my_course_ime);
-    thumnail = view.findViewById(R.id.iv_course_map_thumbnail);
+    thumnail = view.findViewById(R.id.my_iv_course_map_thumnail);
     KM = view.findViewById(R.id.tv_my_course_km_text);
     TIME = view.findViewById(R.id.tv_my_course_calories_text);
     this.listener = listener;

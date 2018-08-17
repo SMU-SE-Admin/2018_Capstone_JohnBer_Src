@@ -317,7 +317,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private LocationRequest getLocationRequest() {
         @SuppressLint("RestrictedApi")
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
+        locationRequest.setInterval(5000);
         //5 seconds
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
