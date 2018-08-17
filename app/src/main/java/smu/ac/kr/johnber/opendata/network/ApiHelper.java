@@ -34,7 +34,8 @@ public class ApiHelper {
                 break;
 
             case PLACE_DETAIL_FEILDS_REQUEST:
-                fields = "opening_hours,formatted_phone_number,website,review,rating";
+                fields = "name,rating,review,formatted_phone_number" +
+                        ",url,photo,opening_hours,website,geometry";
                 break;
 
         }

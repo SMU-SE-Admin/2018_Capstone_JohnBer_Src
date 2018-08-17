@@ -38,7 +38,6 @@ import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
-import smu.ac.kr.johnber.opendata.PlaceRequest;
 import smu.ac.kr.johnber.opendata.network.ApiService;
 
 /**
@@ -147,10 +146,6 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
             }
         };
     }
-
-//    public String getThumnailImgUrl(RunningCourse item) {
-//
-//    }
 
     public Uri getStaticMapImg(RunningCourse course) {
 

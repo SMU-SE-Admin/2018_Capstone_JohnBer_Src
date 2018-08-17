@@ -10,6 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import smu.ac.kr.johnber.opendata.APImodel.WeatherResponse;
+import smu.ac.kr.johnber.opendata.PlaceAPImodel.PlaceDetails;
 
 
 /**
@@ -47,12 +48,14 @@ public interface ApiService {
                                        @Query(value = "key", encoded = true) String serviceKey);
 
 
+
+
     //* place_id is required
     //place_id
     //fields=opening_hours,formatted_phone_number,website,review,rating
 
     @GET("details/json")
-    Call<ResponseBody> callPlaceDetails(@Query("placeid") String placeid,
+    Call<PlaceDetails> callPlaceDetails(@Query("placeid") String placeid,
                                         @Query("fields") String fields,
             @Query(value = "key", encoded = true) String serviceKey);
 

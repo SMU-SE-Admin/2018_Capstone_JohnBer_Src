@@ -22,7 +22,7 @@ public class ApiServiceGenerator {
   public static final int BASE_URL_TYPE_DUSTCONENTRATION = 3302;
   public static final int BASE_URL_TYPE_RUNNINGCOURSE = 3303;
   public static final int BASE_URL_TYPE_PLACE = 3304;
-
+  public static final int MAX_WIDTH = 400;
   private static final String BASE_URL_PLACE = "https://maps.googleapis.com/maps/api/place/";
   private static final String BASE_URL_WEATHERFORECAST="http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/";
   private static final String BASE_URL_DUSTCONENTRATION = "";

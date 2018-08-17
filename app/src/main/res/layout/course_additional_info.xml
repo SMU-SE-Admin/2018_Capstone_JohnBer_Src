@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="395dp" />
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_AVGratings_title_additional"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="평점"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline16"
+        app:layout_constraintTop_toBottomOf="@+id/rv_course_detail_info_photos" />
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_additional"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="부가정보"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline16"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_AVGratings_additional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_AVGratings_title_additional"
+        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_AVGratings_title_additional" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_course_detail_info_photos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_additional"
+        tools:listitem="@layout/course_detail_additional_item">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_review_title_additional"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="리뷰"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline16"
+        app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_AVGratings_title_additional" />
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_numbers_title_additional"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="전화번호"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/darkergrey"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_AVGratings_additional"
+        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_AVGratings_title_additional" />
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_numbers_additional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_numbers_title_additional"
+        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_numbers_title_additional" />
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_website_title_additional"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="웹사이트"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/darkergrey"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ic_call"
+        app:layout_constraintTop_toTopOf="@+id/ic_call" />
+
+    <TextView
+        android:id="@+id/tv_course_detail_info_website_additional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_website_title_additional"
+        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_website_title_additional" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_course_detail_info_reviews"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_review_title_additional"
+        tools:listitem="@layout/course_detail_additional_review_item">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <ImageView
+        android:id="@+id/ic_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_numbers_additional"
+        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_numbers_title_additional"
+        app:srcCompat="@drawable/ic_call_black_24dp" />
+
+    <ImageView
+        android:id="@+id/ic_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_course_detail_info_website_additional"
+        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_website_title_additional"
+        app:srcCompat="@drawable/ic_explore_black_24dp" />
+
+</android.support.constraint.ConstraintLayout>

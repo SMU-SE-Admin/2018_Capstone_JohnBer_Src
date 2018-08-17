@@ -47,7 +47,7 @@ public class PlaceRequest {
 
     private ApiService apiService;
 
-    public PlaceRequest(Context context, RunningCourse courseItem, final CourseViewHolder holder, int position, GeoDataClient mGeoDataClient) {
+    public PlaceRequest(Context context, RunningCourse courseItem) {
         this.course = courseItem;
         this.holder = holder;
         this.position = position;
@@ -99,7 +99,8 @@ public class PlaceRequest {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 String placeID = null;
                 String photoref = null;
-//                LOGD(TAG, "server contacted at: "+locationName + call.request().url());
+//
+
                 try {
                     //response body를 string으로 변환
                     String json = response.body().string();
@@ -144,6 +145,69 @@ public class PlaceRequest {
         });
 
     }
+
+//    public void findPlaceID(final String locationName, LatLng latLng) {
+//        if (apiService == null) {
+//            apiService =
+//                    ApiServiceGenerator.getApiServiceGenerator(ApiServiceGenerator.BASE_URL_TYPE_PLACE)
+//                            .getApiService();
+//        }
+//
+//        final Call<ResponseBody> responseBodyCall =
+//                apiService.callPlaceSearch(locationName, "textquery",
+//                        ApiHelper.getQueryFeilds(ApiHelper.PLACE_SEARCH_FEILDS_REQUEST),
+//                        ApiHelper.getLocationbiase(latLng),
+//                        ApiService.GOOGLE_MAPS_API_SERVICE_KEY);
+//        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                String placeID = null;
+//                String photoref = null;
+////                LOGD(TAG, "server contacted at: "+locationName + call.request().url());
+//                try {
+//                    //response body를 string으로 변환
+//                    String json = response.body().string();
+//                    JSONObject jsonObject = new JSONObject(json);
+//                    //candidates
+//                    //status
+//                    String status = jsonObject.getString("status");
+////                    LOGD(TAG, "status : " + status);
+//                    if (status.equals("OK")) {
+//                        JSONObject candidates = jsonObject.getJSONArray("candidates").getJSONObject(0);
+//
+//                        String formatted_address = candidates.getString("formatted_address");
+//                        placeID = candidates.getString("place_id");
+//                        if (candidates.has("photos")) {
+//                            photoref = candidates.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
+//                        }
+//
+//                        LOGD(TAG, "place address: " +course.getStartPoint()+":"+ formatted_address);
+//                        LOGD(TAG, "place id is  r: " +course.getStartPoint()+":"+ placeID);
+//                        LOGD(TAG, "photo reference: " +course.getStartPoint()+":"+ photoref);
+//                        //이미지 세팅
+//                        setPhototoThumnailView(placeID, photoref, course, holder, position);
+//
+//                        //
+//                    } else {
+////                        LOGD(TAG, "place request error code : " + status);
+//                        // static map 으로 마커표시해서 보여주기
+//                        getStaticMapImg(course);
+//                        return;
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                LOGD(TAG, "failed to connected at " + call.request());
+//            }
+//        });
+//
+//    }
 
 
     public void getPlaceDetail() {

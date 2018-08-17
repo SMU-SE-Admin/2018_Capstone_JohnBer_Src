@@ -300,9 +300,27 @@
             android:layout_marginEnd="8dp"
             android:text=" "
             app:layout_constraintEnd_toStartOf="@+id/guideline6"
-            tools:layout_editor_absoluteY="96dp" />
+            app:layout_constraintStart_toEndOf="parent"
+            tools:layout_editor_absoluteY="96dp"
+            tools:ignore="MissingConstraints" />
 
       </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_course_detail_info_add_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="100dp"
+        android:layout_weight="1"
+        android:background="@color/white">
+
+        <!--부가정보 레이아웃-->
+        <include android:id="@+id/course_additional_info_layout"
+            layout="@layout/course_additional_info"/>
+
     </android.support.v7.widget.CardView>
 
   </LinearLayout>
