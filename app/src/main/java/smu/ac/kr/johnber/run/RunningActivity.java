@@ -319,12 +319,10 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     }
 
     private void uploadRecordtoFirebase(Record mRecord, String uid, String getTime, String stringStartTime) {
-        //TODO : 파이어베이스와 연동
-
         // Write data to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
-        myRef.child(uid).child(getTime).child(stringStartTime).setValue(mRecord);
+        myRef.child(uid).child("userRecord").child(getTime).child(stringStartTime).setValue(mRecord);
     }
 
 }

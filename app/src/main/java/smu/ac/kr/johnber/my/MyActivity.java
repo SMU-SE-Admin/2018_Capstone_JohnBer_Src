@@ -101,6 +101,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
 //    mockRecords = generateMockRecords();
         adapter = new MyCourseAdapter(this, recordItems, this);
         RecyclerView recyclerView = findViewById(R.id.my_rv_course);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 //            recyclerView.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
@@ -192,13 +193,15 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
 
+                Iterable<DataSnapshot> ds =  dataSnapshot.child(uid).child("userRecord").getChildren();
+//                LOGD(TAG,"test : "+ds.getKey().toString());
                 //DB에 저장된 데이터 HashMap에 저장.
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     //DB에서 로그인한 아이디와 일치하는지 확인 후 해당 데이터만 읽어옴.
                     if (snapshot.getKey().toString().equals(uid)) {
                         Log.d("MainActivity", "Single ValueEventListener : " + snapshot.getValue());
                         String keyDate1 = "";
-                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        for (DataSnapshot snapshot1 : snapshot.child("userRecord").getChildren()) {
                             keyDate1 = snapshot1.getKey().toString();
                             for (DataSnapshot snapshot2 : snapshot1.getChildren()) {
                                 String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();

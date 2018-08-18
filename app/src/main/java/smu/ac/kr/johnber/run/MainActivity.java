@@ -369,7 +369,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         try {
             currentLocationName = mGeoCoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
             //TODO : 검색범위에 시+군 검색 : 정규식
-            locality = currentLocationName.get(0).getLocality() ;
+            locality = currentLocationName.get(0).getLocality();
             LOGD(TAG,locality);
         } catch (IOException e) {
             e.printStackTrace();

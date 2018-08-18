@@ -8,13 +8,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
@@ -175,7 +179,19 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
       if (mBottomNavigation != null) {
         setNavigationItemClicked();
       }
+      /**
+       * set bottomNav icon size
+       */
       mBottomNavigation.setOnNavigationItemSelectedListener(this);
+      BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottomNavigation.getChildAt(0);
+      for (int i = 0; i < menuView.getChildCount(); i++) {
+        final View iconView = menuView.getChildAt(i).findViewById(android.support.design.R.id.icon);
+        final ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+        final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, displayMetrics);
+        layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, displayMetrics);
+        iconView.setLayoutParams(layoutParams);
+      }
     }
   }
 
