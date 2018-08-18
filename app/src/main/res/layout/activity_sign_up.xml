@@ -14,7 +14,8 @@
         android:layout_marginTop="68dp"
         android:text="회원가입"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="20sp"
+        android:textColor="@color/dark_grey"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,50 +25,42 @@
     <TextView
         android:id="@+id/tv_id_label"
         android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/dark_grey"
         android:text="아이디"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/signup_id"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/ed_nickname" />
 
 
     <EditText
         android:id="@+id/signup_id"
         android:layout_width="0dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginStart="48dp"
+        android:backgroundTint="@color/grey"
         android:inputType="textEmailAddress"
-        android:backgroundTint="@color/darkergrey"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/text_grey"
+        app:layout_constraintEnd_toEndOf="@+id/signup"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_id_label" />
-
-    <EditText
-        android:id="@+id/signup_id2"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginStart="48dp"
-        android:backgroundTint="@color/darkergrey"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/signup"
         app:layout_constraintTop_toBottomOf="@+id/tv_id_label" />
 
     <TextView
         android:id="@+id/tv_password_label"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/dark_grey"
         android:text="비밀번호"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/signup_password"
         app:layout_constraintTop_toBottomOf="@+id/signup_id" />
@@ -76,13 +69,12 @@
         android:id="@+id/signup_password"
         android:layout_width="0dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginStart="48dp"
-        android:inputType="textVisiblePassword"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/grey"
+        android:inputType="textPassword"
+        android:textColor="@color/text_grey"
+        app:layout_constraintEnd_toEndOf="@+id/signup"
         app:layout_constraintHorizontal_bias="0.0"
-        android:backgroundTint="@color/darkergrey"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/signup"
         app:layout_constraintTop_toBottomOf="@+id/tv_password_label" />
 
 
@@ -90,53 +82,67 @@
         android:id="@+id/tv_height_label"
         android:layout_width="wrap_content"
         android:layout_height="21dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/dark_grey"
         android:text="신장"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_password"/>
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_password_label"
+        app:layout_constraintTop_toBottomOf="@+id/signup_password" />
 
     <EditText
         android:id="@+id/height_input"
-        android:layout_width="90dp"
+        android:layout_width="0dp"
         android:layout_height="44dp"
-        android:backgroundTint="@color/darkergrey"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/grey"
+        android:inputType="textPassword"
+        android:textColor="@color/text_grey"
+        app:layout_constraintEnd_toStartOf="@+id/weightt_input"
         app:layout_constraintStart_toStartOf="@+id/tv_height_label"
         app:layout_constraintTop_toBottomOf="@+id/tv_height_label" />
 
     <TextView
         android:id="@+id/tv_weight_label"
-        android:layout_width="45dp"
+        android:layout_width="0dp"
         android:layout_height="20dp"
-        android:layout_marginStart="170dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="76dp"
+        android:backgroundTint="@color/dark_grey"
         android:text="몸무게"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/tv_height_label"
-        app:layout_constraintTop_toBottomOf="@+id/signup_password" />
+        app:layout_constraintTop_toTopOf="@+id/tv_height_label" />
 
     <EditText
         android:id="@+id/weightt_input"
-        android:layout_width="90dp"
+        android:layout_width="0dp"
         android:layout_height="44dp"
-        android:backgroundTint="@color/darkergrey"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/grey"
+        android:inputType="textPassword"
+        android:textColor="@color/text_grey"
+        app:layout_constraintEnd_toStartOf="@+id/tv_gender_label"
         app:layout_constraintStart_toStartOf="@+id/tv_weight_label"
         app:layout_constraintTop_toBottomOf="@+id/tv_weight_label" />
 
     <TextView
         android:id="@+id/tv_gender_label"
-        android:layout_width="45dp"
+        android:layout_width="0dp"
         android:layout_height="20dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="80dp"
+        android:backgroundTint="@color/dark_grey"
         android:text="성별"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/height_input"
-        app:layout_constraintTop_toBottomOf="@+id/height_input" />
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_weight_label"
+        app:layout_constraintTop_toTopOf="@+id/tv_weight_label" />
 
 
     <Button
@@ -144,42 +150,49 @@
         android:layout_width="316dp"
         android:layout_height="46dp"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="32dp"
-        android:background="@color/darkgrey"
+        android:background="@drawable/btn_run_dark_bg"
         android:text="가입하기"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="90dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/signup"
         app:layout_constraintStart_toStartOf="@+id/tv_gender_label"
         app:layout_constraintTop_toBottomOf="@+id/tv_gender_label" />
 
     <TextView
         android:id="@+id/tv_nickname"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="17dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/dark_grey"
         android:text="이름"
-        app:layout_constraintEnd_toStartOf="@+id/ed_nickname"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/ed_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
         android:id="@+id/ed_nickname"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
+        android:backgroundTint="@color/grey"
         android:inputType="text|textPersonName"
-        android:text="Name"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="138dp" />
+        android:textColor="@color/text_grey"
+        app:layout_constraintEnd_toEndOf="@+id/signup"
+        app:layout_constraintStart_toStartOf="@+id/signup"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nickname" />
 
 
 </android.support.constraint.ConstraintLayout>

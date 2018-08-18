@@ -91,7 +91,7 @@ public class CourseRequest {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                LOGD(TAG, "server failed at: " );
+                LOGD(TAG, "server failed at: " + call.request().url() );
             }
         });
     }

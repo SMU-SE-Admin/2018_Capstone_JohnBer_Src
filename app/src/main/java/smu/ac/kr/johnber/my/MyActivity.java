@@ -84,7 +84,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         userName = findViewById(R.id.tv_my_username);
         userName.setText(user.getDisplayName());
         //TODO : 프로필 사진
-
+        //TODO : 통계
         MyStatisticsPagerAdapter myStatisticsPagerAdapter = new MyStatisticsPagerAdapter();
         ViewPager myStatisticsviewPager = findViewById(R.id.my_statistics_viewPager);
         myStatisticsviewPager.setAdapter(myStatisticsPagerAdapter);
@@ -183,7 +183,6 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
 
     public void getRecord() {
 
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
 
@@ -193,7 +192,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
 
-                Iterable<DataSnapshot> ds =  dataSnapshot.child(uid).child("userRecord").getChildren();
+                Iterable<DataSnapshot> ds = dataSnapshot.child(uid).child("userRecord").getChildren();
 //                LOGD(TAG,"test : "+ds.getKey().toString());
                 //DB에 저장된 데이터 HashMap에 저장.
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -212,8 +211,6 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
                             }
                         }
                     }
-//         recordItems = (List<Record>) recordHashMap.values();
-
 //          LOGD(TAG,"Size : "+recordItems.size();
                     if (adapter != null) {
 

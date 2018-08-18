@@ -156,6 +156,10 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
             }
         });
         mSearchView = findViewById(R.id.sv_searchView);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setFocusable(false);
+        mSearchView.clearFocus();
+        mSearchView.requestFocusFromTouch();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

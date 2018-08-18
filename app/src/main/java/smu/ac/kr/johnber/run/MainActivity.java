@@ -532,6 +532,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
   }
     public void checkFirstRun() {
         boolean isFirstRun = prefs.getBoolean("isFirstRun", true);
+            LOGD(TAG, "THIS IS FIRSTRUN : "+ isFirstRun);
         if (isFirstRun) {
             new CourseRequest(getApplicationContext()).loadCourseData();
             prefs.edit().putBoolean("isFirstRun", false).apply();

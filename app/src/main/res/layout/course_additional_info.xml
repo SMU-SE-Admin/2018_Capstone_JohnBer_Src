@@ -17,18 +17,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="395dp" />
+        app:layout_constraintGuide_begin="365dp" />
 
     <TextView
         android:id="@+id/tv_course_detail_info_AVGratings_title_additional"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="평점"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/text_black"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toBottomOf="@+id/rv_course_detail_info_photos" />
 
@@ -39,8 +38,8 @@
         android:layout_marginTop="16dp"
         android:text="부가정보"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,16 +49,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
+        android:textColor="@color/text_black"
         app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_AVGratings_title_additional"
-        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_AVGratings_title_additional" />
+        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_AVGratings_title_additional"
+        tools:text="x" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_course_detail_info_photos"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -78,9 +78,8 @@
         android:layout_marginTop="32dp"
         android:text="리뷰"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/text_black"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_info_AVGratings_title_additional" />
 
@@ -88,12 +87,11 @@
         android:id="@+id/tv_course_detail_info_numbers_title_additional"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="68dp"
         android:text="전화번호"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@color/darkergrey"
+        android:textColor="@color/text_black"
         android:textSize="14sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_AVGratings_additional"
         app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_AVGratings_title_additional" />
 
@@ -107,14 +105,16 @@
 
     <TextView
         android:id="@+id/tv_course_detail_info_website_title_additional"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:layout_marginStart="32dp"
         android:text="웹사이트"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@color/darkergrey"
+        android:textColor="@color/text_black"
         android:textSize="14sp"
-        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/ic_website"
+        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/ic_call"
         app:layout_constraintTop_toTopOf="@+id/ic_call" />
 
@@ -131,6 +131,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginTop="8dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -144,20 +145,24 @@
 
     <ImageView
         android:id="@+id/ic_call"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_course_detail_info_numbers_title_additional"
         app:layout_constraintStart_toEndOf="@+id/tv_course_detail_info_numbers_additional"
         app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_numbers_title_additional"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_call_black_24dp" />
 
     <ImageView
         android:id="@+id/ic_website"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_course_detail_info_website_additional"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_course_detail_info_website_title_additional"
+        app:layout_constraintEnd_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toTopOf="@+id/tv_course_detail_info_website_title_additional"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_explore_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>
