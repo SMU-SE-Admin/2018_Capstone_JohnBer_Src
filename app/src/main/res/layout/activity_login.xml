@@ -13,11 +13,14 @@
         android:layout_width="316dp"
         android:layout_height="48dp"
         android:layout_gravity="bottom"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/darkgrey"
+        android:background="@drawable/btn_run_dark_bg"
         android:text="회원가입"
-        app:layout_constraintEnd_toEndOf="@+id/btn_login"
-        app:layout_constraintStart_toStartOf="@+id/btn_login"
+        android:textColor="@color/real_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
     <Button
@@ -28,8 +31,9 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/btn_border"
         android:text="로그인"
-        app:layout_constraintEnd_toEndOf="@+id/login_password"
-        app:layout_constraintStart_toStartOf="@+id/login_password"
+        android:textColor="@color/dark_grey"
+        app:layout_constraintEnd_toEndOf="@+id/btn_signup"
+        app:layout_constraintStart_toStartOf="@+id/btn_signup"
         app:layout_constraintTop_toBottomOf="@+id/login_password" />
 
     <TextView
@@ -39,7 +43,9 @@
         android:layout_marginTop="240dp"
         android:text="아이디"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/login_id"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,25 +55,26 @@
         android:id="@+id/login_id"
         android:layout_width="0dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginStart="48dp"
+        android:backgroundTint="@color/grey"
         android:hint="Email"
-        android:backgroundTint="@color/darkergrey"
         android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/text_grey"
+        app:layout_constraintEnd_toEndOf="@+id/btn_login"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btn_login"
         app:layout_constraintTop_toBottomOf="@+id/tv_id_label" />
 
     <TextView
         android:id="@+id/tv_password_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="40dp"
         android:text="비밀번호"
-        android:backgroundTint="@color/darkergrey"
+        android:backgroundTint="@color/dark_grey"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/login_password"
         app:layout_constraintTop_toBottomOf="@+id/login_id" />
@@ -76,13 +83,12 @@
         android:id="@+id/login_password"
         android:layout_width="0dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginStart="48dp"
+        android:backgroundTint="@color/grey"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/text_grey"
+        app:layout_constraintEnd_toEndOf="@+id/btn_login"
+        app:layout_constraintStart_toStartOf="@+id/btn_login"
         app:layout_constraintTop_toBottomOf="@+id/tv_password_label" />
 
 </android.support.constraint.ConstraintLayout>

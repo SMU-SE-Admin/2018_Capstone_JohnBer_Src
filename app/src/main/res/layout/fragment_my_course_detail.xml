@@ -17,6 +17,7 @@
 <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:elevation="0dp"
     android:background="@color/white">
 
     <android.support.constraint.ConstraintLayout
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textColor="@color/black"
+            android:textColor="@color/text_black"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
@@ -45,14 +46,16 @@
             android:orientation="vertical"
             map:layout_constraintEnd_toEndOf="parent"
             map:layout_constraintGuide_begin="395dp" />
-        
+
         <TextView
             android:id="@+id/tv_my_course_detail_summary_end_point"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:textAlignment="viewStart"
+            android:textColor="@color/text_light_grey"
             app:layout_constraintEnd_toStartOf="@+id/textView3"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline8"
@@ -64,8 +67,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:textAlignment="viewStart"
+            android:textColor="@color/text_light_grey"
             app:layout_constraintEnd_toStartOf="@+id/textView3"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline8"
@@ -107,8 +112,9 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="8dp"
             android:text="-"
-            android:textColor="@color/darkergrey"
-            android:textSize="12sp"
+            android:textColor="@color/text_grey"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
             app:layout_constraintTop_toBottomOf="@+id/tv_my_course_detail_summary_end_point"
@@ -120,9 +126,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="-"
-            android:textColor="@color/darkergrey"
-            android:textSize="12sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
+            android:textColor="@color/text_grey"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_cousrse_km_text"
             app:layout_constraintStart_toEndOf="@+id/tv_my_cousrse_km_text"
             tools:text="4:50" />
 
@@ -131,9 +138,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textColor="@color/darkergrey"
-            android:textSize="12sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
+            android:textColor="@color/text_grey"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_time_text"
             app:layout_constraintStart_toEndOf="@+id/tv_my_course_time_text"
             tools:text="4403" />
 
@@ -146,8 +154,8 @@
             android:freezesText="false"
             android:text="KM"
             android:textAlignment="viewStart"
-            android:textColor="@color/darkgrey"
-            android:textSize="12sp"
+            android:textColor="@color/text_grey"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/tv_my_course_distance"
             app:layout_constraintTop_toTopOf="@+id/tv_my_course_distance" />
@@ -160,10 +168,10 @@
             android:freezesText="false"
             android:text="TIME"
             android:textAlignment="viewStart"
-            android:textColor="@color/darkgrey"
-            android:textSize="12sp"
+            android:textColor="@color/text_grey"
+            android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_distance"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_time"
             app:layout_constraintStart_toEndOf="@+id/tv_my_course_time" />
 
         <TextView
@@ -174,42 +182,41 @@
             android:freezesText="false"
             android:text="CAL"
             android:textAlignment="viewStart"
-            android:textColor="@color/darkgrey"
-            android:textSize="12sp"
+            android:textColor="@color/text_grey"
+            android:textSize="14sp"
 
 
             android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_my_course_calories"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_my_course_calories"
-            app:layout_constraintTop_toTopOf="@+id/tv_my_course_distance" />
+            app:layout_constraintStart_toEndOf="@+id/tv_my_course_calories" />
 
         <View
             android:id="@+id/spointMarker"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
             android:background="@drawable/ic_point_marker"
             app:layout_constraintBottom_toBottomOf="@+id/tv_my_course_detail_summary_start_point"
-            app:layout_constraintStart_toStartOf="@+id/guideline7"
-        />
+            app:layout_constraintStart_toStartOf="@+id/guideline7" />
 
         <View
             android:id="@+id/epointMarker"
             android:layout_width="8dp"
             android:layout_height="8dp"
+            android:layout_marginStart="4dp"
             android:background="@drawable/ic_point_marker"
             app:layout_constraintBottom_toBottomOf="@+id/tv_my_course_detail_summary_end_point"
             app:layout_constraintTop_toTopOf="@+id/tv_my_course_detail_summary_end_point"
-            map:layout_constraintStart_toStartOf="@+id/guideline7"
-             />
+            map:layout_constraintStart_toStartOf="@+id/guideline7" />
 
         <View
             android:id="@+id/line"
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginEnd="4dp"
-            android:background="@color/grey"
+            android:background="@color/almost_white"
             app:layout_constraintBottom_toBottomOf="@+id/epointMarker"
             app:layout_constraintBottom_toTopOf="@+id/epointMarker"
             app:layout_constraintEnd_toEndOf="@+id/spointMarker"

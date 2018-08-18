@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#3F51B5</color>
-  <color name="colorPrimaryDark">#353639</color>
-  <color name="colorAccent">#FF4081</color>
+  <color name="colorPrimary">#306FF6</color>
+  <color name="colorPrimaryDark">#2e2e2e</color>
+  <color name="colorAccent">#1588f1</color>
+  <color name="colorLine">#c3e7eced</color>
 
-  <color name="lightgrey">#f8f9fa</color>
-  <color name="white">#F7F7F7</color>
-  <color name="darkgrey">#909091</color>
-  <color name="darkergrey">#575757</color>
-  <color name="black">#2a2a2a</color>
-  <color name="grey">#EEF0F3</color>
-  <color name="colorLine">#dfdfdf</color>
+  <color name="real_white">#ffffff</color>
+  <color name="white">#ffffff</color>
+  <color name="almost_white">#ededed</color>
+
+  <color name="lightgrey">#bfbdcc</color>
+  <color name="grey">#81818b</color>
+  <color name="dark_grey">#35353f</color>
+  <color name="black">#232323</color>
+
+
+
+  <color name="light_grey_blue">#8aa9c5</color>
+  <color name="grey_blue">#FAFAFA</color>
+
+  <color name="text_black">#424242</color>
+  <!--<color name="text_black">#333333</color>-->
+  <!--<color name="text_black">#252424</color>-->
+  <color name="text_grey">#7c7c7c</color>
+  <color name="text_light_grey">#999999</color>
+
+  <color name="toolbar_color">#f3f5f7</color>
+
+  <color name="transparent_">#00ffffff</color>
 </resources>

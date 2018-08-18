@@ -52,9 +52,9 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
     private Realm mRealm;
     private final String KEY = String.valueOf(R.string.google_maps_key);
     private GeoDataClient mGeoDataClient;
-
+    private filteringlistener fListener;
     public CourseAdapter(Context context, RealmResults<RunningCourse> data, boolean automaticUpdate,
-                         boolean animateResults, CourseViewHolder.itemClickListener listener, GeoDataClient geoDataClient) {
+                         boolean animateResults, CourseViewHolder.itemClickListener listener, GeoDataClient geoDataClient,filteringlistener fListener) {
         super(context, data, automaticUpdate, animateResults);
         this.data = data;
         this.listener = listener;
@@ -62,7 +62,7 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
         Realm.init(getContext());
         mRealm = Realm.getDefaultInstance();
         LOGD(TAG,"API KEY : "+KEY);
-
+            this.fListener = fListener;
     }
 
     @Override
@@ -98,10 +98,10 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
             Glide.with(getContext())
                     .load(uri)
                     .apply(new RequestOptions().centerCrop()
-                            .placeholder(R.drawable.ic_point_marker)
-                            .error(R.drawable.ic_dust_testicon_replacelater)
+                            .placeholder(R.drawable.ic_glide_placeholder)
+                            .error(R.drawable.ic_glide_placeholder)
                     )
-                    .thumbnail(0.1f)
+                    .thumbnail(0.9f)
                     .into(holder.thumnail);
         }
 
@@ -138,26 +138,40 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
                             .contains("courseName", charString)
                             .findAll();
                     data = filteredList;
+                updateRealmResults(filteredList);
                     LOGD(TAG, "filtered result : " + data.size());
+                notifyDataSetChanged();
+                fListener.onFiltered(filteredList);
                 }
 
-
-                notifyDataSetChanged();
             }
         };
     }
 
     public Uri getStaticMapImg(RunningCourse course) {
 
-        List<LatLng> list = getLatLangFromAddr(course);
-        String staticURL = "https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=200x200" +
+//        List<LatLng> list = getLatLangFromAddr(course);
+//        String staticURL = "https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=100x100" +
+//                "&markers=color:blue%7Clabel:S%7C"
+//                +list.get(0).latitude+","+list.get(0).longitude
+//                +"&markers=color:yellow%7Clabel:E%7C"
+//                +list.get(1).latitude+","+list.get(1).longitude +"&key="
+//                + ApiService.GOOGLE_MAPS_API_SERVICE_KEY;
+////        LOGD(TAG, "static url "+course.getCourseName()+": "+staticURL);
+//        Uri uri = Uri.parse(staticURL);
+
+
+//        List<LatLng> list = getLatLangFromAddr(course);
+        String staticURL = "https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=100x100" +
                 "&markers=color:blue%7Clabel:S%7C"
-                +list.get(0).latitude+","+list.get(0).longitude
+                +course.getsLat()+","+course.getsLng()
                 +"&markers=color:yellow%7Clabel:E%7C"
-                +list.get(1).latitude+","+list.get(1).longitude +"&key="
+                +course.geteLat()+","+course.geteLng() +"&key="
                 + ApiService.GOOGLE_MAPS_API_SERVICE_KEY;
 //        LOGD(TAG, "static url "+course.getCourseName()+": "+staticURL);
         Uri uri = Uri.parse(staticURL);
+
+
       return uri;
     }
 
@@ -210,4 +224,13 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
 
         return latlng;
     }
+
+
+    public interface filteringlistener {
+        public void onFiltered(RealmResults<RunningCourse> filteredResult);
+
+    }
+
+
+
 }

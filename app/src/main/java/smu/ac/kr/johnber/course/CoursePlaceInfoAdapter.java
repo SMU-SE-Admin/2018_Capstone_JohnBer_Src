@@ -80,8 +80,8 @@ public class CoursePlaceInfoAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 Glide.with(context)
                         .load(uri)
                         .apply(new RequestOptions().centerCrop()
-                                .placeholder(R.drawable.ic_point_marker)
-                                .error(R.drawable.ic_dust_testicon_replacelater)
+                                .placeholder(R.drawable.ic_glide_placeholder)
+                                .error(R.drawable.ic_glide_placeholder)
                         )
                         .thumbnail(0.1f)
                         .into(((CoursePlaceInfoViewHolder) holder).imgview);
@@ -97,8 +97,8 @@ public class CoursePlaceInfoAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 Glide.with(context)
                         .load(uri)
                         .apply(new RequestOptions().centerCrop()
-                                .placeholder(R.drawable.ic_point_marker)
-                                .error(R.drawable.ic_dust_testicon_replacelater)
+                                .placeholder(R.drawable.ic_glide_placeholder)
+                                .error(R.drawable.ic_glide_placeholder)
                         )
                         .thumbnail(0.1f)
                         .into(((CourseReviewHolder) holder).profile);

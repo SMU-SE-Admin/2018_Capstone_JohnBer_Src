@@ -180,10 +180,8 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(8);
         ArrayList<JBLocation> route = getRoute();
-
         LOGD(TAG, "getRoute: "+route);
         mgoogleMap.addPolyline(setPolylineOptions(route));
-
         //마커 설정
         LatLng start = LocationUtil.jbLocationToLatLng(locationArrayList.get(0));
         LatLng end = LocationUtil.jbLocationToLatLng(locationArrayList.get(locationArrayList.size() - 1));
@@ -210,7 +208,6 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         LatLngBounds bounds = builder.build();
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,100);
         mgoogleMap.moveCamera(cu);
-
 
     }
 
@@ -269,7 +266,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
             options.add(LocationUtil.jbLocationToLatLng(location));
             LOGD(TAG, "[location] " + LocationUtil.jbLocationToLatLng(location));
         }
-        options.width(15).color(Color.parseColor("#1D8BF8")).geodesic(true);
+        options.width(13).color(Color.parseColor("#1D8BF8")).geodesic(true);
         LOGD(TAG, "sizeof array" + list.size());
         return options;
     }

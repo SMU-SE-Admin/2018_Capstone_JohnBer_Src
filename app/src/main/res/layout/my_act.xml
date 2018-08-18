@@ -4,195 +4,207 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/real_white"
     android:orientation="vertical">
 
-  <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-    <!--toolbar-->
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        app:layout_scrollFlags="scroll|enterAlways" />
-  </android.support.design.widget.AppBarLayout>
+    <android.support.design.widget.AppBarLayout
+        style="@style/ToolbarTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/real_white">
+        <!--toolbar-->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+        <!--app:layout_scrollFlags="scroll|enterAlways"-->
 
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+    </android.support.design.widget.AppBarLayout>
 
-      android:layout_weight="1">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 
-    <FrameLayout
-        android:id="@+id/mycourse_item_container"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
         android:layout_weight="1">
 
-      <android.support.constraint.ConstraintLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="1">
-
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline9"
+        <FrameLayout
+            android:id="@+id/mycourse_item_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
-
-        <TextView
-            android:id="@+id/tv_my_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/guideline9"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="@+id/guideline5"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="John Ber" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
 
-        <TextView
-            android:id="@+id/tv_my_statistics_title"
-            android:layout_width="wrap_content"
-            android:layout_height="21dp"
-            android:layout_marginTop="32dp"
-            android:text="통계"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/guideline5"
-            app:layout_constraintTop_toBottomOf="@+id/tv_my_username" />
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="16dp" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/my_statistics_viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="16dp"
-            android:background="@color/white"
-            android:clipToPadding="false"
-            android:elevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_my_statistics_title">
-          <!--일,주,월별 통계 title tap ~ 텍스트 설정은 Adapter에서-->
-          <android.support.v4.view.PagerTabStrip
-              android:id="@+id/pager_title_strip"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="top"
-              android:background="@color/lightgrey"
-              android:backgroundTint="@color/grey"
-              android:paddingBottom="8dp"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
-              android:paddingTop="8dp"
-              android:textColor="@color/black" />
-        </android.support.v4.view.ViewPager>
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="16dp" />
 
-        <TextView
-            android:id="@+id/tv_my_mycourse_title"
-            android:layout_width="wrap_content"
-            android:layout_height="21dp"
-            android:layout_marginTop="32dp"
-            android:text="마이코스"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/guideline5"
-            app:layout_constraintTop_toBottomOf="@+id/my_statistics_viewPager" />
+                <TextView
+                    android:id="@+id/tv_my_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/text_black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView5"
+                    tools:text="John Ber" />
 
-        <!--마이코스-->
-        <Spinner
-            android:id="@+id/sp_my_course_search_year"
-            android:layout_width="48dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/sp_my_course_search_month"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/tv_my_mycourse_title" />
 
-        <Spinner
-            android:id="@+id/sp_my_course_search_day"
-            android:layout_width="48dp"
-            android:layout_height="24dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/sp_my_course_search_month"
-            app:layout_constraintTop_toTopOf="@+id/sp_my_course_search_year" />
+                <TextView
+                    android:id="@+id/tv_my_statistics_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="21dp"
+                    android:layout_marginTop="32dp"
+                    android:text="통계"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/text_black"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline5"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_username" />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="27dp"
-            app:layout_constraintStart_toStartOf="parent" />
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/my_statistics_viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/pagertabstrip_bg"
+                    android:clipToPadding="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_statistics_title">
 
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_begin="382dp" />
+                    <!--일,주,월별 통계 title tap ~ 텍스트 설정은 Adapter에서-->
+                    <android.support.v4.view.PagerTabStrip
+                        android:id="@+id/pager_title_strip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp" />
+                </android.support.v4.view.ViewPager>
 
-        <Spinner
-            android:id="@+id/sp_my_course_search_month"
-            android:layout_width="48dp"
-            android:layout_height="24dp"
-            app:layout_constraintEnd_toStartOf="@+id/sp_my_course_search_day"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/sp_my_course_search_year"
-            app:layout_constraintTop_toTopOf="@+id/sp_my_course_search_year" />
+                <TextView
+                    android:id="@+id/tv_my_mycourse_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="21dp"
+                    android:layout_marginTop="32dp"
+                    android:text="마이코스"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/text_black"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline5"
+                    app:layout_constraintTop_toBottomOf="@+id/my_statistics_viewPager" />
 
-        <!--<FrameLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="1">-->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/my_rv_course"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="4dp"
-            android:scrollbars="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sp_my_course_search_year"
-            tools:listitem="@layout/my_course_item_collapsed" />
-        <!--</FrameLayout>-->
-      </android.support.constraint.ConstraintLayout>
-    </FrameLayout>
-  </ScrollView>
-  <!--bottom navigationbar-->
-  <include
-      android:id="@+id/bottomNavigationView"
-      layout="@layout/navigationbar" />
+                <!--마이코스-->
+                <Spinner
+                    android:id="@+id/sp_my_course_search_year"
+                    android:layout_width="48dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/sp_my_course_search_month"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_mycourse_title" />
+
+                <Spinner
+                    android:id="@+id/sp_my_course_search_day"
+                    android:layout_width="48dp"
+                    android:layout_height="24dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/sp_my_course_search_month"
+                    app:layout_constraintTop_toTopOf="@+id/sp_my_course_search_year" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="16dp"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintGuide_begin="382dp" />
+
+                <Spinner
+                    android:id="@+id/sp_my_course_search_month"
+                    android:layout_width="48dp"
+                    android:layout_height="24dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/sp_my_course_search_day"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/sp_my_course_search_year"
+                    app:layout_constraintTop_toTopOf="@+id/sp_my_course_search_year" />
+
+                <!--<FrameLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1">-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/my_rv_course"
+                    android:layout_width="385dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="8dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sp_my_course_search_year"
+                    tools:listitem="@layout/course_item_collapsed" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/ic_point_marker"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                    app:layout_constraintStart_toStartOf="@+id/guideline5"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--</FrameLayout>-->
+            </android.support.constraint.ConstraintLayout>
+        </FrameLayout>
+    </ScrollView>
+    <!--bottom navigationbar-->
+    <include
+        android:id="@+id/bottomNavigationView"
+        layout="@layout/navigationbar" />
 
 
 </LinearLayout>
