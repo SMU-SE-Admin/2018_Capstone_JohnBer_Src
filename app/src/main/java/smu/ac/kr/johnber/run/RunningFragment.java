@@ -195,7 +195,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         // GPS : 확인
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(19);
-
         // Main화면에서 넘긴 좌표 꺼내기
         Intent intent = getActivity().getIntent();
         Double latitude = intent.getExtras().getDouble("latitude");

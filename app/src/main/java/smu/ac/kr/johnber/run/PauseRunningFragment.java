@@ -180,7 +180,6 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(8);
         ArrayList<JBLocation> route = getRoute();
-
         LOGD(TAG, "getRoute: "+route);
         mgoogleMap.addPolyline(setPolylineOptions(route));
 

@@ -13,13 +13,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="TextView"
+        android:textColor="@color/text_black"
         app:layout_constraintStart_toEndOf="@+id/iv_course_detail_ad_profile"
         app:layout_constraintTop_toTopOf="@+id/iv_course_detail_ad_profile" />
 
     <ImageView
         android:id="@+id/iv_course_detail_ad_profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
@@ -33,9 +34,15 @@
         android:id="@+id/tv_course_detail_ad_review_dates"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_course_detail_ad_review_comments"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_course_detail_ad_profile"
         app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_ad_review_comments"
+        app:layout_constraintVertical_bias="0.0"
         tools:text="ㄱㅁㅇㅇㅇ" />
 
     <TextView
@@ -44,7 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="16dp"
-        android:textSize="16sp"
+        android:textColor="@color/text_grey"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_course_detail_ad_review_name"
         app:layout_constraintTop_toTopOf="@+id/tv_course_detail_ad_review_name"

@@ -1,133 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--item layout in recycler view-->
-
-
-<android.support.constraint.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:card_view="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/course_item"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:layout_marginBottom="2dp"
-  android:background="@color/lightgrey">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/course_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    android:background="@color/real_white">
 
     <ImageView
         android:id="@+id/iv_course_map_thumbnail"
         android:layout_width="0dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="78dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginTop="16dp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintDimensionRatio="1:1"
         card_view:layout_constraintEnd_toStartOf="@+id/tv_course_name"
         card_view:layout_constraintHorizontal_bias="0.0"
         card_view:layout_constraintStart_toStartOf="@+id/guideline4"
         card_view:layout_constraintTop_toTopOf="parent"
-        card_view:layout_constraintVertical_bias="0.0"
-         />
+        card_view:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_course_name"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/dark_grey"
         android:textSize="14sp"
         android:textStyle="bold"
-        card_view:layout_constraintBottom_toTopOf="@+id/tv_cousrse_start_point"
+        android:typeface="normal"
         card_view:layout_constraintStart_toStartOf="@+id/tv_cousrse_start_point"
-         />
+        card_view:layout_constraintTop_toTopOf="@+id/iv_course_map_thumbnail"
+        tools:text="ㅋㅋㅋㅋㅋㅋㅋㅋ" />
 
     <TextView
         android:id="@+id/tv_cousrse_start_point"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="6dp"
         android:freezesText="false"
-        android:textAlignment="viewStart"
-        android:textColor="@color/darkgrey"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
         android:textSize="12sp"
-        card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toEndOf="@+id/iv_course_map_thumbnail"
-        card_view:layout_constraintTop_toTopOf="parent"
-         />
+        card_view:layout_constraintTop_toBottomOf="@+id/tv_course_name"
+        tools:text="ㅋㅋㅋㅋ" />
+
     <TextView
-      android:id="@+id/tv_course_distance"
-      android:layout_width="24dp"
-      android:layout_height="16dp"
-      android:layout_marginTop="8dp"
-      android:textColor="@color/darkergrey"
-      android:textSize="12sp"
-      card_view:layout_constraintHorizontal_chainStyle="packed"
-      card_view:layout_constraintStart_toStartOf="@+id/tv_cousrse_start_point"
-      card_view:layout_constraintTop_toBottomOf="@+id/tv_cousrse_start_point"
-      />
+        android:id="@+id/tv_course_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        card_view:layout_constraintBottom_toBottomOf="@+id/iv_course_map_thumbnail"
+        card_view:layout_constraintHorizontal_chainStyle="packed"
+        card_view:layout_constraintStart_toStartOf="@+id/tv_cousrse_start_point"
+        card_view:layout_constraintTop_toBottomOf="@+id/tv_cousrse_start_point"
+        card_view:layout_constraintVertical_bias="0.0"
+        tools:text="3" />
+
     <TextView
-      android:id="@+id/tv_course_calories"
-      android:layout_width="24dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:textColor="@color/darkergrey"
-      android:textSize="12sp"
+        android:id="@+id/tv_course_calories"
+        android:layout_width="24dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
         android:visibility="gone"
-      card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-      card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories_text"
-      />
+        card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_calories_text"
+        card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories_text" />
+
     <TextView
-      android:id="@+id/tv_course_time"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:textColor="@color/darkergrey"
-      android:textSize="12sp"
-      card_view:layout_constraintLeft_toLeftOf="parent"
-      card_view:layout_constraintStart_toEndOf="@+id/tv_cousrse_km_text"
-      card_view:layout_constraintTop_toTopOf="@+id/tv_course_distance"
-      />
+        android:id="@+id/tv_course_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_cousrse_km_text"
+        card_view:layout_constraintLeft_toLeftOf="parent"
+        card_view:layout_constraintStart_toEndOf="@+id/tv_cousrse_km_text"
+        tools:text="zzzzz" />
 
     <!--text view for measurement-->
     <TextView
-      android:id="@+id/tv_cousrse_km_text"
-      android:layout_width="19dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="4dp"
-      android:freezesText="false"
-      android:textAlignment="viewStart"
-      android:textColor="@color/darkgrey"
-      android:textSize="12sp"
-      card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-      card_view:layout_constraintStart_toEndOf="@+id/tv_course_distance"/>
+        android:id="@+id/tv_cousrse_km_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:freezesText="false"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
+        card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
+        card_view:layout_constraintStart_toEndOf="@+id/tv_course_distance"
+        tools:text="KM" />
+
     <TextView
-      android:id="@+id/tv_course_time_text"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="4dp"
-      android:freezesText="false"
+        android:id="@+id/tv_course_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginStart="6dp"
+        android:freezesText="false"
+        android:text="CAL"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp"
         android:visibility="gone"
-      android:text="CAL"
-      android:textAlignment="viewStart"
-      android:textColor="@color/darkgrey"
-      android:textSize="12sp"
-      card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-      card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories"/>
+        card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_calories"
+        card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories" />
 
     <TextView
         android:id="@+id/tv_course_calories_text"
         android:layout_width="wrap_content"
-        android:layout_height="17dp"
-        android:layout_marginStart="4dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="6dp"
         android:freezesText="false"
-        android:textAlignment="viewStart"
-        android:textColor="@color/darkgrey"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/text_grey"
         android:textSize="12sp"
-        card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_distance"
-        card_view:layout_constraintStart_toEndOf="@+id/tv_course_time" />
+        android:visibility="visible"
+        card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_time"
+        card_view:layout_constraintStart_toEndOf="@+id/tv_course_time"
+        tools:text="TIME" />
+
     <android.support.constraint.Guideline
-      android:id="@+id/guideline4"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:orientation="vertical"
-      card_view:layout_constraintGuide_begin="20dp"
-      card_view:layout_constraintStart_toStartOf="parent"/>
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
+        card_view:layout_constraintGuide_begin="16dp"
+        card_view:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

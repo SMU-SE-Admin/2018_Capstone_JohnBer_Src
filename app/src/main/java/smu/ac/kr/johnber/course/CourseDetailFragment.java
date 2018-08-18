@@ -5,18 +5,22 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -99,6 +103,8 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     private PlaceDetails placeDetails;
     private CoursePlaceInfoAdapter adapter;
     private  RecyclerView recyclerView;
+    private detailFragListener callbacklistener;
+
 
     public CourseDetailFragment() {
         // Required empty public constructor
@@ -151,14 +157,29 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
 
 
-
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY > oldScrollY) {
                     mRun.setVisibility(View.GONE);
-                } else if (scrollY < oldScrollY) {
+                    TranslateAnimation animate = new TranslateAnimation(
+                            0,
+                            0,
+                            0,
+                            getActivity().getWindow().getDecorView().getHeight());
+                    animate.setDuration(300);
+                    mRun.startAnimation(animate);
+
+
+                } else {
                     mRun.setVisibility(View.VISIBLE);
+                    TranslateAnimation animate = new TranslateAnimation(
+                            0,
+                            0,
+                            getActivity().getWindow().getDecorView().getHeight(),
+                            0);
+                    animate.setDuration(300);
+                    mRun.startAnimation(animate);
                 }
 
             }
@@ -168,6 +189,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         return mView;
     }
 
+
+    public void setListener(detailFragListener listener) {
+        this.callbacklistener = listener;
+    }
     private void getPlaceID(final RunningCourse course) {
         //get place id from google place search
        place_id = null;
@@ -239,6 +264,8 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     public void onDestroy() {
         super.onDestroy();
         mRealm.close();
+        mMapView.onDestroy();
+        callbacklistener.onBackPressed();
 
     }
 
@@ -346,6 +373,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                             CoursePlaceInfoAdapter adapterP = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 0);
                             recyclerView = mView.findViewById(R.id.rv_course_detail_info_photos);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
+                            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
                             recyclerView.setHasFixedSize(true);
                             recyclerView.setAdapter(adapterP);
                         }
@@ -354,6 +382,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                             CoursePlaceInfoAdapter adapterR = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 1);
                             recyclerView = mView.findViewById(R.id.rv_course_detail_info_reviews);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
                             recyclerView.setHasFixedSize(true);
                             recyclerView.setAdapter(adapterR);
                         }
@@ -462,4 +491,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
     }
 
+    public interface detailFragListener{
+        public void onBackPressed ();
+    }
 }

@@ -20,19 +20,22 @@ public class MyCourseViewHolder extends RecyclerView.ViewHolder{
   public ImageView thumnail;
   public TextView KM;
   public TextView TIME;
+  public TextView CAL;
   private MyCourseViewHolder.itemClickListener listener;
 
   public MyCourseViewHolder(View view, final MyCourseViewHolder.itemClickListener listener) {
     super(view);
 
-    courseName = view.findViewById(R.id.tv_my_course_name);
-    startPoint = view.findViewById(R.id.tv_my_course_start_point);
-    distance = view.findViewById(R.id.tv_my_course_distance);
-    calories = view.findViewById(R.id.tv_my_course_calories);
-    time = view.findViewById(R.id.tv_my_course_ime);
-    thumnail = view.findViewById(R.id.my_iv_course_map_thumnail);
-    KM = view.findViewById(R.id.tv_my_course_km_text);
-    TIME = view.findViewById(R.id.tv_my_course_calories_text);
+    courseName = view.findViewById(R.id.tv_course_name);
+    startPoint = view.findViewById(R.id.tv_cousrse_start_point);
+    distance = view.findViewById(R.id.tv_course_distance);
+    calories = view.findViewById(R.id.tv_course_calories);
+    time = view.findViewById(R.id.tv_course_time);
+    thumnail = view.findViewById(R.id.iv_course_map_thumbnail);
+
+    CAL = view.findViewById(R.id.tv_course_time_text);
+    KM = view.findViewById(R.id.tv_cousrse_km_text);
+    TIME = view.findViewById(R.id.tv_course_calories_text);
     this.listener = listener;
     view.setOnClickListener(new View.OnClickListener() {
       @Override

@@ -6,9 +6,11 @@ import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +20,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.SearchView;
 
@@ -57,7 +60,8 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     CourseAdapter mAdapter;
     private SearchView mSearchView;
     private GeoDataClient mGeoDataClient;
-
+    private AppBarLayout mAppBarLayout;
+    private CourseDetailFragment.detailFragListener fragListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
         setContentView(R.layout.course_act);
         LOGD(TAG, "onCreate");
         initView();
-
+        mAppBarLayout = findViewById(R.id.appbar);
         //RecyclerView 설정
         Realm.init(this);
         mRealm = Realm.getDefaultInstance();
@@ -152,6 +156,10 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
             }
         });
         mSearchView = findViewById(R.id.sv_searchView);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setFocusable(false);
+        mSearchView.clearFocus();
+        mSearchView.requestFocusFromTouch();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -171,11 +179,18 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     // recyclerView 클릭 리스너
     @Override
     public void onItemClicked(View view, int position) {
-        LOGD(TAG, "CLICKED!" + position);
+//        LOGD(TAG, "CLICKED!" + position);
         //코스 detail fragment inflate
+        mAppBarLayout.setVisibility(View.GONE);
+        TranslateAnimation animate = new TranslateAnimation(
+                0,
+                0,
+                0,
+                - mAppBarLayout.getHeight());
+        animate.setDuration(300);
+        animate.setFillAfter(true);
+        mAppBarLayout.startAnimation(animate);
         showDeatilView(position, view);
-
-
     }
 
 //    @Override
@@ -209,12 +224,30 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 //        return true;
 //    }
 
-    public void showDeatilView(int position, View view) {
+    public void showDeatilView(int position,  View view) {
+        fragListener = new CourseDetailFragment.detailFragListener() {
+            @Override
+            public void onBackPressed() {
+                if (mAppBarLayout != null && mAppBarLayout.getVisibility() == View.GONE) {
+                    mAppBarLayout.setVisibility(View.VISIBLE);
+                    TranslateAnimation animate = new TranslateAnimation(
+                            0,                 // fromXDelta
+                            0,                 // toXDelta
+                            -mAppBarLayout.getHeight(),                 // fromYDelta
+                            0); // toYDelta
+                    animate.setDuration(300);
+                    animate.setFillAfter(true);
+                    mAppBarLayout.startAnimation(animate);
+
+                }
+            }
+        };
         Bundle data = new Bundle();
         data.putInt("position", position); //recycler view상의 포지션
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         CourseDetailFragment fragment = new CourseDetailFragment();
+        fragment.setListener(fragListener);
         fragment.setArguments(data);
         fragmentTransaction.add(R.id.course_item_container, fragment, "COURSEDETAILFRAGMENT")
                 .addToBackStack(null)
@@ -271,5 +304,6 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         return latlng;
     }
+
 
 }

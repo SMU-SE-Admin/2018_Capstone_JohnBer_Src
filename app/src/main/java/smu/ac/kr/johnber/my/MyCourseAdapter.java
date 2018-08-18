@@ -47,7 +47,7 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
   @Override
   public MyCourseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-    View view = inflater.inflate(R.layout.my_course_item_collapsed, parent, false);
+    View view = inflater.inflate(R.layout.course_item_collapsed, parent, false);
     MyCourseViewHolder viewHolder = new MyCourseViewHolder(view, listener);
     return viewHolder;
   }
@@ -57,7 +57,8 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     final Record courseItem = data.get(position);
     holder.courseName.setText(courseItem.getTitle());
     holder.calories.setText(Double.toString(courseItem.getCalories()));
-    holder.distance.setText(Double.toString(courseItem.getDistance()));
+    String dist = RecordUtil.distanceToStringFormat(courseItem.getDistance());
+    holder.distance.setText(dist);
     String time = RecordUtil.milliseconsToStringFormat(courseItem.getElapsedTime());
     holder.time.setText(time);
     String startPoint = LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context);
@@ -66,6 +67,8 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
       startPoint = startPointAddress[2] + " " + startPointAddress[3];
     holder.startPoint.setText(startPoint);
 
+    holder.CAL.setVisibility(View.VISIBLE);
+    holder.CAL.setText("CAL");
     holder.KM.setText("KM");
     holder.TIME.setText("TIME");
 
@@ -77,8 +80,8 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     Glide.with(context)
             .load(uri)
             .apply(new RequestOptions().centerCrop()
-                            .placeholder(R.drawable.ic_point_marker)
-                      .error(R.drawable.ic_dust_testicon_replacelater)
+                            .placeholder(R.drawable.ic_glide_placeholder)
+                      .error(R.drawable.ic_glide_placeholder)
             )
             .thumbnail(0.1f)
             .into(holder.thumnail);

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <dimen name="bottom_navigation_padding">5.8</dimen>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <dimen name="design_bottom_navigation_text_size" tools:override="true">10sp</dimen>
+
+  <dimen name="design_bottom_navigation_active_text_size" tools:override="true">9sp</dimen>
+
+  <dimen tools:override="true" name="design_navigation_icon_padding">1dp</dimen>
+   <dimen name="design_bottom_navigation_height" tools:override="true">49dp</dimen>
 </resources>

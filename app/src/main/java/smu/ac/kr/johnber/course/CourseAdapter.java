@@ -98,8 +98,8 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
             Glide.with(getContext())
                     .load(uri)
                     .apply(new RequestOptions().centerCrop()
-                            .placeholder(R.drawable.ic_point_marker)
-                            .error(R.drawable.ic_dust_testicon_replacelater)
+                            .placeholder(R.drawable.ic_glide_placeholder)
+                            .error(R.drawable.ic_glide_placeholder)
                     )
                     .thumbnail(0.1f)
                     .into(holder.thumnail);
