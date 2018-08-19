@@ -49,6 +49,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.account.UserProfile;
 import smu.ac.kr.johnber.map.JBLocation;
 
 /**
@@ -60,12 +61,16 @@ import smu.ac.kr.johnber.map.JBLocation;
  * - 달리기 종료 후 데이터 저장
  * - fragment간 통신 구현
  */
+
 public class RunningActivity extends AppCompatActivity implements PauseRunningFragment.RunFragCallBackListener {
 
     private final static String TAG = makeLogTag(RunningActivity.class);
     private Record mRecord;
     private Fragment runningFragment;
     private Bitmap bitmap;
+    UserProfile profile = ((UserProfile)getApplicationContext());
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -152,6 +157,8 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
      * sharedPreference에 있는 데이터 + date, endTime, Title -> Record객체에 저장
      * firebase에 저장
      */
+
+
     @Override
     public void onClickedReturn() {
         LOGD(TAG, "onClikedReturn ~ save data");
@@ -186,6 +193,26 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 
 
 
+        /***************
+         칼로리 계산은 MET을 이용.
+         일반적인 조깅은 7MET
+         1MET(신진대사 해당치) = 1*3.5ml/kg/min -> 결과는 ml 단위의 산소가 나옴.
+         산소 1L 당 5kcal 소모
+
+         formula : 7 * (3.5 * kg * min) * 5/1000
+
+         출처 : https://m.blog.naver.com/PostView.nhn?blogId=jmkimz&logNo=220137752732&categoryNo=22&proxyReferer=https%3A%2F%2Fwww.google.com%2F
+         ****************/
+
+       // setProfileWeight();
+
+        /*
+        double kg = weight
+        //if 14:50 -> 14.83333
+        double seconds = (elapsedTime / 1000) % 60 *1/60;
+        double min = elapsedTime/(1000*60) + seconds;
+        calories = 7 * (3.5 * kg * min) * 5/1000;
+        */
 
         mRecord = new Record(distance, elapsedTime, calories, locationArrayList, null, startTime, endTime, null);
         /**
@@ -193,9 +220,42 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
          */
 //        String imgBaseUrl = uid + "/" + getTime + "/" + stringStartTime +"/";  // 수정 !!!!!!!!!!!!!!!!!!!!
         captureScreen();
+        //**** Log.d("MAINACTIVITY", "GETWEIGHT333333333333333333 : "+ profile.getWeight());
 
     }
+/*
+    private void setProfileWeight(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
 
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String uid = user.getUid();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.getKey().toString().equals(uid)) {
+                        for (DataSnapshot profileSnapshot : snapshot.getChildren()) {
+                            if (profileSnapshot.getKey().toString().equals("userProfile")){
+                                //profile.setWeight(profileSnapshot.getValue(UserProfile.class).getWeight());
+                                weight = profileSnapshot.getValue(UserProfile.class).getWeight();
+                                Log.d("MAINACTIVITY", "GETWEIGHT11111111111 : "+ weight);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Log.d("MAINACTIVITY", "GETWEIGHT222222222222 : "+ weight);
+    }
+
+*/
     private void captureScreen() {
 
         GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
@@ -310,9 +370,6 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
                     }
                 }
             });
-
-
-
 
         }
 
