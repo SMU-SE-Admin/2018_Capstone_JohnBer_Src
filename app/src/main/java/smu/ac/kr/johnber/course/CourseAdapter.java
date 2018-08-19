@@ -101,7 +101,7 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
                             .placeholder(R.drawable.ic_glide_placeholder)
                             .error(R.drawable.ic_glide_placeholder)
                     )
-                    .thumbnail(0.1f)
+                    .thumbnail(0.9f)
                     .into(holder.thumnail);
         }
 
@@ -149,15 +149,28 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
 
     public Uri getStaticMapImg(RunningCourse course) {
 
-        List<LatLng> list = getLatLangFromAddr(course);
-        String staticURL = "https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=200x200" +
+//        List<LatLng> list = getLatLangFromAddr(course);
+//        String staticURL = "https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=100x100" +
+//                "&markers=color:blue%7Clabel:S%7C"
+//                +list.get(0).latitude+","+list.get(0).longitude
+//                +"&markers=color:yellow%7Clabel:E%7C"
+//                +list.get(1).latitude+","+list.get(1).longitude +"&key="
+//                + ApiService.GOOGLE_MAPS_API_SERVICE_KEY;
+////        LOGD(TAG, "static url "+course.getCourseName()+": "+staticURL);
+//        Uri uri = Uri.parse(staticURL);
+
+
+//        List<LatLng> list = getLatLangFromAddr(course);
+        String staticURL = "https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=100x100" +
                 "&markers=color:blue%7Clabel:S%7C"
-                +list.get(0).latitude+","+list.get(0).longitude
+                +course.getsLat()+","+course.getsLng()
                 +"&markers=color:yellow%7Clabel:E%7C"
-                +list.get(1).latitude+","+list.get(1).longitude +"&key="
+                +course.geteLat()+","+course.geteLng() +"&key="
                 + ApiService.GOOGLE_MAPS_API_SERVICE_KEY;
 //        LOGD(TAG, "static url "+course.getCourseName()+": "+staticURL);
         Uri uri = Uri.parse(staticURL);
+
+
       return uri;
     }
 

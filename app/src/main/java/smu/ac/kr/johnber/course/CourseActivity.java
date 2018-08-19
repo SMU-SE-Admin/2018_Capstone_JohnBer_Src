@@ -17,12 +17,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.SearchView;
 
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -155,25 +155,25 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
                 mRealm.commitTransaction();
             }
         });
-        mSearchView = findViewById(R.id.sv_searchView);
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.setFocusable(false);
-        mSearchView.clearFocus();
-        mSearchView.requestFocusFromTouch();
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                //filter recycler view
-                mAdapter.getFilter().filter(s);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                mAdapter.getFilter().filter(s);
-                return false;
-            }
-        });
+//        mSearchView = findViewById(R.id.sv_searchView);
+//        mSearchView.setIconifiedByDefault(false);
+//        mSearchView.setFocusable(false);
+//        mSearchView.clearFocus();
+//        mSearchView.requestFocusFromTouch();
+//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                //filter recycler view
+//                mAdapter.getFilter().filter(s);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                mAdapter.getFilter().filter(s);
+//                return false;
+//            }
+//        });
     }
 
     // recyclerView 클릭 리스너
@@ -193,36 +193,36 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
         showDeatilView(position, view);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.search_menu, menu);
-//
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//
-//        searchView.setSearchableInfo(searchManager
-//                .getSearchableInfo(getComponentName()));
-//        searchView.setMaxWidth(Integer.MAX_VALUE);
-//
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String s) {
-//                //filter recycler view
-//                mAdapter.getFilter().filter(s);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String s) {
-//                mAdapter.getFilter().filter(s);
-//                return false;
-//            }
-//        });
-//
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+       mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        mSearchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                //filter recycler view
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+        return true;
+    }
 
     public void showDeatilView(int position,  View view) {
         fragListener = new CourseDetailFragment.detailFragListener() {

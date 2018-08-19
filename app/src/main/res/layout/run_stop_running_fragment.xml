@@ -15,28 +15,29 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:background="@color/white">
-    <TextView
-      android:id="@+id/tv_run_title"
-      android:textStyle="bold"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
 
-      android:layout_marginTop="24dp"
-      android:textAlignment="center"
-      android:textAppearance="@style/TextAppearance.AppCompat"
-      android:textColor="@color/black"
-      android:textSize="14sp"
-      app:layout_constraintEnd_toStartOf="@+id/guideline14"
-      app:layout_constraintStart_toStartOf="@+id/guideline13"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="01/29/2018/Run"/>
+    <TextView
+        android:id="@+id/tv_run_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline14"
+        app:layout_constraintStart_toStartOf="@+id/guideline13"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="01/29/2018/Run" />
 
     <TextView
         android:id="@+id/tv_run_distance"
         android:layout_width="49dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/black"
@@ -45,7 +46,7 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_run_time"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@+id/guideline13"
+        app:layout_constraintStart_toStartOf="@+id/btn_return"
         app:layout_constraintTop_toBottomOf="@+id/tv_run_title"
         tools:text="26.4" />
 
@@ -70,13 +71,13 @@
         android:id="@+id/tv_run_calories"
         android:layout_width="62dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/guideline14"
+        app:layout_constraintEnd_toEndOf="@+id/btn_return"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tv_run_time"
         app:layout_constraintTop_toTopOf="@+id/tv_run_distance"

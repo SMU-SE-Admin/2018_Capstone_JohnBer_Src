@@ -4,10 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,11 +21,11 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.course.CourseAdapter;
+import smu.ac.kr.johnber.my.MyCourseAdapter;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 import smu.ac.kr.johnber.opendata.network.ApiService;
 import smu.ac.kr.johnber.opendata.network.ApiServiceGenerator;
-import smu.ac.kr.johnber.util.BitmapUtil;
 
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
@@ -45,7 +42,7 @@ public class CourseRequest {
     private Realm mRealm;
     private JSONObject jsonObject;
     private Context context;
-
+    private MyCourseAdapter adapter ;
     public CourseRequest(Context context) {
         this.context = context;
     }
@@ -80,6 +77,14 @@ public class CourseRequest {
                     }
                     LOGD(TAG, "category: "+jsonArray.length()
                     );
+
+
+                    //notify
+                    if (adapter != null) {
+
+                    adapter.notifyDataSetChanged();
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -94,7 +99,37 @@ public class CourseRequest {
                 LOGD(TAG, "server failed at: " + call.request().url() );
             }
         });
+
+        // 위경도
+//        insertCourseLatLng();
     }
+
+//    private void insertCourseLatLng() {
+//        final RealmResults<RunningCourse> results = mRealm.where(RunningCourse.class).findAll();
+//
+//        mRealm.executeTransactionAsync(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                for (RunningCourse item : results) {
+//
+//                    List<String> addrs = getseAddrList(item);
+//                    Double start= getstartLatLang(addrs.get(0)).;
+//
+//
+//
+//
+//
+//
+//                }
+//            }
+//        });
+////            Double start[] = getstartLatLang(addrs.get(0));
+////            Double end[] = getstartLatLang(addrs.get(1));
+////            runningCourse.setsLat(.latitude);
+////            runningCourse.setsLng(sLat.longitude);
+////            runningCourse.seteLat(eLat.latitude);
+////            runningCourse.seteLng(eLat.longitude);
+//    }
 
     private void insertCourseData() {
         mRealm.beginTransaction();
@@ -121,12 +156,15 @@ public class CourseRequest {
             runningCourse.setStartPointRoadAddr(jsonObject.get("시작지점도로명주소").toString());
             runningCourse.setEndPointAddr(jsonObject.get("종료지점소재지지번주소").toString());
             runningCourse.setEndPointRoadAddr(jsonObject.get("종료지점소재지도로명주소").toString());
-//            LatLng sLat = this.getLatLangFromAddr(runningCourse).get(0);
-//            LatLng eLat = this.getLatLangFromAddr(runningCourse).get(1);
-//            runningCourse.setsLat(sLat.latitude);
-//            runningCourse.setsLng(sLat.longitude);
-//            runningCourse.seteLat(eLat.latitude);
-//            runningCourse.seteLng(eLat.longitude);
+            List<String> addrs = getseAddrList(runningCourse);
+            List<LatLng> latLngs = getLatLangFromAddr(addrs);
+
+            LatLng sLat = latLngs.get(0);
+            LatLng eLat = latLngs.get(1);
+            runningCourse.setsLat(sLat.latitude);
+            runningCourse.setsLng(sLat.longitude);
+            runningCourse.seteLat(eLat.latitude);
+            runningCourse.seteLng(eLat.longitude);
         } catch (JSONException e) {}
         mRealm.commitTransaction();
     }
@@ -136,7 +174,13 @@ public class CourseRequest {
         return list.size();
     }
 
+
+
+
     private List<LatLng> getLatLangFromAddr(RunningCourse mcourseData) {
+
+
+
         List<LatLng> latlng = new ArrayList<>();
         if(mcourseData == null)
         LOGD(TAG,"mcourseData is empty");
@@ -186,5 +230,88 @@ public class CourseRequest {
         return latlng;
     }
 
+    private List<LatLng> getLatLangFromAddr(List<String> addrs) {
 
+
+        String startaddr = addrs.get(0);
+        String endaddr = addrs.get(1);
+
+            List<LatLng> latlng = new ArrayList<>();
+        LatLng start;
+        LatLng end;
+        LOGD(TAG, "addr s tart  is : " + startaddr);
+        LOGD(TAG, "addr  edbd t  is : " + endaddr);
+
+            try {
+                //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
+                Geocoder mGeoCoder = new Geocoder(context, Locale.KOREA);
+                List<Address> startLocation = null;
+                List<Address> endLocation = null;
+
+                    startLocation = mGeoCoder.getFromLocationName(startaddr, 1);
+                    LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(startaddr, 1).toString());
+
+
+
+                    endLocation = mGeoCoder.getFromLocationName(endaddr, 1);
+                    LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(endaddr, 1).toString());
+
+                if ( startLocation.size() ==0) {
+                    start = new LatLng(0, 0);
+                }else {
+                    start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
+                }
+
+                if (endLocation.size() ==0) {
+                    end = new LatLng(0, 0);
+                } else {
+                     end =new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude());
+                }
+                latlng.add(start);
+                latlng.add(end);
+                LOGD(TAG, "size of lsitsts : " + latlng.size());
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                LOGD(TAG, "cannot find location iuuuuuuunfo" );
+            }
+
+            return latlng;
+        }
+
+
+    private List<String> getseAddrList(RunningCourse mcourseData) {
+
+        List<String> latlng = new ArrayList<>();
+        if (mcourseData == null)
+            LOGD(TAG, "mcourseData is empty");
+
+
+        if (!(mcourseData.getStartPointAddr().equals("null") || mcourseData.getStartPointAddr().equals("해당 없음"))) {
+            //지번주소
+            LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
+            latlng.add(0, mcourseData.getStartPointAddr());
+        } else if (!(mcourseData.getStartPointRoadAddr().equals("null") || mcourseData.getStartPointRoadAddr().equals("해당 없음"))) {
+            //도로명주소
+            LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
+            latlng.add(0, mcourseData.getStartPointRoadAddr());
+        }
+
+        if (!(mcourseData.getEndPointAddr().equals("null") || mcourseData.getEndPointAddr().equals("해당 없음"))) {
+            //지번주소
+            LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
+            latlng.add(1, mcourseData.getEndPointAddr());
+
+
+        } else if (!(mcourseData.getEndPointRoadAddr().equals("null") || mcourseData.getEndPointRoadAddr().equals("해당 없음"))) {
+            //도로명주소
+            LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
+            latlng.add(1, mcourseData.getEndPointRoadAddr());
+
+        }
+
+
+        return latlng;
+    }
 }

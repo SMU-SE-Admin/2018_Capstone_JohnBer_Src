@@ -1,14 +1,11 @@
 package smu.ac.kr.johnber.opendata.network;
 
 
-import java.util.Map;
-
 import okhttp3.ResponseBody;
-import okio.Utf8;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 import smu.ac.kr.johnber.opendata.APImodel.WeatherResponse;
 import smu.ac.kr.johnber.opendata.PlaceAPImodel.PlaceDetails;
 
@@ -21,6 +18,7 @@ public interface ApiService {
 
     public static final String DATAGOKR_API_SERVICE_KEY = "VEQG7Dkn9phMbx%2Bvwni9uI8YB0Wk37FPh%2BFaIhIqXo3dh%2FXvJdkOhSs6XXHpHdfvL25UEU%2FLriN4idb8l7bUIw%3D%3D";
     public static final String GOOGLE_MAPS_API_SERVICE_KEY = "AIzaSyDhkhaiqWWQ4uoKGM8vgdHRAvE_RwIDo00";
+
     //  동네 예보
     @GET("ForecastGrib")
     Call<WeatherResponse> loadWeatherForecast(@Query(value = "ServiceKey", encoded = true) String serviceKey,
@@ -48,8 +46,6 @@ public interface ApiService {
                                        @Query(value = "key", encoded = true) String serviceKey);
 
 
-
-
     //* place_id is required
     //place_id
     //fields=opening_hours,formatted_phone_number,website,review,rating
@@ -57,7 +53,7 @@ public interface ApiService {
     @GET("details/json")
     Call<PlaceDetails> callPlaceDetails(@Query("placeid") String placeid,
                                         @Query("fields") String fields,
-            @Query(value = "key", encoded = true) String serviceKey);
+                                        @Query(value = "key", encoded = true) String serviceKey);
 
 
     //*) photoreference    / maxheihgt or maxwidth
@@ -67,9 +63,6 @@ public interface ApiService {
             @Query("maxwidth") int maxwidth,
             @Query("photoreference") String photoref,
             @Query(value = "key", encoded = true) String serviceKey);
-
-
-
 
 
 

@@ -313,6 +313,7 @@ public class TrackerService extends Service {
         mState = RESUME;
     }
 
+
     /**
      * save 기록
      * 자원 해제
@@ -346,7 +347,6 @@ public class TrackerService extends Service {
         //TODO : Date와 Title설정할것
         editor.putString("STARTTIME", Double.toString(startTime));
         editor.putString("ENDTIME", Double.toString(endTime));
-
         String currentDateandTime = RecordUtil.getFormattedDate();
         editor.putString("DATE",currentDateandTime);
         editor.commit();
