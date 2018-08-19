@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private static final String PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
 
     private Realm mRealm;
-
+    private boolean isFindCourseBtClicked;
     private Button mRun;
     public SharedPreferences prefs;
     private FloatingActionButton mFindCourse;
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         initView();
         seListeners();
         mAuth = FirebaseAuth.getInstance();
-
+        isFindCourseBtClicked = false;
     checkUserlogin();
 
         /**
@@ -212,6 +212,12 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         mFindCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isFindCourseBtClicked == true) {
+
+                isFindCourseBtClicked = false;
+                } else if (isFindCourseBtClicked == false) {
+                    isFindCourseBtClicked = true;
+                }
                 findCourse();
             }
         });
@@ -349,7 +355,10 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
         //update UI
         LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        if (isFindCourseBtClicked == false) {
+
         mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+        }
         LOGD(TAG, "Lattitude : " + latitude + "/Longtitude : " + longtitude);
 
     }
@@ -376,6 +385,8 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         }
 
         RealmResults<RunningCourse> query = filterResults(locality);
+
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         //각 코스의 출발지~도착치 모두 비교
         // integer : primary key of course
@@ -386,14 +397,18 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         LOGD(TAG,"query resuㅣt : "+query.size());
         //현재 좌표와 검색결과 좌표 거리 계산
         for (RunningCourse course : query) {
-            List<LatLng> latlist = getLatLangFromAddr(course);
-            LatLng sPoint = latlist.get(0);
-            LatLng ePoint = latlist.get(1);
-            if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), sPoint)<distance){
+//            List<LatLng> latlist = getLatLangFromAddr(course);
+            LatLng sPoint = new LatLng(course.getsLat(), course.getsLng());
+            LatLng ePoint = new LatLng(course.geteLat(), course.geteLng());
+            if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())
+                , sPoint)
+                    <distance){
                 courseMap.put(course.getId(), sPoint);
                 courseName.put(course.getId(), course.getCourseName());
             }
-            else if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), ePoint)<distance){
+            else if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())
+                    , ePoint)
+                    <distance){
                 courseMap.put(course.getId(), ePoint);
                 courseName.put(course.getId(), course.getCourseName());
             }

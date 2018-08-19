@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 
 import smu.ac.kr.johnber.map.JBLocation;
+
+import static android.support.constraint.Constraints.TAG;
 
 /**
  * android.location <-> johnber.location
@@ -62,6 +65,7 @@ public class LocationUtil {
             address = mGeoCoder.getFromLocation(location.getmLatitude(), location.getmLongitude(), 1);
             if(address != null &&address.size()>0){
                 stringLocation = address.get(0).getAddressLine(0).toString();
+                Log.d("마이코스 시작위치 ", stringLocation);
             }
         } catch (IOException e) {
             e.printStackTrace();

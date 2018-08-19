@@ -276,45 +276,55 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
         mgoogleMap = googleMap;
 
-//    LOGD(TAG, "s "+mcourseData.getStartPointAddr());
-//    LOGD(TAG, "s - "+mcourseData.getStartPointRoadAddr());
-//    LOGD(TAG, "e - "+mcourseData.getEndPointAddr());
-//    LOGD(TAG, "e - "+mcourseData.getEndPointRoadAddr());
-        try {
-            //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
-            Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
-            List<Address> startLocation = null;
-            List<Address> endLocation = null;
+
+//        try {
+//            //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
+//            Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
+//            List<Address> startLocation = null;
+//            List<Address> endLocation = null;
             markerList = new ArrayList<>();
-            if (!mcourseData.getStartPointAddr().equals("null")) {
-                //지번주소
-                LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
-                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1);
-                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1).toString());
-            } else if (!mcourseData.getStartPointRoadAddr().equals("null")) {
-                //도로명주소
-                LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
-                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1);
-                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1).toString());
-            }
+//            if (!mcourseData.getStartPointAddr().equals("null")) {
+//                //지번주소
+//                LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
+//                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1);
+//                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1).toString());
+//            } else if (!mcourseData.getStartPointRoadAddr().equals("null")) {
+//                //도로명주소
+//                LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
+//                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1);
+//                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1).toString());
+//            }
+//
+//            if (!mcourseData.getEndPointAddr().equals("null")) {
+//                //지번주소
+//                LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
+//                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
+//                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
+//
+//            } else if (!mcourseData.getEndPointRoadAddr().equals("null")) {
+//                //도로명주소
+//                LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
+//                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1);
+//                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1).toString());
+//            }
+//            markerList.add(new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude()));
+//            markerList.add(new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude()));
+//            LOGD(TAG, "end : " + endLocation.get(0).getLatitude() + " " + endLocation.get(0).getLongitude());
+//            LOGD(TAG, "estar : " + startLocation.get(0).getLatitude() + " " + startLocation.get(0).getLongitude());
+//            LOGD(TAG, "size ; " + markerList.size());
 
-            if (!mcourseData.getEndPointAddr().equals("null")) {
-                //지번주소
-                LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
-                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
-                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
 
-            } else if (!mcourseData.getEndPointRoadAddr().equals("null")) {
-                //도로명주소
-                LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
-                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1);
-                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1).toString());
-            }
-            markerList.add(new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude()));
-            markerList.add(new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude()));
-            LOGD(TAG, "end : " + endLocation.get(0).getLatitude() + " " + endLocation.get(0).getLongitude());
-            LOGD(TAG, "estar : " + startLocation.get(0).getLatitude() + " " + startLocation.get(0).getLongitude());
-            LOGD(TAG, "size ; " + markerList.size());
+
+
+
+
+        LatLng sPoint = new LatLng(mcourseData.getsLat(), mcourseData.getsLng());
+        LatLng ePoint = new LatLng(mcourseData.geteLat(), mcourseData.geteLng());
+        LOGD(TAG, "detail start point : "+sPoint.toString());
+        LOGD(TAG, "detail start point : "+ePoint.toString());
+        markerList.add(sPoint);
+        markerList.add(ePoint);
+
 
 
             for (int position = 0; position < markerList.size(); position++) {
@@ -333,10 +343,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             int padding = 50;
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
             mgoogleMap.moveCamera(cu);
-        } catch (IOException e) {
-            e.printStackTrace();
-            LOGD(TAG, "cannot find location info");
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            LOGD(TAG, "cannot find location info");
+//        }
 
 //부가정보
         getPlaceID(mcourseData);
@@ -365,10 +375,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
                         placeDetails = response.body();
                         //photo정보 있는경우 주소 가져오기
-                        if (placeDetails.getResult().getPhotos().size() > 0) {
-                            for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
-                                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
-                            }
+                        if (placeDetails.getResult().getPhotos() !=null) {
+//                            for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
+//                                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
+//                            }
                             //부가정보 사진 //TODO :
                             CoursePlaceInfoAdapter adapterP = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 0);
                             recyclerView = mView.findViewById(R.id.rv_course_detail_info_photos);
@@ -378,7 +388,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                             recyclerView.setAdapter(adapterP);
                         }
                         //review정보있는경우 넘기기기
-                        if (placeDetails.getResult().getReviews().size() > 0) {
+                        if (placeDetails.getResult().getReviews()!= null) {
                             CoursePlaceInfoAdapter adapterR = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 1);
                             recyclerView = mView.findViewById(R.id.rv_course_detail_info_reviews);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -63,7 +63,7 @@
                 tools:ignore="MissingConstraints" />
 
             <SearchView
-
+android:visibility="gone"
               android:layout_marginTop="0.7dp"
                 android:layout_marginBottom="0.7dp"
 
@@ -71,6 +71,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/real_white"
+                android:paddingBottom="1dp"
                 android:queryHint="코스 검색..."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
