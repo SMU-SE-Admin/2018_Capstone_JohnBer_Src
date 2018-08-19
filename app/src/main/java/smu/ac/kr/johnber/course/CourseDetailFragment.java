@@ -314,14 +314,19 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 //            LOGD(TAG, "size ; " + markerList.size());
 
 
+            if (!mcourseData.getEndPointAddr().equals("null")) {
+                //지번주소
+                LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
+                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
+                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
 
 
 
 
         LatLng sPoint = new LatLng(mcourseData.getsLat(), mcourseData.getsLng());
         LatLng ePoint = new LatLng(mcourseData.geteLat(), mcourseData.geteLng());
-        LOGD(TAG, sPoint.toString());
-        LOGD(TAG, ePoint.toString());
+        LOGD(TAG, "detail start point : "+sPoint.toString());
+        LOGD(TAG, "detail start point : "+ePoint.toString());
         markerList.add(sPoint);
         markerList.add(ePoint);
 
@@ -375,10 +380,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
                         placeDetails = response.body();
                         //photo정보 있는경우 주소 가져오기
-                        if (placeDetails.getResult().getPhotos().size() > 0) {
-                            for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
-                                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
-                            }
+                        if (placeDetails.getResult().getPhotos() !=null) {
+//                            for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
+//                                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
+//                            }
                             //부가정보 사진 //TODO :
                             CoursePlaceInfoAdapter adapterP = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 0);
                             recyclerView = mView.findViewById(R.id.rv_course_detail_info_photos);
@@ -388,7 +393,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                             recyclerView.setAdapter(adapterP);
                         }
                         //review정보있는경우 넘기기기
-                        if (placeDetails.getResult().getReviews().size() > 0) {
+                        if (placeDetails.getResult().getReviews()!= null) {
                             CoursePlaceInfoAdapter adapterR = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 1);
                             recyclerView = mView.findViewById(R.id.rv_course_detail_info_reviews);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

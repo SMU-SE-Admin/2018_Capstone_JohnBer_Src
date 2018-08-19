@@ -4,7 +4,10 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,11 +24,11 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import smu.ac.kr.johnber.course.CourseAdapter;
-import smu.ac.kr.johnber.my.MyCourseAdapter;
+import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.opendata.APImodel.RunningCourse;
 import smu.ac.kr.johnber.opendata.network.ApiService;
 import smu.ac.kr.johnber.opendata.network.ApiServiceGenerator;
+import smu.ac.kr.johnber.util.BitmapUtil;
 
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
@@ -42,7 +45,7 @@ public class CourseRequest {
     private Realm mRealm;
     private JSONObject jsonObject;
     private Context context;
-    private MyCourseAdapter adapter ;
+
     public CourseRequest(Context context) {
         this.context = context;
     }
@@ -77,14 +80,6 @@ public class CourseRequest {
                     }
                     LOGD(TAG, "category: "+jsonArray.length()
                     );
-
-
-                    //notify
-                    if (adapter != null) {
-
-                    adapter.notifyDataSetChanged();
-                    }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -99,37 +94,7 @@ public class CourseRequest {
                 LOGD(TAG, "server failed at: " + call.request().url() );
             }
         });
-
-        // 위경도
-//        insertCourseLatLng();
     }
-
-//    private void insertCourseLatLng() {
-//        final RealmResults<RunningCourse> results = mRealm.where(RunningCourse.class).findAll();
-//
-//        mRealm.executeTransactionAsync(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//                for (RunningCourse item : results) {
-//
-//                    List<String> addrs = getseAddrList(item);
-//                    Double start= getstartLatLang(addrs.get(0)).;
-//
-//
-//
-//
-//
-//
-//                }
-//            }
-//        });
-////            Double start[] = getstartLatLang(addrs.get(0));
-////            Double end[] = getstartLatLang(addrs.get(1));
-////            runningCourse.setsLat(.latitude);
-////            runningCourse.setsLng(sLat.longitude);
-////            runningCourse.seteLat(eLat.latitude);
-////            runningCourse.seteLng(eLat.longitude);
-//    }
 
     private void insertCourseData() {
         mRealm.beginTransaction();
@@ -257,13 +222,14 @@ public class CourseRequest {
                     LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(endaddr, 1).toString());
 
                 if ( startLocation.size() ==0) {
-                    start = new LatLng(0, 0);
+
+                    start = new LatLng( 35.5245878,  129.3999542);
                 }else {
                     start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
                 }
 
                 if (endLocation.size() ==0) {
-                    end = new LatLng(0, 0);
+                    end = new LatLng( 129.3999542,  129.3999542);
                 } else {
                      end =new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude());
                 }
