@@ -17,12 +17,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.SearchView;
 
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -49,7 +49,7 @@ import smu.ac.kr.johnber.opendata.CourseRequest;
 import smu.ac.kr.johnber.run.MainActivity;
 import smu.ac.kr.johnber.run.RunningFragment;
 
-public class CourseActivity extends BaseActivity implements CourseViewHolder.itemClickListener {
+public class CourseActivity extends BaseActivity implements CourseViewHolder.itemClickListener, CourseAdapter.filteringlistener {
 
     private final static String TAG = makeLogTag(CourseActivity.class);
     //TODO : 테스트용, api 데이터 다운로드 -> 기능 구현 후 앱 최초 실행 시 다운로드 하도록 구현할것
@@ -62,7 +62,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     private GeoDataClient mGeoDataClient;
     private AppBarLayout mAppBarLayout;
     private CourseDetailFragment.detailFragListener fragListener;
-
+    private  RealmResults<RunningCourse> courseItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,13 +74,13 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
         Realm.init(this);
         mRealm = Realm.getDefaultInstance();
 
-        RealmResults<RunningCourse> courseItems = mRealm
+        courseItems = mRealm
                 .where(RunningCourse.class).findAll();
         mGeoDataClient = Places.getGeoDataClient(this);
 
 
         mAdapter = new CourseAdapter(this, courseItems, true, false
-                , this,mGeoDataClient);
+                , this,mGeoDataClient,this);
         RealmRecyclerView recyclerView = (RealmRecyclerView) findViewById(R.id.rv_course);
         recyclerView.setAdapter(mAdapter);
 
@@ -191,6 +191,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
         animate.setFillAfter(true);
         mAppBarLayout.startAnimation(animate);
         showDeatilView(position, view);
+        LOGD(TAG, "cliked " + courseItems.size());
     }
 
     @Override
@@ -208,21 +209,13 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
+            public boolean onQueryTextSubmit(String charString) {
                 //filter recycler view
-                mAdapter.getFilter().filter(s);
+                mAdapter.getFilter().filter(charString);
+                LOGD(TAG, "cliked " + courseItems.size());
                 return false;
             }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                mAdapter.getFilter().filter(s);
-                return false;
-            }
-        });
-
-        return true;
-    }
             @Override
             public boolean onQueryTextChange(String s) {
                 mAdapter.getFilter().filter(s);
@@ -321,6 +314,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         return latlng;
     }
+
 
 
 }

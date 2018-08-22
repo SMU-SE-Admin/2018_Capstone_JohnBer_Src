@@ -5,14 +5,10 @@ import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.net.Uri;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -46,8 +43,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import io.realm.Realm;
 import okhttp3.ResponseBody;
@@ -64,19 +59,13 @@ import smu.ac.kr.johnber.run.RunningActivity;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.PermissionUtil;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-
-//Todo : MAPVIEW setting
 public class CourseDetailFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private final static String TAG = makeLogTag(CourseDetailFragment.class);
     private static final int REQUEST_LOCATION_PERMISSION = 101;
     private static final String PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
-    private GeoDataClient mGeoDataClient;
+
     private TextView courseName;
-    public TextView startPoint;
+    private TextView startPoint;
     public TextView endPoint;
     public TextView distance;
     public TextView calories;
@@ -88,26 +77,29 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     public ImageView btPhone;
     public ImageView btWebsite;
     public TextView website;
-    private Realm mRealm;
-    private String place_id;
-    private int dataNO;
-    private RunningCourse mcourseData;
+    private ScrollView scrollView;
+    private Button mRun;
     private View mView;
-    private Marker mMarker;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
+
+    private CoursePlaceInfoAdapter adapter;
+    private RecyclerView recyclerView;
+
+    private Realm mRealm;
+    private int dataNO;
+    private RunningCourse mcourseData;
     private ArrayList<LatLng> markerList;
-    private Button mRun;
-    private ScrollView scrollView;
     private FusedLocationProviderClient mFusedLocationClient;
     private PlaceDetails placeDetails;
-    private CoursePlaceInfoAdapter adapter;
-    private  RecyclerView recyclerView;
+
     private detailFragListener callbacklistener;
+    private ApiCallback callback;
+    private ApiDetailCallback placedetail_callback;
 
 
     public CourseDetailFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -126,7 +118,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         calories = mView.findViewById(R.id.tv_course_calories);
         btWebsite = mView.findViewById(R.id.ic_website);
         btPhone = mView.findViewById(R.id.ic_call);
-        mRun = mView.findViewById(R.id.btn_course_run);  //TODO !!!!!달리기 실행으로 연결
+        mRun = mView.findViewById(R.id.btn_course_run);
         mRun.setOnClickListener(this);
         scrollView = mView.findViewById(R.id.scrollview);
 
@@ -152,9 +144,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         mMapView.getMapAsync(this);
-
-
-
 
 
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -193,16 +182,17 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     public void setListener(detailFragListener listener) {
         this.callbacklistener = listener;
     }
-    private void getPlaceID(final RunningCourse course) {
+
+    private void getPlaceID(final RunningCourse course, String query, final ApiCallback callback) {
         //get place id from google place search
-       place_id = null;
+
         ApiService apiService =
                 ApiServiceGenerator.getApiServiceGenerator(ApiServiceGenerator.BASE_URL_TYPE_PLACE)
                         .getApiService();
-        if (markerList!=null) {
+        if (markerList != null) {
 
             final Call<ResponseBody> responseBodyCall =
-                    apiService.callPlaceSearch(course.getCourseName(), "textquery",
+                    apiService.callPlaceSearch(query, "textquery",
                             ApiHelper.getQueryFeilds(ApiHelper.PLACE_SEARCH_FEILDS_REQUEST),
                             ApiHelper.getLocationbiase(markerList.get(0)),
                             ApiService.GOOGLE_MAPS_API_SERVICE_KEY);
@@ -222,18 +212,22 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                             JSONObject candidates = jsonObject.getJSONArray("candidates").getJSONObject(0);
 
                             String formatted_address = candidates.getString("formatted_address");
-                            place_id = candidates.getString("place_id");
+                            String place_id = candidates.getString("place_id");
                             if (candidates.has("photos")) {
 //                                photoref = candidates.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
                             }
 //                            LOGD(TAG, "place address: " +course.getStartPoint()+":"+ formatted_address);
-                            LOGD(TAG, "place id is  r: " +course.getStartPoint()+" : "+ place_id);
+                            LOGD(TAG, "place id is  r: " + course.getStartPoint() + " : " + place_id);
 //                            LOGD(TAG, "photo reference: " +course.getStartPoint()+":"+ photoref);
                             //
-                            if (place_id != null) {
-                                getPlaceDetails(place_id);
+                            if (!place_id.equals(null)) {
+                                callback.onSuccess(place_id);
+//                                getPlaceDetails(place_id);
                             }
                         } else {
+                            if (status.equals("ZERO_RESULTS")) {
+//                                callback.onZERORESUT();
+                            }
 //                        LOGD(TAG, "place request error code : " + status);
                             return;
                         }
@@ -282,7 +276,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 //            Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
 //            List<Address> startLocation = null;
 //            List<Address> endLocation = null;
-            markerList = new ArrayList<>();
+        markerList = new ArrayList<>();
 //            if (!mcourseData.getStartPointAddr().equals("null")) {
 //                //지번주소
 //                LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
@@ -314,22 +308,19 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 //            LOGD(TAG, "size ; " + markerList.size());
 
 
-            if (!mcourseData.getEndPointAddr().equals("null")) {
-                //지번주소
-                LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
-                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
-                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
+        if (!mcourseData.getEndPointAddr().equals("null")) {
+            //지번주소
+//            LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
+//            endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
+//            LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
 
 
-
-
-        LatLng sPoint = new LatLng(mcourseData.getsLat(), mcourseData.getsLng());
-        LatLng ePoint = new LatLng(mcourseData.geteLat(), mcourseData.geteLng());
-        LOGD(TAG, "detail start point : "+sPoint.toString());
-        LOGD(TAG, "detail start point : "+ePoint.toString());
-        markerList.add(sPoint);
-        markerList.add(ePoint);
-
+            LatLng sPoint = new LatLng(mcourseData.getsLat(), mcourseData.getsLng());
+            LatLng ePoint = new LatLng(mcourseData.geteLat(), mcourseData.geteLng());
+            LOGD(TAG, "detail start point : " + sPoint.toString());
+            LOGD(TAG, "detail start point : " + ePoint.toString());
+            markerList.add(sPoint);
+            markerList.add(ePoint);
 
 
             for (int position = 0; position < markerList.size(); position++) {
@@ -353,20 +344,112 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 //            LOGD(TAG, "cannot find location info");
 //        }
 
-//부가정보
-        getPlaceID(mcourseData);
+//부가정보     String [] id = null;
+            final String[] tmpid = new String[1];
+            callback = new ApiCallback() {
+                @Override
+                public void onSuccess(String place_id) {
+                    if (!place_id.equals(null))
+                        getPlaceDetails(place_id, new ApiDetailCallback() {
+                            @Override
+                            public void onDetailSuccessed(PlaceDetails details) {
+                                setRecyclerview(details);
+                            }
+                        });
+                    tmpid[0] = place_id;
+                }
+
+                @Override
+                public void onZERORESUT() {
+                    // 시작명으로 다시 검색
+//
+                }
+            };
+
+            getPlaceID(mcourseData, mcourseData.getStartPoint(), callback);
+            if (tmpid.equals(null)) {
+                getPlaceID(mcourseData, mcourseData.getEndPoint(), callback);
+
+            }
+
+        }
+    }
+
+    private void setRecyclerview(final PlaceDetails placeDetails) {
+
+        if (placeDetails.getResult().getPhotos() != null) {
+            for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
+                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
+            }
+            //부가정보 사진 //TODO :
+            CoursePlaceInfoAdapter adapterP = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 0);
+            recyclerView = mView.findViewById(R.id.rv_course_detail_info_photos);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapterP);
+        }
+        //review정보있는경우 넘기기기
+        if (placeDetails.getResult().getReviews() != null) {
+            CoursePlaceInfoAdapter adapterR = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 1);
+            recyclerView = mView.findViewById(R.id.rv_course_detail_info_reviews);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapterR);
+        }
+
+        if (placeDetails.getResult().getRating() != null) {
+            //TODO  :  UI기본상태 gone 으로 바꿀것
+            mView.findViewById(R.id.tv_course_detail_info_AVGratings_title_additional).setVisibility(View.VISIBLE);
+            avgRates.setText(placeDetails.getResult().getRating().toString());
+        }
+
+        if (placeDetails.getResult().getFormattedPhoneNumber() != null) {
+            mView.findViewById(R.id.tv_course_detail_info_numbers_title_additional).setVisibility(View.VISIBLE);
+//                            phone.setText(placeDetails.getResult().getFormattedPhoneNumber());
+            btPhone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 전화 연결
+                    String receiver = placeDetails.getResult().getFormattedPhoneNumber();
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + receiver));
+                    startActivity(intent);
+                }
+            });
+
+        }
+
+        if (placeDetails.getResult().getWebsite() != null) {
+            mView.findViewById(R.id.tv_course_detail_info_website_title_additional).setVisibility(View.VISIBLE);
+//                            website.setText(placeDetails.getResult().getWebsite());
+            btWebsite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = placeDetails.getResult().getWebsite();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
+        }
+        if (placeDetails.getStatus().equals("ZERO_RESULT") || placeDetails.getResult().getPhotos() == null)
+            mView.findViewById(R.id.cv_course_detail_info_add_cardview).setVisibility(View.GONE);
+
+        {
+
+        }
+        //부가정보 숨김
 
     }
 
-    private void getPlaceDetails(String place_id) {
-
+    private void getPlaceDetails(String place_id, final ApiDetailCallback detailCallback) {
 
 
         ApiService apiService =
                 ApiServiceGenerator.getApiServiceGenerator(ApiServiceGenerator.BASE_URL_TYPE_PLACE)
                         .getApiService();
-        LOGD(TAG,"dd"+markerList.toString());
-        if (markerList!=null) {
+        LOGD(TAG, "dd" + markerList.toString());
+        if (markerList != null) {
 
             final Call<PlaceDetails> responseBodyCall =
                     apiService.callPlaceDetails(place_id,
@@ -380,70 +463,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
                         placeDetails = response.body();
                         //photo정보 있는경우 주소 가져오기
-                        if (placeDetails.getResult().getPhotos() !=null) {
-//                            for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
-//                                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
-//                            }
-                            //부가정보 사진 //TODO :
-                            CoursePlaceInfoAdapter adapterP = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 0);
-                            recyclerView = mView.findViewById(R.id.rv_course_detail_info_photos);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
-                            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-                            recyclerView.setHasFixedSize(true);
-                            recyclerView.setAdapter(adapterP);
+                        if (placeDetails.getResult() != null) {
+                            detailCallback.onDetailSuccessed(placeDetails);
                         }
-                        //review정보있는경우 넘기기기
-                        if (placeDetails.getResult().getReviews()!= null) {
-                            CoursePlaceInfoAdapter adapterR = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 1);
-                            recyclerView = mView.findViewById(R.id.rv_course_detail_info_reviews);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-                            recyclerView.setHasFixedSize(true);
-                            recyclerView.setAdapter(adapterR);
-                        }
-
-                        if (placeDetails.getResult().getRating() != null) {
-                            //TODO  :  UI기본상태 gone 으로 바꿀것
-                            mView.findViewById(R.id.tv_course_detail_info_AVGratings_title_additional).setVisibility(View.VISIBLE);
-                            avgRates.setText(placeDetails.getResult().getRating().toString());
-                        }
-
-                        if (placeDetails.getResult().getFormattedPhoneNumber() != null) {
-                            mView.findViewById(R.id.tv_course_detail_info_numbers_title_additional).setVisibility(View.VISIBLE);
-//                            phone.setText(placeDetails.getResult().getFormattedPhoneNumber());
-                            btPhone.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // 전화 연결
-                                    String receiver = placeDetails.getResult().getFormattedPhoneNumber();
-                                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + receiver));
-                                    startActivity(intent);
-                                }
-                            });
-
-                        }
-
-                        if (placeDetails.getResult().getWebsite() != null) {
-                            mView.findViewById(R.id.tv_course_detail_info_website_title_additional).setVisibility(View.VISIBLE);
-//                            website.setText(placeDetails.getResult().getWebsite());
-                            btWebsite.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    String url = placeDetails.getResult().getWebsite();
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                    startActivity(intent);
-                                }
-                            });
-                        }
-                    } else {
-                        //부가정보 숨김
-                        mView.findViewById(R.id.cv_course_detail_info_add_cardview).setVisibility(View.GONE);
-
                     }
-
-
-
-
 
                 }
 
@@ -456,8 +479,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         }
 
 
-
-
     }
 
     //RUN 버튼 눌렀을 때
@@ -465,15 +486,8 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onClick(View view) {
         if (!PermissionUtil.shouldAskPermission(getActivity(), PERMISSION)) {
-            //권한 있음
-//            mRun.setVisibility(view.GONE);
-//            RunningFragment runningFragment = new RunningFragment();
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.homeContainer, runningFragment, "RUNNINGFRAGMENT")
-//                    .addToBackStack(null)
-//                    .commit();
 
+            //권한 있음
             //get the last known location
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
@@ -485,11 +499,24 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                                 mCurrentLocation.setLatitude(location.getLatitude());
                                 mCurrentLocation.setLongitude(location.getLongitude());
                                 Intent intent = new Intent(getActivity(), RunningActivity.class);
+
+                                //XXX : Course - RUN - 해당 코스 정보 받아와서  split [ realmUID(코스)/행정구역(getfromlocation) ]
+
                                 //현재위치좌표를 같이 넘겨줌
                                 intent.putExtra("latitude", mCurrentLocation.getLatitude());
                                 intent.putExtra("longitude", mCurrentLocation.getLongitude());
-                                startActivity(intent);
 
+                                intent.putExtra("fromCourse", true);
+                                //코스 시작지점, 종료지점 좌표
+                                intent.putExtra("course_slat", mcourseData.getsLat());
+                                intent.putExtra("course_slng", mcourseData.getsLng());
+                                intent.putExtra("course_elat", mcourseData.geteLat());
+                                intent.putExtra("course_elng", mcourseData.geteLng());
+
+                                //코스 - 좌표 명
+                                intent.putExtra("course_sName", mcourseData.getStartPoint());
+                                intent.putExtra("course_eName", mcourseData.getEndPoint());
+                                startActivity(intent);
                             }
                         }
                     });
@@ -499,14 +526,26 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             PermissionUtil.checkPermission(getActivity(), PERMISSION, REQUEST_LOCATION_PERMISSION);
     }
 
-    public void getPhotoImg() {
-        //img 받아온 후 glide사용
 
+
+    public interface detailFragListener {
+        public void onBackPressed();
+    }
+
+    public interface ApiCallback {
+        void onSuccess(String place_id);
+
+        void onZERORESUT();
 
 
     }
 
-    public interface detailFragListener{
-        public void onBackPressed ();
+    public interface ApiDetailCallback {
+        void onDetailSuccessed(PlaceDetails details);
     }
+
 }
+
+
+
+

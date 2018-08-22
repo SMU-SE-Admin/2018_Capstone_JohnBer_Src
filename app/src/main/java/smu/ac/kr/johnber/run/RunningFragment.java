@@ -13,7 +13,9 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.VectorDrawable;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,22 +35,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.util.BitmapUtil;
+import smu.ac.kr.johnber.util.LocationUtil;
 import smu.ac.kr.johnber.util.RecordUtil;
 
 /**
@@ -62,6 +71,8 @@ import smu.ac.kr.johnber.util.RecordUtil;
  */
 public class RunningFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
+    private static final float POLYLINE_STROKE_WIDTH_PX =10;
+    private static final int COLOR_BLACK_ARGB = R.color.colorAccent;
     private final static String TAG = makeLogTag(RunningFragment.class);
     private Activity mActivity;
     private TextView mDistance;
@@ -77,7 +88,10 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private GoogleMap mgoogleMap;
     private Marker mMarker;                     // 현재 위치를 표시할 마커
     private ArrayList<LatLng> locationArrayList = new ArrayList<>(); //마커, 폴리라인 표시를 위한 좌표 목록
+    private ArrayList<LatLng> courseDetailLatLng;
+    private String [] courseNames;
     private boolean isBound;
+    private boolean isFromCourseRec ;
     // service 객체를 onServiceConnected 에서 받아옴
     private TrackerService mTrackerService;
     private static int mState;
@@ -177,7 +191,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         bundle.putString("distance", txtDistance);
         bundle.putString("calories",txtCalories);
 
-        //TODO : 오늘 날짜 넘겨주기 + 포맷형식은 Util에 구현?~  tracker Service에서 sharedPreferences에 저장한것을 PauseRunningFrragment에서 불러와서 세팅
         pauseRunningFragment.setArguments(bundle);
 
         //달리기 중지 fragment로 전환
@@ -191,36 +204,36 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //TODO : 기본위치 - 현재위치로
-        // GPS : 확인
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(19);
-        // Main화면에서 넘긴 좌표 꺼내기
         Intent intent = getActivity().getIntent();
+
+        // Main화면에서 넘긴 좌표 꺼내기
         Double latitude = intent.getExtras().getDouble("latitude");
         Double longitude = intent.getExtras().getDouble("longitude");
-        LatLng defaultLatLng = new LatLng(latitude,longitude);
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(defaultLatLng));
-    }
 
-//  private void hideActivityContainer() {
-//    mRun = getActivity().findViewById(R.id.btn_run);
-//    mToolbar = (Toolbar)getActivity().findViewById(R.id.toolbar);
-//    mBottomNav = getActivity().findViewById(R.id.bottomNavigationView);
-//    mWeatherWidgetView = getActivity().findViewById(R.id.v_weatherWidget_container);
-//
-//    mRun.setVisibility(View.GONE);
-//    mToolbar.setVisibility(View.GONE);
-//    mBottomNav.setVisibility(View.GONE);
-//    mWeatherWidgetView.setVisibility(View.GONE);
-//  }
-//
-//  private void showActivityContainer() {
-//    mRun.setVisibility(View.VISIBLE);
-//    mToolbar.setVisibility(View.VISIBLE);
-//    mBottomNav.setVisibility(View.VISIBLE);
-//    mWeatherWidgetView.setVisibility(View.GONE);
-//  }
+        if(!isFromCourseRec) {
+            if (intent.getBooleanExtra("fromCourse", false)) {
+
+                isFromCourseRec = true;
+
+                courseDetailLatLng=new ArrayList();
+                courseDetailLatLng.add(new LatLng(intent.getExtras().getDouble("course_slat")
+                ,intent.getExtras().getDouble("course_slng")));
+                courseDetailLatLng.add(new LatLng(intent.getExtras().getDouble("course_elat")
+                        ,intent.getExtras().getDouble("course_elng")));
+
+                courseNames = new String[2];
+                courseNames[0] = intent.getStringExtra("course_sName");
+                courseNames[1] = intent.getStringExtra("course_eName");
+                LOGD(TAG, courseNames[0] + courseNames[1]);
+            }
+        }
+        LatLng currentLocation = new LatLng(latitude, longitude);
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+
+
+    }
 
 
     public void initView() {
@@ -237,11 +250,14 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            isFromCourseRec = false;
             //bind되었을 때 Service객체 가져오기
             mTrackerService = ((TrackerService.TrackerBinder) iBinder).getService();
+
             //callback 등록
             mTrackerService.registerCallback(mCallback);
-            Toast.makeText(mTrackerService, "TrackerService connected", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mTrackerService, "TrackerService connected", Toast.LENGTH_SHORT).show();
+
             //기록 측정 시작
             if (mTrackerService != null) {
                 mTrackerService.start(mState, mHandler);
@@ -250,16 +266,19 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+
             // 예기치 못한 상황으로 연결 실패
             LOGD(TAG, "TrackerService disConnected");
+
             //callback 해제
             mTrackerService.unregisterCallback(mCallback);
-            Toast.makeText(mTrackerService, "TrackerService disconnected", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mTrackerService, "TrackerService disconnected", Toast.LENGTH_SHORT).show();
         }
     };
 
+
+    //메세지 핸들러를 통한 ui변경
     TrackerService.TrackerCallback mCallback = new TrackerService.TrackerCallback() {
-        //메세지 핸들러를 통한 ui변경
         @Override
         public void onDistanceChanged(double value) {
             Message msg = mHandler.obtainMessage(MSG_DISTANCE, (int) value, 0);
@@ -345,22 +364,33 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     // 지도에 이동 경로 표시
     private void drawPolylines(ArrayList<LatLng> locationArrayList) {
         PolylineOptions options = new PolylineOptions();
-        options.addAll(locationArrayList).width(25).color(Color.parseColor("#1D8BF8")).geodesic(true);
+        options.addAll(locationArrayList).endCap(new RoundCap())
+            .width(POLYLINE_STROKE_WIDTH_PX)
+                .color(COLOR_BLACK_ARGB)
+                .jointType(JointType.ROUND)
+                .geodesic(true);
         mgoogleMap.addPolyline(options);
 
     }
+
     // 지도에 마커 표시
     // 시작점, 끝점(현재위치)
     private void setMarkers() {
         ArrayList<LatLng> markerList = new ArrayList<>();
-        markerList.add(0,locationArrayList.get(0));
-        if (locationArrayList.size() > 1) {
 
-        markerList.add(1,locationArrayList.get(locationArrayList.size() - 1)); // 끝점(현재위치)
+        //시작 위치
+        markerList.add(0,locationArrayList.get(0));
+
+        //TODO : 코스에서 RUN하는경우 코스 시작, 종료지점 마커 추가
+
+        if (locationArrayList.size() > 1) {
+            // 끝점(현재위치)
+             markerList.add(1,locationArrayList.get(locationArrayList.size() - 1));
         }
+
         //시작 지점
         MarkerOptions options1 = new MarkerOptions();
-        options1.position(markerList.get(0)).title("start");
+        options1.position(markerList.get(0)).title("출발");
         options1.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_flag,mActivity));
         mgoogleMap.addMarker(options1);
 
@@ -371,12 +401,38 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
                 mMarker.remove();
             }
             MarkerOptions options2 = new MarkerOptions();
-            options2.position(markerList.get(1)).title("end");
-            options2.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current,mActivity));
+            options2.position(markerList.get(1)).title("도착");
+            options2.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_flag,mActivity));
             mMarker = mgoogleMap.addMarker(options2);
         }
 
-        // 카메라 이동
+        //코스 마커
+        // FIXME : isFromCourseRec 조건문 지워야 표시되는문제
+        // TODO : Puase 화면에서 코스 마커도 표시 ..?
+//        if (isFromCourseRec) {
+            for (LatLng point : courseDetailLatLng) {
+                int index = 0;
+                MarkerOptions options = new MarkerOptions();
+                options.position(point).title(courseNames[index]);
+                options.icon(BitmapUtil.getBitmapDescriptor(R.drawable.jbic_man_running, mActivity));
+                mgoogleMap.addMarker(options);
+                index++;
+            }
+//        }
+
+//        //카메라 이동
+//        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//        for(LatLng point : locationArrayList) {
+//            builder.include(point);
+//        }
+//        //bound로 애니메이션
+//        LatLngBounds bounds = builder.build();
+//        int width = getResources().getDisplayMetrics().widthPixels;
+//        int height = 300;
+//        int padding = 50;
+//        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
+//        mgoogleMap.moveCamera(cu);
+         //카메라 이동
         mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng
                 (locationArrayList.get(locationArrayList.size()-1)));
     }

@@ -148,6 +148,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 //   runfrag.resumestartTimer();
     }
 
+
     /**
      * sharedPreference에 있는 데이터 + date, endTime, Title -> Record객체에 저장
      * firebase에 저장
@@ -156,9 +157,8 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     public void onClickedReturn() {
         LOGD(TAG, "onClikedReturn ~ save data");
 
-        /**
-         * 지도 screen capture
-         */
+
+        //지도 screen capture
         SharedPreferences preferences;
         preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
 
