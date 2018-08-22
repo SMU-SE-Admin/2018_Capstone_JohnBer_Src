@@ -17,12 +17,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.SearchView;
 
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -223,6 +223,22 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         return true;
     }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public void onFiltered(RealmResults<RunningCourse> filteredResult) {
+        courseItems = filteredResult;
+        LOGD(TAG,"changed resuts size " + courseItems.size());
+        mAdapter.notifyDataSetChanged();
+    }
 
     public void showDeatilView(int position,  View view) {
         fragListener = new CourseDetailFragment.detailFragListener() {
@@ -243,6 +259,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
             }
         };
         Bundle data = new Bundle();
+        position=courseItems.get(position).getId()-1;
         data.putInt("position", position); //recycler view상의 포지션
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

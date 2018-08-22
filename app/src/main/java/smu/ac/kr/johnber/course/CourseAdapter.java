@@ -52,9 +52,9 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
     private Realm mRealm;
     private final String KEY = String.valueOf(R.string.google_maps_key);
     private GeoDataClient mGeoDataClient;
-
+    private filteringlistener fListener;
     public CourseAdapter(Context context, RealmResults<RunningCourse> data, boolean automaticUpdate,
-                         boolean animateResults, CourseViewHolder.itemClickListener listener, GeoDataClient geoDataClient) {
+                         boolean animateResults, CourseViewHolder.itemClickListener listener, GeoDataClient geoDataClient,filteringlistener fListener) {
         super(context, data, automaticUpdate, animateResults);
         this.data = data;
         this.listener = listener;
@@ -62,7 +62,7 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
         Realm.init(getContext());
         mRealm = Realm.getDefaultInstance();
         LOGD(TAG,"API KEY : "+KEY);
-
+            this.fListener = fListener;
     }
 
     @Override
@@ -138,11 +138,12 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
                             .contains("courseName", charString)
                             .findAll();
                     data = filteredList;
+                updateRealmResults(filteredList);
                     LOGD(TAG, "filtered result : " + data.size());
+                notifyDataSetChanged();
+                fListener.onFiltered(filteredList);
                 }
 
-
-                notifyDataSetChanged();
             }
         };
     }
@@ -223,4 +224,13 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
 
         return latlng;
     }
+
+
+    public interface filteringlistener {
+        public void onFiltered(RealmResults<RunningCourse> filteredResult);
+
+    }
+
+
+
 }

@@ -185,7 +185,8 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
                 "\n" + preferences.getString("STARTTIME", "0"));
 
 
-
+//TODO : TrackerService에서 realm uid, ~ 앞서 넘겨줬던거 꺼내오기 -> is conquered true일때만 파베 코스정복에 저장함수 호출하기
+//                                JohnBer/UID/courseStamp/ 레코드아이디(2018-08-19/04:24:48) - 행정구역(admin) , sLat, sLng, eLat, eLng 형태
 
         mRecord = new Record(distance, elapsedTime, calories, locationArrayList, null, startTime, endTime, null);
         /**
@@ -322,6 +323,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
         // Write data to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
+        //TODO : JohnBer/UID/courseStamp/ 레코드아이디(2018-08-19/04:24:48) - 행정구역(admin) , sLat, sLng, eLat, eLng 형태
         myRef.child(uid).child("userRecord").child(getTime).child(stringStartTime).setValue(mRecord);
     }
 
