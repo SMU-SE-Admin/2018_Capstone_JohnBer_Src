@@ -61,7 +61,6 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     switch (position) {
       case 0:
         viewId = R.layout.my_statistics_daily_view;
-        getRecord();
         break;
       case 1:
         viewId = R.layout.my_statistics_weekly_view;
@@ -95,17 +94,13 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
           //DB에서 로그인한 아이디와 일치하는지 확인 후 해당 데이터만 읽어옴.
           if (snapshot.getKey().toString().equals(uid)){
             //Log.d("MainActivity", "Single ValueEventListener : " + snapshot.getValue());
-            for(DataSnapshot recordSnapshot : snapshot.getChildren()){
-              if (recordSnapshot.getKey().toString().equals("userRecord")){
-                String keyDate1 = "";
-                for (DataSnapshot snapshot1 : recordSnapshot.getChildren()){
-                  keyDate1 = snapshot1.getKey().toString();
-                  for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                    String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
-                    recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
-                    //Log.d("mainactivity", "hashMap"+recordHashMap.toString());
-                  }
-                }
+            String keyDate1 = "";
+            for (DataSnapshot snapshot1 : snapshot.getChildren()){
+              keyDate1 = snapshot1.getKey().toString();
+              for (DataSnapshot snapshot2 : snapshot1.getChildren()){
+                String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
+                recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
+                //Log.d("mainactivity", "hashMap"+recordHashMap.toString());
               }
             }
           }
@@ -163,7 +158,6 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     Iterator<String> iter = recordHashMap.keySet().iterator();
     while(iter.hasNext()){
       //Log.d("mainactivity", "dkdkdkdkdkdkdkd : " + recordHashMap.keySet());
-      //ex) keys : hashmap의 key, 2018
       String keys = (String) iter.next();
       String dates = keys.split("/")[0];
       String times = keys.split("/")[1];
@@ -178,43 +172,9 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
         dailyTime.add(dailyRecord.getElapsedTime());
         dailyCal.add(dailyRecord.getCalories());
 
-        //Log.d("mainactivity", "daily: " + dailyKM.toString());
-
-
-        calculateTime(dailyTime);
+        Log.d("mainactivity", "daily: " + dailyKM.toString());
       }
     }
-  }
-
-  public void calculateKcal(List<Double> kcalList){
-    double sum=0;
-    for(int i=0; i<kcalList.size(); i++){
-      sum+=kcalList.get(i);
-    }
-    Log.d("MAINACTIVITY", "kcal" + sum);
 
   }
-
-  public void calculateTime(List<Double> timeList){
-    double sum =0;
-    for(int i=0; i<timeList.size(); i++){
-      SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-      sum += timeList.get(i);
-    }
-
-    int seconds = (int) (sum / 1000) % 60 ;            //초
-    int minutes = (int) ((sum/ (1000*60)) % 60);  //분
-    int hours   = (int) ((sum / (1000*60*60)) % 24);//시
-
-    Log.d("MAINACTIVITY", "TIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
-  }
-
-  public void calculateKM(List<Double> kmList){
-    double sum=0;
-    for(int i=0; i<kmList.size(); i++){
-      sum+=kmList.get(i);
-    }
-    Log.d("MAINACTIVITY", "KM" + sum);
-  }
-
 }

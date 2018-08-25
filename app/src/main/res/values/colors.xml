@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="colorPrimary">#306FF6</color>
-  <color name="colorPrimaryDark">#0A0A0A</color>
+  <color name="colorPrimaryDark">#2e2e2e</color>
   <color name="colorAccent">#1588f1</color>
   <color name="colorLine">#c3e7eced</color>
 
@@ -12,15 +12,17 @@
   <color name="lightgrey">#bfbdcc</color>
   <color name="grey">#81818b</color>
   <color name="dark_grey">#35353f</color>
-  <color name="black">#1e2024</color>
+  <color name="black">#232323</color>
 
 
 
   <color name="light_grey_blue">#8aa9c5</color>
   <color name="grey_blue">#FAFAFA</color>
 
-  <color name="text_black">#252424</color>
-  <color name="text_grey">#a3a3a3</color>
+  <color name="text_black">#424242</color>
+  <!--<color name="text_black">#333333</color>-->
+  <!--<color name="text_black">#252424</color>-->
+  <color name="text_grey">#7c7c7c</color>
   <color name="text_light_grey">#999999</color>
 
   <color name="toolbar_color">#f3f5f7</color>
