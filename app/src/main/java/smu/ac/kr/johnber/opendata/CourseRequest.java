@@ -121,12 +121,15 @@ public class CourseRequest {
             runningCourse.setStartPointRoadAddr(jsonObject.get("시작지점도로명주소").toString());
             runningCourse.setEndPointAddr(jsonObject.get("종료지점소재지지번주소").toString());
             runningCourse.setEndPointRoadAddr(jsonObject.get("종료지점소재지도로명주소").toString());
-//            LatLng sLat = this.getLatLangFromAddr(runningCourse).get(0);
-//            LatLng eLat = this.getLatLangFromAddr(runningCourse).get(1);
-//            runningCourse.setsLat(sLat.latitude);
-//            runningCourse.setsLng(sLat.longitude);
-//            runningCourse.seteLat(eLat.latitude);
-//            runningCourse.seteLng(eLat.longitude);
+            List<String> addrs = getseAddrList(runningCourse);
+            List<LatLng> latLngs = getLatLangFromAddr(addrs);
+
+            LatLng sLat = latLngs.get(0);
+            LatLng eLat = latLngs.get(1);
+            runningCourse.setsLat(sLat.latitude);
+            runningCourse.setsLng(sLat.longitude);
+            runningCourse.seteLat(eLat.latitude);
+            runningCourse.seteLng(eLat.longitude);
         } catch (JSONException e) {}
         mRealm.commitTransaction();
     }
@@ -136,7 +139,13 @@ public class CourseRequest {
         return list.size();
     }
 
+
+
+
     private List<LatLng> getLatLangFromAddr(RunningCourse mcourseData) {
+
+
+
         List<LatLng> latlng = new ArrayList<>();
         if(mcourseData == null)
         LOGD(TAG,"mcourseData is empty");
@@ -186,5 +195,89 @@ public class CourseRequest {
         return latlng;
     }
 
+    private List<LatLng> getLatLangFromAddr(List<String> addrs) {
 
+
+        String startaddr = addrs.get(0);
+        String endaddr = addrs.get(1);
+
+            List<LatLng> latlng = new ArrayList<>();
+        LatLng start;
+        LatLng end;
+        LOGD(TAG, "addr s tart  is : " + startaddr);
+        LOGD(TAG, "addr  edbd t  is : " + endaddr);
+
+            try {
+                //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
+                Geocoder mGeoCoder = new Geocoder(context, Locale.KOREA);
+                List<Address> startLocation = null;
+                List<Address> endLocation = null;
+
+                    startLocation = mGeoCoder.getFromLocationName(startaddr, 1);
+                    LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(startaddr, 1).toString());
+
+
+
+                    endLocation = mGeoCoder.getFromLocationName(endaddr, 1);
+                    LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(endaddr, 1).toString());
+
+                if ( startLocation.size() ==0) {
+
+                    start = new LatLng( 35.5245878,  129.3999542);
+                }else {
+                    start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
+                }
+
+                if (endLocation.size() ==0) {
+                    end = new LatLng( 129.3999542,  129.3999542);
+                } else {
+                     end =new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude());
+                }
+                latlng.add(start);
+                latlng.add(end);
+                LOGD(TAG, "size of lsitsts : " + latlng.size());
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                LOGD(TAG, "cannot find location iuuuuuuunfo" );
+            }
+
+            return latlng;
+        }
+
+
+    private List<String> getseAddrList(RunningCourse mcourseData) {
+
+        List<String> latlng = new ArrayList<>();
+        if (mcourseData == null)
+            LOGD(TAG, "mcourseData is empty");
+
+
+        if (!(mcourseData.getStartPointAddr().equals("null") || mcourseData.getStartPointAddr().equals("해당 없음"))) {
+            //지번주소
+            LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
+            latlng.add(0, mcourseData.getStartPointAddr());
+        } else if (!(mcourseData.getStartPointRoadAddr().equals("null") || mcourseData.getStartPointRoadAddr().equals("해당 없음"))) {
+            //도로명주소
+            LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
+            latlng.add(0, mcourseData.getStartPointRoadAddr());
+        }
+
+        if (!(mcourseData.getEndPointAddr().equals("null") || mcourseData.getEndPointAddr().equals("해당 없음"))) {
+            //지번주소
+            LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
+            latlng.add(1, mcourseData.getEndPointAddr());
+
+
+        } else if (!(mcourseData.getEndPointRoadAddr().equals("null") || mcourseData.getEndPointRoadAddr().equals("해당 없음"))) {
+            //도로명주소
+            LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
+            latlng.add(1, mcourseData.getEndPointRoadAddr());
+
+        }
+
+
+        return latlng;
+    }
 }
