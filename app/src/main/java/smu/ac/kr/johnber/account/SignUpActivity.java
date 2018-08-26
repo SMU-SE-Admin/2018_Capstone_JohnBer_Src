@@ -1,5 +1,6 @@
 package smu.ac.kr.johnber.account;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;

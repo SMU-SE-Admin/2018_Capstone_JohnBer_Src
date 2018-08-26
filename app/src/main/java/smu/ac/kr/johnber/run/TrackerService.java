@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -75,7 +76,7 @@ public class TrackerService extends Service {
     private LocationCallback mLocationCallback;
     private Handler mHandler;
     //TODO : user 객체를 앱 로그인 성공후 사용자 만들어 놓고 weight만 getter로 받아와서 사용할 수 있도록 하기
-    private double weight = 70.0;
+    //private double weight = 70.0;
     private Timer mTimer;
 
     public TrackerService() {
@@ -259,7 +260,10 @@ public class TrackerService extends Service {
         elapsedTime = SystemClock.elapsedRealtime() - startTime;
         //평균속도
         double averageSpeed = distance / elapsedTime;
-        //칼로리 계산
+        //칼로리 계산 jgh
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        double weight = pref.getFloat("userWeight", 0);
+        Log.d("mainactivity", "fuckda;fioasdlkfjas;lkfj;alsdfjal" +weight);
         calories = RecordUtil.getAverageCalories(weight, elapsedTime);
 
         //runningfragment에서 콜백 리스너를 호출하여 UI 업데이트
@@ -350,6 +354,8 @@ public class TrackerService extends Service {
         String currentDateandTime = RecordUtil.getFormattedDate();
         editor.putString("DATE",currentDateandTime);
         editor.commit();
+
+        Log.d("mainactivity", "TrackerService Stop Calories : "+ preferences.getString("CALORIES", ""));
 
         //서비스 종료
         this.stopSelf();

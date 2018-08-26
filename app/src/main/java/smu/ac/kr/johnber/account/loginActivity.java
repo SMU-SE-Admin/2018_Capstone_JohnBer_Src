@@ -38,7 +38,6 @@ public class loginActivity extends AppCompatActivity {
     private Button button_sign;
     // [START declare_auth]
     private FirebaseAuth mAuth;
-    //**** public UserProfile profile;
 
 
     @Override
@@ -80,10 +79,6 @@ public class loginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
-                            //UserProfile에 weight넣기.
-
-
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                         } else {
@@ -97,38 +92,11 @@ public class loginActivity extends AppCompatActivity {
                     }
                 });
     }
-/*
-//****
-    private void setProfileWeight(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
 
 
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String uid = user.getUid();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (snapshot.getKey().toString().equals(uid)) {
-                        for (DataSnapshot profileSnapshot : snapshot.getChildren()) {
-                            if (profileSnapshot.getKey().toString().equals("userProfile")){
-                                profile.setWeight(profileSnapshot.getValue(UserProfile.class).getWeight());
 
-                            }
-                        }
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-    }
-*/
 
 }
 

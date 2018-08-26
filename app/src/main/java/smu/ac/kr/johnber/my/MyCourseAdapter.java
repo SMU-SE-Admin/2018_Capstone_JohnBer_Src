@@ -61,11 +61,16 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     holder.distance.setText(dist);
     String time = RecordUtil.milliseconsToStringFormat(courseItem.getElapsedTime());
     holder.time.setText(time);
+    /*
     String startPoint = LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context);
-    String startPointAddress[] = startPoint.split(" ");
+    String startPointAddress[] = null;
+    //String startPointAddress[] = startPoint.split(" ");
     if(startPointAddress[2]!=null)
       startPoint = startPointAddress[2] + " " + startPointAddress[3];
     holder.startPoint.setText(startPoint);
+    */
+
+    holder.startPoint.setText("테스트");
 
     holder.CAL.setVisibility(View.VISIBLE);
     holder.CAL.setText("CAL");

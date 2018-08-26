@@ -1,5 +1,7 @@
 package smu.ac.kr.johnber.util;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,10 +16,25 @@ public class RecordUtil {
      * @link 계산 공식 참고 http://117.16.42.60/redmine/issues/1063#
      * 7MET 계산(달리기 가중치7.0)
      */
+
+    /***************
+     칼로리 계산은 MET을 이용.
+     일반적인 조깅은 7MET
+     1MET(신진대사 해당치) = 1*3.5ml/kg/min -> 결과는 ml 단위의 산소가 나옴.
+     산소 1L 당 5kcal 소모
+
+     formula : 7 * (3.5 * kg * min) * 5/1000
+
+     출처 : https://m.blog.naver.com/PostView.nhn?blogId=jmkimz&logNo=220137752732&categoryNo=22&proxyReferer=https%3A%2F%2Fwww.google.com%2F
+     ****************/
+    //jgh
     public static double getAverageCalories(double weight, double workoutTime) {
-        int minutes = millisecondsToMinute(workoutTime);
-        LogUtils.LOGD("RecordUtil ", Integer.toString(minutes));
-        double calories = 5 * (7 * (3.5 * weight * minutes) / 1000);
+        //시간 변경. if 14:50 -> 14.83333
+        double seconds = (workoutTime / 1000) % 60 *1/60;
+        double min = workoutTime/(1000*60) + seconds;
+        //LogUtils.LOGD("RecordUtil ", Integer.toString(min));
+        double calories = 7 * (3.5 * weight * min) * 5/1000;
+        Log.d("mainactivity", "RecordUtil calculate calories : " + calories + " "+ weight + " " + workoutTime);
         return calories;
     }
 

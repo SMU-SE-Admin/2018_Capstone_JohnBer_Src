@@ -1,34 +1,32 @@
 package smu.ac.kr.johnber.account;
 
-import android.app.Application;
+import java.lang.String;
 
-public class UserProfile extends Application{
+public class UserProfile{
     //male : 0
     //female :1
-    private String userID;
-    private double weight;
-    private double height;
-    private String gender;
+    private String userId, gender;
+    private double weight, height;
     //private int profileIMG;
-    private final static int DEFAULT_WEIGHT = 1;
-    private final static int DEFAULT_HEIGHT = 1;
+    //private final static int DEFAULT_WEIGHT = 1;
+    //private final static int DEFAULT_HEIGHT = 1;
 
-    public UserProfile(String userID, double weight, double height, String gender) {
-        this.userID = userID;
+    public UserProfile(String userId, double weight, double height, String gender){
+        this.userId = userId;
         this.weight = weight;
         this.height = height;
         this.gender = gender;
     }
 
-    public UserProfile() {}
-
-
-    public String getUserID() {
-        return userID;
+    public UserProfile() {
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public double getWeight() {
@@ -54,6 +52,4 @@ public class UserProfile extends Application{
     public void setGender(String gender) {
         this.gender = gender;
     }
-
-
 }

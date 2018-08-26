@@ -43,6 +43,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
@@ -60,6 +65,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.account.UserProfile;
 import smu.ac.kr.johnber.account.loginActivity;
 import smu.ac.kr.johnber.course.CourseDetailFragment;
 import smu.ac.kr.johnber.map.JBLocation;
@@ -99,6 +105,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private FirebaseAuth mAuth; //FirebaseAuth 사용자 로그인 여부 확인 변수
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SearchView searchView;
+
 
 
     @Override
@@ -514,10 +521,42 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     mAuthListener = new FirebaseAuth.AuthStateListener() {
       @Override
       public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
+          FirebaseUser user = firebaseAuth.getCurrentUser();
+          if (user != null) {
           // User is signed in
-          Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference();
+
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    String uid = user.getUid();
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if (snapshot.getKey().toString().equals(uid)) {
+                            for (DataSnapshot profileSnapshot : snapshot.getChildren()) {
+                                if (profileSnapshot.getKey().toString().equals("userProfile")){
+                                    UserProfile profile = profileSnapshot.getValue(UserProfile.class);
+                                    double weight = profile.getWeight();
+                                    //Log.d("Mainactivity", "weight: " + weight);
+
+                                    SharedPreferences prefs = getSharedPreferences("pref", MODE_PRIVATE);
+                                    prefs.edit().putFloat("userWeight", (float)weight).apply();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
 
         } else {
