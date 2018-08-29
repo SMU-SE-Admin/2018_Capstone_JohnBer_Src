@@ -143,6 +143,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     return super.getPageTitle(position);
   }
 
+
   /*
   //JGH
   public void dailyStats(HashMap<String, Record> recordHashMap) {
@@ -178,5 +179,6 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
         Log.d("mainactivity", "daily: " + dailyKM.toString());
       }
     }
-    */
+  */
+
 }

@@ -66,9 +66,17 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     String startPoint = LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context);
     String startPointAddress[] = null;
     //String startPointAddress[] = startPoint.split(" ");
+<<<<<<< HEAD
 
     String startPoint = LocationUtil.latlngtoStringLocation(courseItem.getJBLocation().get(0),context);
     String startPointAddress[] = startPoint.split(" ");
+=======
+=======
+
+    String startPoint = LocationUtil.latlngtoStringLocation(courseItem.getJBLocation().get(0),context);
+    String startPointAddress[] = startPoint.split(" ");
+
+>>>>>>> origin/master
     if(startPointAddress[2]!=null)
       startPoint = startPointAddress[2] + " " + startPointAddress[3];
     holder.startPoint.setText(startPoint);
