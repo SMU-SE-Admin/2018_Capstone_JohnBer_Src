@@ -29,18 +29,17 @@ public class RecordUtil {
      ****************/
     //jgh
     public static double getAverageCalories(double weight, double workoutTime) {
-<<<<<<< HEAD
+
         //시간 변경. if 14:50 -> 14.83333
         double seconds = (workoutTime / 1000) % 60 *1/60;
         double min = workoutTime/(1000*60) + seconds;
         //LogUtils.LOGD("RecordUtil ", Integer.toString(min));
-        double calories = 7 * (3.5 * weight * min) * 5/1000;
-        Log.d("mainactivity", "RecordUtil calculate calories : " + calories + " "+ weight + " " + workoutTime);
-=======
+//        double calories = 7 * (3.5 * weight * min) * 5/1000;
+//        Log.d("mainactivity", "RecordUtil calculate calories : " + calories + " "+ weight + " " + workoutTime);
         int minutes = millisecondsToMinute(workoutTime);
 //        LogUtils.LOGD("RecordUtil ", Integer.toString(minutes));
         double calories = 5 * (7 * (3.5 * weight * minutes) / 1000);
->>>>>>> 1cdfbe563869b247caaa6b8c46398a8554a14939
+
         return calories;
     }
 
