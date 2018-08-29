@@ -56,7 +56,7 @@ public class DailyStatistics {
         for(int i=0; i<kcalList.size(); i++){
             sum+=kcalList.get(i);
         }
-        Log.d("MAINACTIVITY", "kcal" + sum);
+        Log.d("MAINACTIVITY", "dailykcal" + sum);
 
     }
 
@@ -71,7 +71,7 @@ public class DailyStatistics {
         int minutes = (int) ((sum/ (1000*60)) % 60);  //분
         int hours   = (int) ((sum / (1000*60*60)) % 24);//시
 
-        Log.d("MAINACTIVITY", "TIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
+        Log.d("MAINACTIVITY", "dailyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
     }
 
     public static void calculateKM(List<Double> kmList){
@@ -79,6 +79,6 @@ public class DailyStatistics {
         for(int i=0; i<kmList.size(); i++){
             sum+=kmList.get(i);
         }
-        Log.d("MAINACTIVITY", "KM" + sum);
+        Log.d("MAINACTIVITY", "dailyKM" + sum);
     }
 }

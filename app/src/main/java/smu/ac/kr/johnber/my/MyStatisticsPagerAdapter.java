@@ -60,6 +60,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
 
     switch (position) {
       case 0:
+        getRecord();
         viewId = R.layout.my_statistics_daily_view;
         break;
       case 1:
@@ -90,21 +91,26 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
         String uid = user.getUid();
 
         //DB에 저장된 데이터 HashMap에 저장.
-        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
           //DB에서 로그인한 아이디와 일치하는지 확인 후 해당 데이터만 읽어옴.
-          if (snapshot.getKey().toString().equals(uid)){
+          if (snapshot.getKey().toString().equals(uid)) {
             //Log.d("MainActivity", "Single ValueEventListener : " + snapshot.getValue());
-            String keyDate1 = "";
-            for (DataSnapshot snapshot1 : snapshot.getChildren()){
-              keyDate1 = snapshot1.getKey().toString();
-              for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
-                recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
-                //Log.d("mainactivity", "hashMap"+recordHashMap.toString());
+            for (DataSnapshot recordSnapshot : snapshot.getChildren()) {
+              if (recordSnapshot.getKey().toString().equals("userRecord")) {
+                String keyDate1 = "";
+                for (DataSnapshot snapshot1 : recordSnapshot.getChildren()) {
+                  keyDate1 = snapshot1.getKey().toString();
+                  for (DataSnapshot snapshot2 : snapshot1.getChildren()) {
+                    String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
+                    recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
+                    //Log.d("mainactivity", "hashMap"+recordHashMap.toString());
+                  }
+                }
               }
             }
           }
         }
+
         DailyStatistics.dailyStats(recordHashMap);
         WeeklyStatistics.weeklyStats(recordHashMap);
         MonthlyStatistics.monthlyStats(recordHashMap);

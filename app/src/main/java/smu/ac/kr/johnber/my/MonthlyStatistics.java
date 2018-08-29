@@ -69,7 +69,7 @@ public class MonthlyStatistics {
         sum = sum/numberOfRecord;
 
 
-        Log.d("MAINACTIVITY", "weeklykcal : " + sum);
+        Log.d("MAINACTIVITY", "monthly_weeklykcal : " + sum);
 
     }
 
@@ -86,7 +86,7 @@ public class MonthlyStatistics {
         int minutes = (int) ((sum/ (1000*60)) % 60);  //분
         int hours   = (int) ((sum / (1000*60*60)) % 24);//시
 
-        Log.d("MAINACTIVITY", "weeklyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
+        Log.d("MAINACTIVITY", "monthly_TIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
     }
 
     public static void calculateKM(List<Double> kmList, int numberOfRecord){
@@ -97,6 +97,6 @@ public class MonthlyStatistics {
 
         sum = sum/numberOfRecord;
 
-        Log.d("MAINACTIVITY", "weeklyKM : " + sum);
+        Log.d("MAINACTIVITY", "monthly_KM : " + sum);
     }
 }
