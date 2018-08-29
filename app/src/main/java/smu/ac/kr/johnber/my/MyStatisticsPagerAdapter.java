@@ -61,7 +61,6 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     switch (position) {
       case 0:
         viewId = R.layout.my_statistics_daily_view;
-        getRecord();
         break;
       case 1:
         viewId = R.layout.my_statistics_weekly_view;
@@ -95,17 +94,13 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
           //DB에서 로그인한 아이디와 일치하는지 확인 후 해당 데이터만 읽어옴.
           if (snapshot.getKey().toString().equals(uid)){
             //Log.d("MainActivity", "Single ValueEventListener : " + snapshot.getValue());
-            for(DataSnapshot recordSnapshot : snapshot.getChildren()){
-              if (recordSnapshot.getKey().toString().equals("userRecord")){
-                String keyDate1 = "";
-                for (DataSnapshot snapshot1 : recordSnapshot.getChildren()){
-                  keyDate1 = snapshot1.getKey().toString();
-                  for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                    String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
-                    recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
-                    //Log.d("mainactivity", "hashMap"+recordHashMap.toString());
-                  }
-                }
+            String keyDate1 = "";
+            for (DataSnapshot snapshot1 : snapshot.getChildren()){
+              keyDate1 = snapshot1.getKey().toString();
+              for (DataSnapshot snapshot2 : snapshot1.getChildren()){
+                String keyDate = keyDate1 + '/' + snapshot2.getKey().toString();
+                recordHashMap.put(keyDate, snapshot2.getValue(Record.class));
+                //Log.d("mainactivity", "hashMap"+recordHashMap.toString());
               }
             }
           }
@@ -147,4 +142,41 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     }
     return super.getPageTitle(position);
   }
+
+  /*
+  //JGH
+  public void dailyStats(HashMap<String, Record> recordHashMap) {
+    //현재 시간 받아오기.
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String todayDate = sdf.format(date);
+
+    List<Double> dailyKM = new ArrayList<Double>();
+    List<Double> dailyTime = new ArrayList<Double>();
+    List<Double> dailyCal = new ArrayList<Double>();
+
+
+    Iterator<String> iter = recordHashMap.keySet().iterator();
+    while(iter.hasNext()){
+      //Log.d("mainactivity", "dkdkdkdkdkdkdkd : " + recordHashMap.keySet());
+      String keys = (String) iter.next();
+      String dates = keys.split("/")[0];
+      String times = keys.split("/")[1];
+
+      //Log.d("mainactivity", "keys, dates, times: " + dates.toString());
+
+
+      if (todayDate.equals(dates)){
+        Record dailyRecord = recordHashMap.get(keys);
+
+        dailyKM.add(dailyRecord.getDistance());
+        dailyTime.add(dailyRecord.getElapsedTime());
+        dailyCal.add(dailyRecord.getCalories());
+
+        Log.d("mainactivity", "daily: " + dailyKM.toString());
+      }
+    }
+    */
 }

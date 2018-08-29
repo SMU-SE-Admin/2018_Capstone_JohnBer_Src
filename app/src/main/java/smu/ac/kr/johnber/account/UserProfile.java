@@ -1,5 +1,6 @@
 package smu.ac.kr.johnber.account;
 
+
 import java.lang.String;
 
 public class UserProfile{
@@ -17,6 +18,7 @@ public class UserProfile{
         this.height = height;
         this.gender = gender;
     }
+
 
     public UserProfile() {
     }
