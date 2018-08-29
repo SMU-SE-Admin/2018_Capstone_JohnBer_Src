@@ -61,10 +61,16 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
     holder.distance.setText(dist);
     String time = RecordUtil.milliseconsToStringFormat(courseItem.getElapsedTime());
     holder.time.setText(time);
+
     /*
     String startPoint = LocationUtil.latlngtoStringLocation(data.get(0).getJBLocation().get(0),context);
     String startPointAddress[] = null;
     //String startPointAddress[] = startPoint.split(" ");
+=======
+
+    String startPoint = LocationUtil.latlngtoStringLocation(courseItem.getJBLocation().get(0),context);
+    String startPointAddress[] = startPoint.split(" ");
+
     if(startPointAddress[2]!=null)
       startPoint = startPointAddress[2] + " " + startPointAddress[3];
     holder.startPoint.setText(startPoint);
@@ -79,7 +85,7 @@ public class MyCourseAdapter extends RecyclerView.Adapter<MyCourseViewHolder>{
 
     //썸네일 다운로드
     Uri uri = Uri.parse(data.get(position).getImgUrl());
-    LOGD(TAG,"DownloadIMG_path : "+ data.get(position).getImgUrl());
+//    LOGD(TAG,"DownloadIMG_path : "+ data.get(position).getImgUrl());
     if (uri != null) {
       //placeholder : 이미지 로딩중 미리 보여지는 이미지
     Glide.with(context)

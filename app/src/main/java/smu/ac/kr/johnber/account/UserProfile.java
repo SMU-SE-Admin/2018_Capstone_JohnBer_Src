@@ -1,5 +1,6 @@
 package smu.ac.kr.johnber.account;
 
+
 import java.lang.String;
 
 public class UserProfile{
@@ -11,6 +12,8 @@ public class UserProfile{
     //private final static int DEFAULT_WEIGHT = 1;
     //private final static int DEFAULT_HEIGHT = 1;
 
+
+
     public UserProfile(String userId, double weight, double height, String gender){
         this.userId = userId;
         this.weight = weight;
@@ -18,8 +21,10 @@ public class UserProfile{
         this.gender = gender;
     }
 
+
     public UserProfile() {
     }
+
 
     public String getUserId() {
         return userId;

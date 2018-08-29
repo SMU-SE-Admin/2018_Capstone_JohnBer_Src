@@ -76,6 +76,7 @@ import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.LocationUtil;
 import smu.ac.kr.johnber.util.LogUtils;
 import smu.ac.kr.johnber.util.PermissionUtil;
+import smu.ac.kr.johnber.util.RecordUtil;
 
 /**
  * 메인화면
@@ -92,7 +93,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     private static final String PERMISSION = android.Manifest.permission.ACCESS_FINE_LOCATION;
 
     private Realm mRealm;
-
+    private boolean isFindCourseBtClicked;
     private Button mRun;
     public SharedPreferences prefs;
     private FloatingActionButton mFindCourse;
@@ -115,7 +116,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         initView();
         seListeners();
         mAuth = FirebaseAuth.getInstance();
-
+        isFindCourseBtClicked = false;
     checkUserlogin();
 
         /**
@@ -219,6 +220,12 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         mFindCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isFindCourseBtClicked == true) {
+
+                isFindCourseBtClicked = false;
+                } else if (isFindCourseBtClicked == false) {
+                    isFindCourseBtClicked = true;
+                }
                 findCourse();
             }
         });
@@ -299,19 +306,18 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
      */
     @SuppressLint("MissingPermission")
     private void enableLocationTracking() {
-        LOGD(TAG, "enableLocationTracking : check permission");
+//        LOGD(TAG, "enableLocationTracking : check permission");
         if (!PermissionUtil.shouldAskPermission(this, PERMISSION)) {
             //권한 있음
             if (mgoogleMap != null) {
                 mgoogleMap.setMyLocationEnabled(true);
-                //TODO : request current location
-                LOGD(TAG, "Start location tracking");
+//                LOGD(TAG, "Start location tracking");
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
                 return;
             }
         }
 
-        LOGD(TAG, "enableLocationTracking : have no permission");
+//        LOGD(TAG, "enableLocationTracking : have no permission");
         PermissionUtil.checkPermission(this, PERMISSION, REQUEST_LOCATION_PERMISSION);
     }
 
@@ -341,7 +347,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 mCurrentLocation = locationResult.getLastLocation();
-                //Todo: 업데이트된 좌표로 마커 이동
                updateMarker();
 
             }
@@ -350,14 +355,16 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
     }
 
     private void updateMarker() {
-        //TODO : permission 체크//이동 좌표 찍어보기
         Double latitude = mCurrentLocation.getLatitude();
         Double longtitude = mCurrentLocation.getLongitude();
 
         //update UI
         LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        if (isFindCourseBtClicked == false) {
         mgoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
-        LOGD(TAG, "Lattitude : " + latitude + "/Longtitude : " + longtitude);
+        }
+//        lse if(isFindCourseBtClicked == true && mFusedLocationClient.getl)
+//        LOGD(TAG, "Lattitude : " + latitude + "/Longtitude : " + longtitude);
 
     }
 
@@ -367,15 +374,15 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         // 시, Realm에서 검색
         // 필터링된 데이터들의 위,경도구하기
         // 현위치 좌표~검색된 좌표 거리계산
-        // 반경 xkm 내의 위치좌표만 표시
+        // 반경 1km 내의 위치좌표만 표시
 
         Geocoder mGeoCoder = new Geocoder(getApplicationContext(), Locale.KOREA);
         List<Address> currentLocationName = null;
         String locality = null;
         ArrayList<LatLng> markerList = new ArrayList<>();
+
         try {
             currentLocationName = mGeoCoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-            //TODO : 검색범위에 시+군 검색 : 정규식
             locality = currentLocationName.get(0).getLocality();
             LOGD(TAG,locality);
         } catch (IOException e) {
@@ -383,44 +390,53 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         }
 
         RealmResults<RunningCourse> query = filterResults(locality);
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         //각 코스의 출발지~도착치 모두 비교
         // integer : primary key of course
         HashMap<Integer, LatLng> courseMap = new HashMap<>();
         HashMap<Integer, String> courseName = new HashMap<>();
-        final double distance = 5000;
+        final double QUERY_DIAMETER = 2.0; // km 단위
 
-        LOGD(TAG,"query resuㅣt : "+query.size());
+        LOGD(TAG,"query result : "+query.size());
         //현재 좌표와 검색결과 좌표 거리 계산
-        for (RunningCourse course : query) {
-            List<LatLng> latlist = getLatLangFromAddr(course);
-            LatLng sPoint = latlist.get(0);
-            LatLng ePoint = latlist.get(1);
-            if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), sPoint)<distance){
-                courseMap.put(course.getId(), sPoint);
-                courseName.put(course.getId(), course.getCourseName());
-            }
-            else if(SphericalUtil.computeDistanceBetween(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), ePoint)<distance){
-                courseMap.put(course.getId(), ePoint);
-                courseName.put(course.getId(), course.getCourseName());
-            }
+        if (query.size() !=0) {
+            for (RunningCourse course : query) {
 
+                if (RecordUtil.distance(course.getsLat(), course.getsLng()
+                        , mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())
+                        < QUERY_DIAMETER) {
+
+                    courseMap.put(course.getId(), new LatLng(course.getsLat(), course.getsLng()));
+                    courseName.put(course.getId(), course.getCourseName());
+                }
+
+                if (RecordUtil.distance(course.geteLat(), course.geteLng()
+                        , mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())
+                        < QUERY_DIAMETER) {
+
+                    courseMap.put(course.getId(), new LatLng(course.geteLat(), course.geteLng()));
+                    courseName.put(course.getId(), course.getCourseName());
+                }
+
+            }
         }
+        //HACK:
         if (courseMap.size() > 0) {
             Iterator it = courseMap.entrySet().iterator();
-            for (;it.hasNext();) {
-                Map.Entry pair  = (Map.Entry) it.next();
+            for ( ; it.hasNext(); ) {
+                Map.Entry pair = (Map.Entry) it.next();
 
-            MarkerOptions startMarker = new MarkerOptions();
-            startMarker.position((LatLng) pair.getValue())
-                    .title(courseName.get(pair.getKey()))
-                    .snippet(String.valueOf(pair.getKey()))
-                    .icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, this));
-            mgoogleMap.addMarker(startMarker).showInfoWindow();
-
-            builder.include((LatLng) pair.getValue());
+                MarkerOptions startMarker = new MarkerOptions();
+                startMarker.position((LatLng) pair.getValue())
+                        .title(courseName.get(pair.getKey()))
+                        .snippet(String.valueOf(pair.getKey()))
+                        .icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, this));
+                mgoogleMap.addMarker(startMarker).showInfoWindow();
+                builder.include((LatLng) pair.getValue());
 
             }
+
         LatLngBounds bounds = builder.build();
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
@@ -429,6 +445,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         mgoogleMap.moveCamera(cu);
 
         // 마커의 타이틀 누르면 해당 코스 정보 화면으로 이동
+            //FIXME : 메인- 주변코스검색 - 상세페이지에서 백버튼 누르면 오류 : back pressed null
         mgoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -448,8 +465,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         });
         }
 
-
-        //bound로 애니메이션
     }
 
 
@@ -516,6 +531,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
         return latlng;
     }
+
  //로그인 여부 확인 함수.
   private void checkUserlogin(){
     mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -569,7 +585,9 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
       }
     };
   }
-    public void checkFirstRun() {
+
+  //앱 최초 실행시 코스정보를 받아오기 위한 함수
+  public void checkFirstRun() {
         boolean isFirstRun = prefs.getBoolean("isFirstRun", true);
             LOGD(TAG, "THIS IS FIRSTRUN : "+ isFirstRun);
         if (isFirstRun) {

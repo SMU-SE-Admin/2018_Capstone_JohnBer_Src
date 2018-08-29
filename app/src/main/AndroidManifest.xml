@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="smu.ac.kr.johnber">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,9 +13,6 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.DIAL_PHONE" />
 
-
-    출처: http://mainia.tistory.com/4884 [녹두장군 - 상상을 현실로]
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -25,7 +23,8 @@
         android:label="JohnBer"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
         <activity android:name=".run.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

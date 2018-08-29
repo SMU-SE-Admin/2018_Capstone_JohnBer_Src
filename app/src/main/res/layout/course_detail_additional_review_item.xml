@@ -9,11 +9,12 @@
 
     <TextView
         android:id="@+id/tv_course_detail_ad_review_name"
-        android:layout_width="58dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="TextView"
         android:textColor="@color/text_black"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/iv_course_detail_ad_profile"
         app:layout_constraintTop_toTopOf="@+id/iv_course_detail_ad_profile" />
 
@@ -34,27 +35,25 @@
         android:id="@+id/tv_course_detail_ad_review_dates"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
         android:textColor="@color/text_grey"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_course_detail_ad_profile"
-        app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_ad_review_comments"
-        app:layout_constraintVertical_bias="0.0"
+        android:textSize="10sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_course_detail_ad_review_name"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="ㄱㅁㅇㅇㅇ" />
 
     <TextView
         android:id="@+id/tv_course_detail_ad_review_comments"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:textColor="@color/text_grey"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_course_detail_ad_review_name"
-        app:layout_constraintTop_toTopOf="@+id/tv_course_detail_ad_review_name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/iv_course_detail_ad_profile"
+        app:layout_constraintTop_toBottomOf="@+id/tv_course_detail_ad_review_name"
         tools:text="재미있어요 아름다운경치가 좋네요" />
 </android.support.constraint.ConstraintLayout>

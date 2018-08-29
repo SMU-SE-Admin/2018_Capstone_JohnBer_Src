@@ -49,7 +49,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.account.UserProfile;
 import smu.ac.kr.johnber.map.JBLocation;
 
 /**
@@ -61,13 +60,13 @@ import smu.ac.kr.johnber.map.JBLocation;
  * - 달리기 종료 후 데이터 저장
  * - fragment간 통신 구현
  */
-
 public class RunningActivity extends AppCompatActivity implements PauseRunningFragment.RunFragCallBackListener {
 
     private final static String TAG = makeLogTag(RunningActivity.class);
     private Record mRecord;
     private Fragment runningFragment;
     private Bitmap bitmap;
+
     //UserProfile profile = ((UserProfile)getApplicationContext());
 
 
@@ -153,19 +152,17 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
 //   runfrag.resumestartTimer();
     }
 
+
     /**
      * sharedPreference에 있는 데이터 + date, endTime, Title -> Record객체에 저장
      * firebase에 저장
      */
-
-
     @Override
     public void onClickedReturn() {
         LOGD(TAG, "onClikedReturn ~ save data");
 
-        /**
-         * 지도 screen capture
-         */
+
+        //지도 screen capture
         SharedPreferences preferences;
         preferences = getApplicationContext().getSharedPreferences("savedRecord", Context.MODE_PRIVATE);
 
@@ -191,7 +188,6 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
                 "\n" + preferences.getString("ENDTIME", "0") +
                 "\n" + preferences.getString("STARTTIME", "0"));
 
-
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
 
         double kg = pref.getFloat("userWeight", 0);
@@ -201,6 +197,10 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
         calories = 7 * (3.5 * kg * min) * 5/1000;
 
         Log.d("Mainactivity", "*****calculateCalories : " + calories + ", " +kg);
+
+
+//TODO : TrackerService에서 realm uid, ~ 앞서 넘겨줬던거 꺼내오기 -> is conquered true일때만 파베 코스정복에 저장함수 호출하기
+//                                JohnBer/UID/courseStamp/ 레코드아이디(2018-08-19/04:24:48) - 행정구역(admin) , sLat, sLng, eLat, eLng 형태
 
 
         mRecord = new Record(distance, elapsedTime, calories, locationArrayList, null, startTime, endTime, null);
@@ -327,6 +327,9 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
                 }
             });
 
+
+
+
         }
 
     }
@@ -335,6 +338,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
         // Write data to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
+        //TODO : JohnBer/UID/courseStamp/ 레코드아이디(2018-08-19/04:24:48) - 행정구역(admin) , sLat, sLng, eLat, eLng 형태
         myRef.child(uid).child("userRecord").child(getTime).child(stringStartTime).setValue(mRecord);
     }
 
