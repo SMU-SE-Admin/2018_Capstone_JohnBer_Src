@@ -28,7 +28,7 @@ public class MonthlyStatistics {
         List<Double> monthlyTime = new ArrayList<Double>();
         List<Double> monthlyCal = new ArrayList<Double>();
 
-        int lastDayOfMonth = DateUtil.getLastDateOfMonth(yyyyMM);
+        int numberOfRecord = 0;
 
         Iterator<String> iter = recordHashMap.keySet().iterator();
         while(iter.hasNext()){
@@ -49,36 +49,38 @@ public class MonthlyStatistics {
                 monthlyTime.add(dailyRecord.getElapsedTime());
                 monthlyCal.add(dailyRecord.getCalories());
 
+                numberOfRecord ++;
+
                 //Log.d("mainactivity", "daily: " + dailyKM.toString());
             }
         }
 
-        calculateTime(monthlyTime, lastDayOfMonth);
-        calculateKcal(monthlyCal, lastDayOfMonth);
-        calculateKM(monthlyKM, lastDayOfMonth);
+        calculateTime(monthlyTime, numberOfRecord);
+        calculateKcal(monthlyCal, numberOfRecord);
+        calculateKM(monthlyKM, numberOfRecord);
     }
 
-    public static void calculateKcal(List<Double> kcalList, int lastDayOfMonth){
+    public static void calculateKcal(List<Double> kcalList, int numberOfRecord){
         double sum=0;
         for(int i=0; i<kcalList.size(); i++){
             sum+=kcalList.get(i);
         }
 
-        sum = sum/lastDayOfMonth;
+        sum = sum/numberOfRecord;
 
 
         Log.d("MAINACTIVITY", "weeklykcal : " + sum);
 
     }
 
-    public static void calculateTime(List<Double> timeList, int lastDayOfMonth){
+    public static void calculateTime(List<Double> timeList, int numberOfRecord){
         double sum =0;
         for(int i=0; i<timeList.size(); i++){
             //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             sum += timeList.get(i);
         }
 
-        sum = sum/lastDayOfMonth;
+        sum = sum/numberOfRecord;
 
         int seconds = (int) (sum / 1000) % 60 ;            //초
         int minutes = (int) ((sum/ (1000*60)) % 60);  //분
@@ -87,13 +89,13 @@ public class MonthlyStatistics {
         Log.d("MAINACTIVITY", "weeklyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
     }
 
-    public static void calculateKM(List<Double> kmList, int lastDayOfMonth){
+    public static void calculateKM(List<Double> kmList, int numberOfRecord){
         double sum=0;
         for(int i=0; i<kmList.size(); i++){
             sum+=kmList.get(i);
         }
 
-        sum = sum/lastDayOfMonth;
+        sum = sum/numberOfRecord;
 
         Log.d("MAINACTIVITY", "weeklyKM : " + sum);
     }
