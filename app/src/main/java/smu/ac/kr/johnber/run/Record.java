@@ -12,14 +12,10 @@ import smu.ac.kr.johnber.map.JBLocation;
  */
 public class Record {
     //TODO : 시간 포맷 등 바꿔주는 util 필요함
-    private double distance;
-    private double elapsedTime;
-    private double calories;
+    private double distance, elapsedTime, calories, startTime, endTime;
     // android.JBLocation 대신 커스텀 JBLocation 사용
     private ArrayList<JBLocation> JBLocation;
     private Date date;
-    private double startTime;
-    private double endTime;
     private String title;
 
 
