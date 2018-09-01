@@ -4,19 +4,16 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import smu.ac.kr.johnber.run.Record;
-import smu.ac.kr.johnber.util.DateUtil;
 
 public class MonthlyStatistics {
     //JGH
-    public static void monthlyStats(HashMap<String, Record> recordHashMap) {
+    public static List<Double> monthlyStats(HashMap<String, Record> recordHashMap) {
         //현재 시간 받아오기.
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -55,12 +52,14 @@ public class MonthlyStatistics {
             }
         }
 
-        calculateTime(monthlyTime, numberOfRecord);
-        calculateKcal(monthlyCal, numberOfRecord);
-        calculateKM(monthlyKM, numberOfRecord);
+        List<Double> stats = new ArrayList<>();
+        stats.add(calculateTime(monthlyTime,numberOfRecord));
+        stats.add(calculateKcal(monthlyCal,numberOfRecord));
+        stats.add(calculateKM(monthlyKM,numberOfRecord));
+        return stats;
     }
 
-    public static void calculateKcal(List<Double> kcalList, int numberOfRecord){
+    public static double calculateKcal(List<Double> kcalList, int numberOfRecord){
         double sum=0;
         for(int i=0; i<kcalList.size(); i++){
             sum+=kcalList.get(i);
@@ -70,10 +69,10 @@ public class MonthlyStatistics {
 
 
         Log.d("MAINACTIVITY", "weeklykcal : " + sum);
-
+return sum;
     }
 
-    public static void calculateTime(List<Double> timeList, int numberOfRecord){
+    public static double calculateTime(List<Double> timeList, int numberOfRecord){
         double sum =0;
         for(int i=0; i<timeList.size(); i++){
             //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -87,9 +86,10 @@ public class MonthlyStatistics {
         int hours   = (int) ((sum / (1000*60*60)) % 24);//시
 
         Log.d("MAINACTIVITY", "weeklyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
+        return sum;
     }
 
-    public static void calculateKM(List<Double> kmList, int numberOfRecord){
+    public static double calculateKM(List<Double> kmList, int numberOfRecord){
         double sum=0;
         for(int i=0; i<kmList.size(); i++){
             sum+=kmList.get(i);
@@ -98,5 +98,6 @@ public class MonthlyStatistics {
         sum = sum/numberOfRecord;
 
         Log.d("MAINACTIVITY", "weeklyKM : " + sum);
+    return sum;
     }
 }

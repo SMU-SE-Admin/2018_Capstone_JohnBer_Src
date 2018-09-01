@@ -75,13 +75,10 @@ public class TrackerService extends Service {
     //    private JBLocation mCurrentLocation;
     private LocationCallback mLocationCallback;
     private Handler mHandler;
-<<<<<<< HEAD
+
     //TODO : user 객체를 앱 로그인 성공후 사용자 만들어 놓고 weight만 getter로 받아와서 사용할 수 있도록 하기
     //private double weight = 70.0;
-=======
     //TODO [ 경환 ] : shared preference에서 몸무게 꺼내와서 멤버변수에 저장할것
-    private double weight = 70.0;
->>>>>>> 1cdfbe563869b247caaa6b8c46398a8554a14939
     private Timer mTimer;
 
     public TrackerService() {
@@ -141,7 +138,6 @@ public class TrackerService extends Service {
         public void onElapsedtimeChanged(double value);
         public void onLocationChanged(double latitude, double longitude);
     }
-
 //    @SuppressLint("MissingPermission")
 //    private void startLocationTracking() {
 //        LOGD(TAG, "enableLocationTracking : check permission");
@@ -263,7 +259,7 @@ public class TrackerService extends Service {
         LatLng to = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         if (!from.equals(to)){
             //mLastLocation ~ mCurrentLocation 거리 구하기
-            distance += SphericalUtil.computeDistanceBetween(from, to);
+            distance += RecordUtil.distance(from.latitude,from.longitude,to.latitude,to.longitude);
             //TODO : 코스시작지점, 종료지점 거쳤는지 체크 (반경300m?) - true인경우 / isconquered flag true, jblocation 내의 flag도 true
         }
         //운동시간
@@ -274,7 +270,6 @@ public class TrackerService extends Service {
         //칼로리 계산 jgh
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         double weight = pref.getFloat("userWeight", 0);
-        Log.d("mainactivity", "fuckda;fioasdlkfjas;lkfj;alsdfjal" +weight);
 
         //TODO [ 경환 ]: 칼로리 계산
 

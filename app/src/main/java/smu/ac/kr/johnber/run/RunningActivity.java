@@ -67,6 +67,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
     private Fragment runningFragment;
     private Bitmap bitmap;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

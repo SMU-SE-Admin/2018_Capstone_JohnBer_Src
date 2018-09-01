@@ -12,6 +12,7 @@ public class UserProfile{
     //private final static int DEFAULT_WEIGHT = 1;
     //private final static int DEFAULT_HEIGHT = 1;
 
+
     public UserProfile(String userId, double weight, double height, String gender){
         this.userId = userId;
         this.weight = weight;
@@ -22,6 +23,7 @@ public class UserProfile{
 
     public UserProfile() {
     }
+
 
     public String getUserId() {
         return userId;

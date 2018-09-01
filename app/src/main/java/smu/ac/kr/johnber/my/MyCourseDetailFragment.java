@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -51,6 +52,8 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
     private GoogleMap mgoogleMap;
     private List<Record> data;
     private Record record;
+    private ScrollView scrollView;
+
     public MyCourseDetailFragment() {
         // Required empty public constructor
     }
@@ -71,6 +74,8 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         distance = mView.findViewById(R.id.tv_my_course_distance);
         calories = mView.findViewById(R.id.tv_my_course_calories);
         time = mView.findViewById(R.id.tv_my_course_time);
+        scrollView = getActivity().findViewById(R.id.my_scrollview);
+       scrollView.scrollTo(0,0);
         mMapView = this.mView.findViewById(R.id.mycourse_map_view);
 
         data = ((MyActivity)getActivity()).getRecordsItems();

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
@@ -12,9 +17,9 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
-      android:layout_marginTop="20dp"
-      android:freezesText="false"
-      android:text="24.4"
+      android:layout_marginTop="8dp"
+
+
       android:textAlignment="center"
       android:textAppearance="@style/TextAppearance.AppCompat"
       android:textColor="@color/black"
@@ -65,15 +70,17 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
+      android:layout_marginTop="2dp"
       android:freezesText="false"
       android:text="KM"
       android:textAlignment="center"
       android:textColor="@color/text_grey"
       android:textSize="18sp"
-      app:layout_constraintBaseline_toBaselineOf="@+id/tv_statistics_daily_time_text"
+      android:visibility="visible"
       app:layout_constraintEnd_toStartOf="@+id/tv_statistics_daily_time_text"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="@+id/guideline11" />
+      app:layout_constraintStart_toStartOf="@+id/guideline11"
+      app:layout_constraintTop_toBottomOf="@+id/tv_statistics_daily_km" />
 
   <TextView
       android:id="@+id/tv_statistics_daily_time_text"
@@ -86,26 +93,31 @@
       android:textAlignment="center"
       android:textColor="@color/text_grey"
       android:textSize="18sp"
+      android:visibility="visible"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/tv_statistics_daily_calories_text"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/tv_statistics_daily_km_text"
-      app:layout_constraintTop_toBottomOf="@+id/tv_statistics_daily_time" />
+      app:layout_constraintTop_toBottomOf="@+id/tv_statistics_daily_time"
+      app:layout_constraintVertical_bias="1.0" />
 
   <TextView
       android:id="@+id/tv_statistics_daily_calories_text"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginEnd="8dp"
+      android:layout_marginTop="2dp"
       android:freezesText="false"
       android:text="CAL"
       android:textAlignment="center"
       android:textColor="@color/text_grey"
       android:textSize="18sp"
-      app:layout_constraintBaseline_toBaselineOf="@+id/tv_statistics_daily_time_text"
+      android:visibility="visible"
       app:layout_constraintEnd_toStartOf="@+id/guideline12"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/tv_statistics_daily_time_text" />
+      app:layout_constraintStart_toEndOf="@+id/tv_statistics_daily_time_text"
+      app:layout_constraintTop_toBottomOf="@+id/tv_statistics_daily_calories"
+      tools:text="CAL" />
 
   <android.support.constraint.Guideline
       android:id="@+id/guideline11"
@@ -122,3 +134,4 @@
       app:layout_constraintGuide_end="24dp" />
 
 </android.support.constraint.ConstraintLayout>
+  </LinearLayout>
