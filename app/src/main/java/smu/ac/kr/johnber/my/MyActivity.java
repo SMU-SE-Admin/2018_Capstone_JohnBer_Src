@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
@@ -17,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ethanhua.skeleton.Skeleton;
@@ -69,7 +71,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     //  private List<Record> mockRecords ;
     private List<Record> recordItems;
     private MyCourseAdapter adapter;
-
+    private ScrollView scrollView;
 
     private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
 
@@ -79,15 +81,14 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_act);
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         userName = findViewById(R.id.tv_my_username);
         userName.setText(user.getDisplayName());
         //TODO : 프로필 사진
-        //TODO : 통계
-        MyStatisticsPagerAdapter myStatisticsPagerAdapter = new MyStatisticsPagerAdapter();
-        ViewPager myStatisticsviewPager = findViewById(R.id.my_statistics_viewPager);
-        myStatisticsviewPager.setAdapter(myStatisticsPagerAdapter);
+
+//        myStatisticsviewPager.setOffscreenPageLimit(2);
 
         //        set on page listener 구현?
 //    if (mockRecords != null) {
@@ -101,10 +102,17 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
 //    mockRecords = generateMockRecords();
         adapter = new MyCourseAdapter(this, recordItems, this);
         RecyclerView recyclerView = findViewById(R.id.my_rv_course);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 //            recyclerView.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
+
+        //TODO : 통계
+        MyStatisticsPagerAdapter myStatisticsPagerAdapter = new MyStatisticsPagerAdapter(this,recordHashMap);
+        ViewPager myStatisticsviewPager = (ViewPager)findViewById(R.id.my_statistics_viewPager);
+        myStatisticsviewPager.setAdapter(myStatisticsPagerAdapter);
+
         /**
          * skeleton 로딩 구현
          * option1 : recyclerview - setAdapter 주석처리할것
@@ -131,12 +139,13 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         View rootView = findViewById(R.id.mycourse_item_container);
         skeletonScreen = Skeleton.bind(rootView)
                 .shimmer(true)
-                .duration(1000)
+                .duration(2000)
                 .color(R.color.shimmer_color)
                 .load(R.layout.activity_view_skeleton)
                 .show();
         MyHandler myHandler = new MyHandler(this);
         myHandler.sendEmptyMessageDelayed(1, 1000);
+
 
 
     }
@@ -245,7 +254,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MyCourseDetailFragment fragment = new MyCourseDetailFragment();
         fragment.setArguments(data);
-        fragmentTransaction.add(R.id.mycourse_item_container, fragment, "MYCOURSEDETAILFRAGMENT")
+        fragmentTransaction.replace(R.id.mycourse_item_container, fragment, "MYCOURSEDETAILFRAGMENT")
                 .addToBackStack(null)
                 .commit();
     }

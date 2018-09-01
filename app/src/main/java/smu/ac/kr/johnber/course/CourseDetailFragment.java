@@ -6,6 +6,7 @@ import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Camera;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.net.Uri;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -82,10 +85,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     private View mView;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
-
+    private SkeletonScreen skeletonScreen;
     private CoursePlaceInfoAdapter adapter;
     private RecyclerView recyclerView;
-
+    private View rootView;
     private Realm mRealm;
     private int dataNO;
     private RunningCourse mcourseData;
@@ -134,6 +137,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         endPoint.setText(mcourseData.getEndPoint());
         time.setText(mcourseData.getTime());
         distance.setText(mcourseData.getDistance());
+        rootView = mView.findViewById(R.id.courseContainers);
 
         avgRates = mView.findViewById(R.id.tv_course_detail_info_AVGratings_additional);
         phone = mView.findViewById(R.id.tv_course_detail_info_numbers_additional);
@@ -144,6 +148,8 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         mMapView.getMapAsync(this);
+
+
 
 
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -259,7 +265,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         super.onDestroy();
         mRealm.close();
         mMapView.onDestroy();
+        if (callbacklistener != null) {
+
         callbacklistener.onBackPressed();
+        }
 
     }
 
@@ -326,9 +335,9 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             for (int position = 0; position < markerList.size(); position++) {
                 String title;
                 if (position == 0)
-                    title = "start";
+                    title = mcourseData.getStartPoint();
                 else
-                    title = "end";
+                    title = mcourseData.getEndPoint();
                 mgoogleMap.addMarker(new MarkerOptions().position(markerList.get(position)).title(title).icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, getActivity())));
             }
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -337,12 +346,19 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             int width = getResources().getDisplayMetrics().widthPixels;
             int height = 300;
             int padding = 50;
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+
+            CameraUpdate cu;
+
+            if (sPoint.equals(ePoint)) {
+
+                //시작-종료지점 같은경우 zoom level 조정
+                cu = CameraUpdateFactory.newLatLngZoom(sPoint,18);
+
+            } else {
+                cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+            }
             mgoogleMap.moveCamera(cu);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            LOGD(TAG, "cannot find location info");
-//        }
+
 
 //부가정보     String [] id = null;
             final String[] tmpid = new String[1];
@@ -377,6 +393,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
     private void setRecyclerview(final PlaceDetails placeDetails) {
 
+
         if (placeDetails.getResult().getPhotos() != null) {
             for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
                 LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
@@ -386,6 +403,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             recyclerView = mView.findViewById(R.id.rv_course_detail_info_photos);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapterP);
         }
@@ -396,6 +414,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
             recyclerView.setHasFixedSize(true);
+            recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setAdapter(adapterR);
         }
 
@@ -432,14 +451,16 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                 }
             });
         }
-        if (placeDetails.getStatus().equals("ZERO_RESULT") || placeDetails.getResult().getPhotos() == null)
+        if (placeDetails.getStatus().equals("ZERO_RESULTS")
+                || placeDetails.getStatus().equals("ZERO_RESULT")
+                || placeDetails.getResult().getPhotos() == null)
+
             mView.findViewById(R.id.cv_course_detail_info_add_cardview).setVisibility(View.GONE);
 
         {
 
         }
         //부가정보 숨김
-
     }
 
     private void getPlaceDetails(String place_id, final ApiDetailCallback detailCallback) {

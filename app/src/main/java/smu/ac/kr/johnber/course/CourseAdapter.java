@@ -86,6 +86,7 @@ public class CourseAdapter extends RealmBasedRecyclerViewAdapter<RunningCourse, 
         holder.KM.setText("KM");
         holder.TIME.setText("TIME");
 
+
 //        //썸네일 다운로드 - google static maps API 사용
 //
 //        new PlaceRequest(getContext(), courseItem, holder, position,mGeoDataClient)
