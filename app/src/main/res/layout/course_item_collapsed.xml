@@ -76,7 +76,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/text_grey"
         android:textSize="12sp"
-        android:visibility="gone"
         card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_calories_text"
         card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories_text" />
 
@@ -117,7 +116,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/text_grey"
         android:textSize="12sp"
-        android:visibility="gone"
         card_view:layout_constraintBaseline_toBaselineOf="@+id/tv_course_calories"
         card_view:layout_constraintStart_toEndOf="@+id/tv_course_calories" />
 

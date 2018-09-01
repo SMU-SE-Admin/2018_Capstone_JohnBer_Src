@@ -1,15 +1,22 @@
 package smu.ac.kr.johnber.my;
 
 import static android.provider.Settings.Global.getString;
+import static android.support.constraint.Constraints.TAG;
 import static android.util.Config.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
+import android.app.FragmentManager;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +36,7 @@ import java.util.List;
 
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.run.Record;
+import smu.ac.kr.johnber.util.RecordUtil;
 
 /**
  * Created by yj34 on 26/03/2018.
@@ -44,8 +52,20 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
    *
    * @return
    */
-
+  private View mView;
+  private List<Double> mStats ;
   private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
+  private Context mContext;
+
+  public MyStatisticsPagerAdapter(Context context, HashMap<String, Record> recordHashMap) {
+    super();
+    this.mContext = context;
+    this.recordHashMap = recordHashMap;
+  }
+
+  public void setmView(ViewPager view) {
+    view.setAdapter(this);
+  }
   @Override
   public int getCount() {
     return 3;
@@ -53,29 +73,29 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
 
   @Override
   public Object instantiateItem(ViewGroup container, int position) {
-    LayoutInflater inflater = (LayoutInflater) container.getContext().getSystemService(
-            Context.LAYOUT_INFLATER_SERVICE);
-
-    int viewId = 0;
+    View mView = LayoutInflater.from(mContext).inflate(R.layout.my_statistics_daily_view, null);
 
     switch (position) {
       case 0:
-        getRecord();
-        viewId = R.layout.my_statistics_daily_view;
+        mStats = DailyStatistics.dailyStats(recordHashMap);
         break;
       case 1:
-        viewId = R.layout.my_statistics_weekly_view;
-        break;
+        mStats = WeeklyStatistics.weeklyStats(recordHashMap);
       case 2:
-        viewId = R.layout.my_statistics_monthly_view;
-        break;
+        mStats = MonthlyStatistics.monthlyStats(recordHashMap);
     }
-
-    View view = inflater.inflate(viewId, null);
-    container.addView(view,0);
-    return view;
-
+    //set data
+    TextView km = mView.findViewById(R.id.tv_statistics_daily_km);
+    TextView time =  mView.findViewById(R.id.tv_statistics_daily_time);
+    TextView cal = mView.findViewById(R.id.tv_statistics_daily_calories);
+    km.setText(mStats.get(2).toString());
+    String stime = RecordUtil.milliseconsToStringFormat(mStats.get(0));
+    time.setText(stime);
+    cal.setText(mStats.get(1).toString());
+  container.addView(mView);
+    return mView;
   }
+
 
 
   public void getRecord(){
@@ -111,10 +131,26 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
           }
         }
 
-        DailyStatistics.dailyStats(recordHashMap);
-        WeeklyStatistics.weeklyStats(recordHashMap);
-        MonthlyStatistics.monthlyStats(recordHashMap);
+////        DailyStatistics.dailyStats(recordHashMap);
+//        WeeklyStatistics.weeklyStats(recordHashMap);
+////        WeeklyStatistics;
+//        MonthlyStatistics.monthlyStats(recordHashMap);
+//
+//        DailyStatistics daily = new DailyStatistics();
+//        daily.dailyStats(recordHashMap);
+//        mStats = daily.getStats();
+//        LOGD(TAG,"he"+ mStats.toString());
+//
+//
+//        TextView km = mView.findViewById(R.id.tv_statistics_daily_km);
+//        TextView time =  mView.findViewById(R.id.tv_statistics_daily_time);
+//        TextView cal = mView.findViewById(R.id.tv_statistics_daily_calories);
+//        km.setText(String.valueOf(mStats.get(0)));
+//        time.setText(String.valueOf(mStats.get(1)));
+//        cal.setText(String.valueOf(mStats.get(2)));
+
       }
+
 
       @Override
       public void onCancelled(DatabaseError databaseError) {
@@ -123,12 +159,10 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
     });
   }
 
-
   @Override
   public void destroyItem(ViewGroup container, int position, Object object) {
-    container.removeView((View) object);
+    container.removeView((View)object);
   }
-
 
   @Override
   public boolean isViewFromObject(View view, Object object) {
