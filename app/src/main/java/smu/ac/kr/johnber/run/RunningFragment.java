@@ -409,6 +409,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         //코스 마커
         // FIXME : isFromCourseRec 조건문 지워야 표시되는문제
         // TODO : Puase 화면에서 코스 마커도 표시 ..?
+        /*****
 //        if (isFromCourseRec) {
             for (LatLng point : courseDetailLatLng) {
                 int index = 0;
@@ -418,6 +419,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
                 mgoogleMap.addMarker(options);
                 index++;
             }
+         *////
 //        }
 
 //        //카메라 이동
