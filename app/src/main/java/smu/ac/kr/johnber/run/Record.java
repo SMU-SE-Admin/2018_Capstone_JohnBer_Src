@@ -17,8 +17,6 @@ public class Record {
     private ArrayList<JBLocation> JBLocation;
     private Date date;
     private String title;
-
-
     //이미지 url
     private String imgUrl;
 

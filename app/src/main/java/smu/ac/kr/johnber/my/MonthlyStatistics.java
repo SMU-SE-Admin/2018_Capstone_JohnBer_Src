@@ -68,8 +68,11 @@ public class MonthlyStatistics {
         sum = sum/numberOfRecord;
 
 
-        Log.d("MAINACTIVITY", "weeklykcal : " + sum);
+
+    Log.d("MAINACTIVITY", "monthly_weeklykcal : " + sum);
 return sum;
+
+        
     }
 
     public static double calculateTime(List<Double> timeList, int numberOfRecord){
@@ -85,7 +88,8 @@ return sum;
         int minutes = (int) ((sum/ (1000*60)) % 60);  //분
         int hours   = (int) ((sum / (1000*60*60)) % 24);//시
 
-        Log.d("MAINACTIVITY", "weeklyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
+
+        Log.d("MAINACTIVITY", "monthly_TIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
         return sum;
     }
 
@@ -97,7 +101,8 @@ return sum;
 
         sum = sum/numberOfRecord;
 
-        Log.d("MAINACTIVITY", "weeklyKM : " + sum);
+
+            Log.d("MAINACTIVITY", "monthly_KM : " + sum);
     return sum;
     }
 }
