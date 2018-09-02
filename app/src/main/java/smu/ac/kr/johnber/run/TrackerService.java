@@ -265,6 +265,7 @@ public class TrackerService extends Service {
         //TODO [ 경환 ]:  평균속도
         double averageSpeed = distance / elapsedTime;
 
+
         //칼로리 계산 jgh
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         double weight = pref.getFloat("userWeight", 0);

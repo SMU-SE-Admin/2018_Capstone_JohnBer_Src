@@ -6,9 +6,12 @@ import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -18,9 +21,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,15 +57,18 @@ import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.course.CourseDetailFragment;
 import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.run.Record;
+import smu.ac.kr.johnber.util.BitmapUtil;
 
 public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemClickListener {
     private final static String TAG = makeLogTag(MyActivity.class);
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
     private TextView courseName;
     private TextView userName;
     public TextView startPoint;
     public TextView distance;
     public TextView calories;
     public TextView time;
+    public ImageView profileView;
     private int dataNO;
     private View mView;
     private Marker mMarker;
@@ -72,7 +81,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     private List<Record> recordItems;
     private MyCourseAdapter adapter;
     private ScrollView scrollView;
-
+    private SharedPreferences pref ;
     private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
 
     private SkeletonScreen skeletonScreen;
@@ -86,7 +95,32 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         FirebaseUser user = mAuth.getCurrentUser();
         userName = findViewById(R.id.tv_my_username);
         userName.setText(user.getDisplayName());
+            pref = getSharedPreferences("pref", MODE_PRIVATE);
         //TODO : 프로필 사진
+        profileView = findViewById(R.id.imageView3);
+
+        if (pref.getString("profileImage",null) != null) {
+            Glide.with(this)
+                    .load(BitmapUtil.decodeBase64(pref.getString("profileImage", null)))
+                    .apply(new RequestOptions().circleCrop()).into(profileView)
+            ;
+        }
+        profileView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //프로필사진 찍기
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                }
+
+            }
+        });
+
+
+
+
 
 //        myStatisticsviewPager.setOffscreenPageLimit(2);
 
@@ -150,13 +184,32 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
 
     }
 
+    //사진 결과 받아와서 sharedPreference에 저장
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            //sharedPreference에 저장
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("profileImage", BitmapUtil.encodeTobase64(imageBitmap));
+            editor.commit();
+
+            Glide.with(this)
+                    .load(imageBitmap)
+                    .apply(new RequestOptions().circleCrop()).into(profileView)
+            ;
+        }
+    }
+
     @Override
     protected int getNavigationItemID() {
         return R.id.action_statistics;
     }
 
-    //TODO :  여기서 test 용 reocord 객체 생성 !!!!!!!!!!!!!!!!!!!
-//    private List<Record> generateMockRecords() {
+
+//    private List<Record> generateMockR`ecords() {
 //
 //        List<Record> mock = new ArrayList<>();
 //

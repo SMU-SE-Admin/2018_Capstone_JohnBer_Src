@@ -17,7 +17,6 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
 
 
       android:textAlignment="center"
@@ -26,14 +25,14 @@
       android:textSize="18sp"
       app:layout_constraintEnd_toStartOf="@+id/tv_statistics_daily_time"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintHorizontal_chainStyle="packed"
+      app:layout_constraintHorizontal_chainStyle="spread"
       app:layout_constraintStart_toStartOf="@+id/guideline11"
-      app:layout_constraintTop_toTopOf="parent" />
+      tools:layout_editor_absoluteY="8dp" />
 
   <TextView
       android:id="@+id/tv_statistics_daily_time"
       android:layout_width="0dp"
-      android:layout_height="25dp"
+      android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:freezesText="false"
       android:text="8:32"
@@ -41,11 +40,11 @@
       android:textAppearance="@style/TextAppearance.AppCompat"
       android:textColor="@color/black"
       android:textSize="18sp"
+      app:layout_constraintBaseline_toBaselineOf="@+id/tv_statistics_daily_km"
       app:layout_constraintEnd_toStartOf="@+id/tv_statistics_daily_calories"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintHorizontal_chainStyle="packed"
-      app:layout_constraintStart_toEndOf="@+id/tv_statistics_daily_km"
-      app:layout_constraintTop_toTopOf="@+id/tv_statistics_daily_km" />
+      app:layout_constraintStart_toEndOf="@+id/tv_statistics_daily_km" />
 
   <TextView
       android:id="@+id/tv_statistics_daily_calories"
@@ -69,6 +68,7 @@
       android:id="@+id/tv_statistics_daily_km_text"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
       android:layout_marginStart="8dp"
       android:layout_marginTop="2dp"
       android:freezesText="false"
@@ -77,35 +77,34 @@
       android:textColor="@color/text_grey"
       android:textSize="18sp"
       android:visibility="visible"
-      app:layout_constraintEnd_toStartOf="@+id/tv_statistics_daily_time_text"
+      app:layout_constraintEnd_toEndOf="@+id/tv_statistics_daily_km"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="@+id/guideline11"
+      app:layout_constraintStart_toStartOf="@+id/tv_statistics_daily_km"
       app:layout_constraintTop_toBottomOf="@+id/tv_statistics_daily_km" />
 
   <TextView
       android:id="@+id/tv_statistics_daily_time_text"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="32dp"
-      android:layout_marginTop="2dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
       android:freezesText="false"
       android:text="TIME"
       android:textAlignment="center"
       android:textColor="@color/text_grey"
       android:textSize="18sp"
       android:visibility="visible"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/tv_statistics_daily_calories_text"
+      app:layout_constraintBaseline_toBaselineOf="@+id/tv_statistics_daily_km_text"
+      app:layout_constraintEnd_toEndOf="@+id/tv_statistics_daily_time"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/tv_statistics_daily_km_text"
-      app:layout_constraintTop_toBottomOf="@+id/tv_statistics_daily_time"
-      app:layout_constraintVertical_bias="1.0" />
+      app:layout_constraintStart_toStartOf="@+id/tv_statistics_daily_time" />
 
   <TextView
       android:id="@+id/tv_statistics_daily_calories_text"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
       android:layout_marginTop="2dp"
       android:freezesText="false"
       android:text="CAL"
@@ -113,9 +112,9 @@
       android:textColor="@color/text_grey"
       android:textSize="18sp"
       android:visibility="visible"
-      app:layout_constraintEnd_toStartOf="@+id/guideline12"
+      app:layout_constraintEnd_toEndOf="@+id/tv_statistics_daily_calories"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/tv_statistics_daily_time_text"
+      app:layout_constraintStart_toStartOf="@+id/tv_statistics_daily_calories"
       app:layout_constraintTop_toBottomOf="@+id/tv_statistics_daily_calories"
       tools:text="CAL" />
 

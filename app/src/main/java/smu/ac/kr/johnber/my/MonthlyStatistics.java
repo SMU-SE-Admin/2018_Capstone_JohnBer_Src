@@ -70,7 +70,7 @@ public class MonthlyStatistics {
 
 
     Log.d("MAINACTIVITY", "monthly_weeklykcal : " + sum);
-return sum;
+return Math.round(sum);
 
         
     }
@@ -90,7 +90,7 @@ return sum;
 
 
         Log.d("MAINACTIVITY", "monthly_TIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
-        return sum;
+        return Math.round(sum*100)/100.0;
     }
 
     public static double calculateKM(List<Double> kmList, int numberOfRecord){
@@ -103,6 +103,6 @@ return sum;
 
 
             Log.d("MAINACTIVITY", "monthly_KM : " + sum);
-    return sum;
+    return Math.round(sum*100)/100.0;
     }
 }

@@ -64,7 +64,7 @@ public class DailyStatistics {
             sum += kcalList.get(i);
         }
         Log.d("MAINACTIVITY", "dailykcal" + sum);
-        return sum;
+        return Math.round(sum*100)/100.0;
     }
 
     public static double calculateTime(List<Double> timeList) {
@@ -79,7 +79,7 @@ public class DailyStatistics {
         int hours = (int) ((sum / (1000 * 60 * 60)) % 24);//시
 
         Log.d("MAINACTIVITY", "dailyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
-        return sum;
+        return Math.round(sum*100)/100.0;
     }
 
     public static double calculateKM(List<Double> kmList) {
@@ -88,7 +88,7 @@ public class DailyStatistics {
             sum += kmList.get(i);
         }
         Log.d("MAINACTIVITY", "dailyKM" + sum);
-        return sum;
+        return Math.round(sum*100)/100.0;
     }
 
 

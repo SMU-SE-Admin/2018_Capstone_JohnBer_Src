@@ -55,14 +55,14 @@
                 <TextView
                     android:id="@+id/tv_my_username"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="19dp"
+                    android:layout_marginTop="11dp"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textColor="@color/text_black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView5"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView3"
                     tools:text="John Ber" />
 
 
@@ -185,7 +185,7 @@
                     tools:listitem="@layout/course_item_collapsed" />
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/imageView3"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginEnd="8dp"

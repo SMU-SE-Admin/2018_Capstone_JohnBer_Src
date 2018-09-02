@@ -81,7 +81,7 @@ public class WeeklyStatistics {
         }
 
         Log.d("MAINACTIVITY", "weeklykcal : " + sum);
-    return sum;
+    return Math.round(sum*100)/100.0;
     }
 
     public static double calculateTime(List<Double> timeList, int dayOfWeek){
@@ -102,7 +102,7 @@ public class WeeklyStatistics {
         int hours   = (int) ((sum / (1000*60*60)) % 24);//시
 
         Log.d("MAINACTIVITY", "weeklyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
-        return sum;
+        return Math.round(sum*100)/100.0;
     }
 
     public static double calculateKM(List<Double> kmList, int dayOfWeek){
@@ -117,6 +117,6 @@ public class WeeklyStatistics {
             sum = sum/7;
         }
         Log.d("MAINACTIVITY", "weeklyKM : " + sum);
-        return sum;
+        return Math.round(sum*100)/100.0;
     }
 }
