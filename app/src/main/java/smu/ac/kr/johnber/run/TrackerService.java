@@ -257,13 +257,19 @@ public class TrackerService extends Service {
         LatLng to = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         if (!from.equals(to)){
             //mLastLocation ~ mCurrentLocation 거리 구하기
-            distance += SphericalUtil.computeDistanceBetween(from, to);
+            distance += RecordUtil.distance(from.latitude,from.longitude,to.latitude,to.longitude);
             //TODO : 코스시작지점, 종료지점 거쳤는지 체크 (반경300m?) - true인경우 / isconquered flag true, jblocation 내의 flag도 true
         }
         //운동시간
         elapsedTime = SystemClock.elapsedRealtime() - startTime;
         //TODO [ 경환 ]:  평균속도
         double averageSpeed = distance / elapsedTime;
+
+
+        //칼로리 계산 jgh
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        double weight = pref.getFloat("userWeight", 0);
+
         //TODO [ 경환 ]: 칼로리 계산
         calories = RecordUtil.getAverageCalories(weight, elapsedTime);
 

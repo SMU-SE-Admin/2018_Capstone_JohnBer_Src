@@ -16,7 +16,7 @@ import smu.ac.kr.johnber.util.DateUtil;
 
 public class WeeklyStatistics {
     //JGH
-    public static void weeklyStats(HashMap<String, Record> recordHashMap) {
+    public static List<Double> weeklyStats(HashMap<String, Record> recordHashMap) {
         //현재 주차 구하기.
         Calendar calendar = new GregorianCalendar();
         Date trialTime = new Date();
@@ -62,12 +62,14 @@ public class WeeklyStatistics {
             }
         }
 
-        calculateTime(weeklyTime, dayOfWeek);
-        calculateKcal(weeklyCal, dayOfWeek);
-        calculateKM(weeklyKM, dayOfWeek);
+        List<Double> stats = new ArrayList<>();
+        stats.add(calculateTime(weeklyTime,dayOfWeek));
+        stats.add(calculateKcal(weeklyCal,dayOfWeek));
+        stats.add(calculateKM(weeklyKM,dayOfWeek));
+        return stats;
     }
 
-    public static void calculateKcal(List<Double> kcalList, int dayOfWeek){
+    public static double calculateKcal(List<Double> kcalList, int dayOfWeek){
         double sum=0;
         for(int i=0; i<kcalList.size(); i++){
             sum+=kcalList.get(i);
@@ -79,10 +81,10 @@ public class WeeklyStatistics {
         }
 
         Log.d("MAINACTIVITY", "weeklykcal : " + sum);
-
+    return Math.round(sum*100)/100.0;
     }
 
-    public static void calculateTime(List<Double> timeList, int dayOfWeek){
+    public static double calculateTime(List<Double> timeList, int dayOfWeek){
         double sum =0;
         for(int i=0; i<timeList.size(); i++){
             //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -100,9 +102,10 @@ public class WeeklyStatistics {
         int hours   = (int) ((sum / (1000*60*60)) % 24);//시
 
         Log.d("MAINACTIVITY", "weeklyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
+        return Math.round(sum*100)/100.0;
     }
 
-    public static void calculateKM(List<Double> kmList, int dayOfWeek){
+    public static double calculateKM(List<Double> kmList, int dayOfWeek){
         double sum=0;
         for(int i=0; i<kmList.size(); i++){
             sum+=kmList.get(i);
@@ -114,5 +117,6 @@ public class WeeklyStatistics {
             sum = sum/7;
         }
         Log.d("MAINACTIVITY", "weeklyKM : " + sum);
+        return Math.round(sum*100)/100.0;
     }
 }

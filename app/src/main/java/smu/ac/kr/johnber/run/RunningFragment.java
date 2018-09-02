@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ import smu.ac.kr.johnber.util.RecordUtil;
 
 /**
  * - MAP view 설정 , 콜백 메소드
- * - 버튼 listener, actionㅓㄹ정
+ * - 버튼 listener, action
  * - 위치 트래킹
  * - 경로좌표 저장
  * - 지도에 라인으로 표시
@@ -71,7 +72,7 @@ import smu.ac.kr.johnber.util.RecordUtil;
  */
 public class RunningFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
-    private static final float POLYLINE_STROKE_WIDTH_PX =10;
+    private static final float POLYLINE_STROKE_WIDTH_PX = 10;
     private static final int COLOR_BLACK_ARGB = R.color.colorAccent;
     private final static String TAG = makeLogTag(RunningFragment.class);
     private Activity mActivity;
@@ -89,9 +90,9 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private Marker mMarker;                     // 현재 위치를 표시할 마커
     private ArrayList<LatLng> locationArrayList = new ArrayList<>(); //마커, 폴리라인 표시를 위한 좌표 목록
     private ArrayList<LatLng> courseDetailLatLng;
-    private String [] courseNames;
+    private String[] courseNames;
     private boolean isBound;
-    private boolean isFromCourseRec ;
+    private boolean isFromCourseRec;
     // service 객체를 onServiceConnected 에서 받아옴
     private TrackerService mTrackerService;
     private static int mState;
@@ -120,12 +121,10 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         mView = inflater.inflate(R.layout.run_running_fragment, container, false);
+
         if (savedInstanceState == null) {
-            /**
-             * view 초기화 및 MapView 추가
-             */
-            //TODO : initview 오버라이딩
             initView();
             mMapView.onCreate(savedInstanceState);
             mMapView.onResume();
@@ -137,10 +136,12 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
     @Override
     public void onAttach(Context context) {
+
         //Activity에 할당되었을 때 호출
         super.onAttach(context);
         mActivity = getActivity();
-        LOGD(TAG, "onAttached");
+//        LOGD(TAG, "onAttached");
+
         //RUN버튼을 눌러 넘어온 경우이므로 INIT으로 세팅
         setState(INIT);
     }
@@ -148,7 +149,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        LOGD(TAG, "onActivityCreated");
+//        LOGD(TAG, "onActivityCreated");
     }
 
     @Override
@@ -179,6 +180,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
     @Override
     public void onClick(View view) {
+
         //Pause버튼 눌렸을 때
         if (mTrackerService != null) {
             mTrackerService.stop();
@@ -189,7 +191,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         PauseRunningFragment pauseRunningFragment = new PauseRunningFragment();
         bundle.putString("time", txtTime);
         bundle.putString("distance", txtDistance);
-        bundle.putString("calories",txtCalories);
+        bundle.putString("calories", txtCalories);
 
         pauseRunningFragment.setArguments(bundle);
 
@@ -204,34 +206,52 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        LOGD(TAG, "onMapReady()");
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(19);
         Intent intent = getActivity().getIntent();
-
+        LatLng centerPoint ;
         // Main화면에서 넘긴 좌표 꺼내기
         Double latitude = intent.getExtras().getDouble("latitude");
         Double longitude = intent.getExtras().getDouble("longitude");
 
-        if(!isFromCourseRec) {
-            if (intent.getBooleanExtra("fromCourse", false)) {
+        isFromCourseRec = (intent.getBooleanExtra("fromCourse", false)) ? true : false;
 
-                isFromCourseRec = true;
+        if (isFromCourseRec) {
+            courseDetailLatLng = new ArrayList();
+            courseDetailLatLng.add(new LatLng(intent.getExtras().getDouble("course_slat")
+                    , intent.getExtras().getDouble("course_slng")));
+            courseDetailLatLng.add(new LatLng(intent.getExtras().getDouble("course_elat")
+                    , intent.getExtras().getDouble("course_elng")));
 
-                courseDetailLatLng=new ArrayList();
-                courseDetailLatLng.add(new LatLng(intent.getExtras().getDouble("course_slat")
-                ,intent.getExtras().getDouble("course_slng")));
-                courseDetailLatLng.add(new LatLng(intent.getExtras().getDouble("course_elat")
-                        ,intent.getExtras().getDouble("course_elng")));
+            courseNames = new String[2];
+            courseNames[0] = intent.getStringExtra("course_sName");
+            courseNames[1] = intent.getStringExtra("course_eName");
+            LOGD(TAG, courseNames[0] + courseNames[1]);
 
-                courseNames = new String[2];
-                courseNames[0] = intent.getStringExtra("course_sName");
-                courseNames[1] = intent.getStringExtra("course_eName");
-                LOGD(TAG, courseNames[0] + courseNames[1]);
+//FIXME  :
+            double dist_S = RecordUtil.distance(latitude, longitude, courseDetailLatLng.get(0).latitude
+                    , courseDetailLatLng.get(0).longitude);
+            double dist_E = RecordUtil.distance(latitude,longitude,courseDetailLatLng.get(1).latitude
+                    , courseDetailLatLng.get(1).longitude);
+double dist;
+double height;
+            if ((dist_S < dist_E)) {
+                dist = dist_S;
+                height = SphericalUtil.computeHeading(new LatLng(latitude, longitude), courseDetailLatLng.get(0));
+
+            } else {
+                dist = dist_E;
+                height = SphericalUtil.computeHeading(new LatLng(latitude, longitude), courseDetailLatLng.get(1));
             }
-        }
-        LatLng currentLocation = new LatLng(latitude, longitude);
-        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
 
+            centerPoint = SphericalUtil.computeOffset(new LatLng(latitude, longitude), dist * 0.5, height);
+
+        } else {
+            centerPoint =new LatLng(latitude, longitude);
+        }
+
+        mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(centerPoint));
 
     }
 
@@ -244,13 +264,13 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         mPauseButton = mView.findViewById(R.id.btn_pause);
         mPauseButton.setOnClickListener(this);
     }
+
     /**
      * bind Service 객체 연결
      */
     ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            isFromCourseRec = false;
             //bind되었을 때 Service객체 가져오기
             mTrackerService = ((TrackerService.TrackerBinder) iBinder).getService();
 
@@ -302,7 +322,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 
         @Override
         public void onLocationChanged(double latitude, double longitude) {
-            //TODO: 현재 위치 표시 마커 추가
             Message msg = mHandler.obtainMessage(MSG_LOCATION);
             Bundle bundle = new Bundle();
             bundle.putDouble("latitude", latitude);
@@ -320,9 +339,11 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private String txtTime;
     private String txtDistance;
     private String txtCalories;
+
     // Service에서 보낸 msg 수신을 위함
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
+
         //메세지 수신
         @Override
         public void handleMessage(Message msg) {
@@ -365,8 +386,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     private void drawPolylines(ArrayList<LatLng> locationArrayList) {
         PolylineOptions options = new PolylineOptions();
         options.addAll(locationArrayList).endCap(new RoundCap())
-            .width(POLYLINE_STROKE_WIDTH_PX)
-                .color(COLOR_BLACK_ARGB)
+                .width(POLYLINE_STROKE_WIDTH_PX)
+                .color(Color.parseColor("#1D8BF8")).geodesic(true)
                 .jointType(JointType.ROUND)
                 .geodesic(true);
         mgoogleMap.addPolyline(options);
@@ -376,23 +397,40 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     // 지도에 마커 표시
     // 시작점, 끝점(현재위치)
     private void setMarkers() {
+        LOGD(TAG, "setMarkers()");
         ArrayList<LatLng> markerList = new ArrayList<>();
 
         //시작 위치
-        markerList.add(0,locationArrayList.get(0));
+        markerList.add(0, locationArrayList.get(0));
 
         //TODO : 코스에서 RUN하는경우 코스 시작, 종료지점 마커 추가
 
         if (locationArrayList.size() > 1) {
+
             // 끝점(현재위치)
-             markerList.add(1,locationArrayList.get(locationArrayList.size() - 1));
+            markerList.add(1, locationArrayList.get(locationArrayList.size() - 1));
         }
 
         //시작 지점
         MarkerOptions options1 = new MarkerOptions();
         options1.position(markerList.get(0)).title("출발");
-        options1.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_flag,mActivity));
+        options1.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_flag, mActivity));
         mgoogleMap.addMarker(options1);
+
+        //코스 마커
+        // TODO : Puase 화면에서 코스 마커도 표시 ..?
+
+        LOGD(TAG, "set markers : " + isFromCourseRec);
+        if (isFromCourseRec) {
+            for (LatLng point : courseDetailLatLng) {
+                int index = 0;
+                MarkerOptions options = new MarkerOptions();
+                options.position(point).title(courseNames[index]);
+                options.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, mActivity));
+                mgoogleMap.addMarker(options).showInfoWindow();
+                index++;
+            }
+        }
 
         //현재 지점
         if (markerList.size() > 1) {
@@ -402,23 +440,10 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
             }
             MarkerOptions options2 = new MarkerOptions();
             options2.position(markerList.get(1)).title("도착");
-            options2.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_flag,mActivity));
+            options2.icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_flag, mActivity));
             mMarker = mgoogleMap.addMarker(options2);
         }
 
-        //코스 마커
-        // FIXME : isFromCourseRec 조건문 지워야 표시되는문제
-        // TODO : Puase 화면에서 코스 마커도 표시 ..?
-//        if (isFromCourseRec) {
-            for (LatLng point : courseDetailLatLng) {
-                int index = 0;
-                MarkerOptions options = new MarkerOptions();
-                options.position(point).title(courseNames[index]);
-                options.icon(BitmapUtil.getBitmapDescriptor(R.drawable.jbic_man_running, mActivity));
-                mgoogleMap.addMarker(options);
-                index++;
-            }
-//        }
 
 //        //카메라 이동
 //        LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -432,9 +457,9 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
 //        int padding = 50;
 //        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
 //        mgoogleMap.moveCamera(cu);
-         //카메라 이동
+        //카메라 이동
         mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng
-                (locationArrayList.get(locationArrayList.size()-1)));
+                (locationArrayList.get(locationArrayList.size() - 1)));
     }
 
     //bindService
@@ -476,7 +501,7 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         }
     }
 
-    public GoogleMap getGooglemap(){
+    public GoogleMap getGooglemap() {
         return mgoogleMap;
     }
 }

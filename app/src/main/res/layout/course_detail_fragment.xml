@@ -3,7 +3,7 @@
 <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/courseContainer"
+    android:id="@+id/courseContainers"
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:visibility="visible"
@@ -329,7 +329,8 @@
 
         <!--부가정보 레이아웃-->
         <include android:id="@+id/course_additional_info_layout"
-            layout="@layout/course_additional_info"/>
+            layout="@layout/course_additional_info"
+             />
 
     </android.support.v7.widget.CardView>
 

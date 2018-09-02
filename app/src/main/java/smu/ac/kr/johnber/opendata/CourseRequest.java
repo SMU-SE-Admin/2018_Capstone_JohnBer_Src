@@ -223,19 +223,19 @@ public class CourseRequest {
 
                 if ( startLocation.size() ==0) {
 
-                    start = new LatLng( 35.5245878,  129.3999542);
+                    start = new LatLng( 37.5665,  126.9780);
                 }else {
                     start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
                 }
 
                 if (endLocation.size() ==0) {
-                    end = new LatLng( 129.3999542,  129.3999542);
+                    end = new LatLng( 37.5665,  126.9780);
                 } else {
                      end =new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude());
                 }
                 latlng.add(start);
                 latlng.add(end);
-                LOGD(TAG, "size of lsitsts : " + latlng.size());
+//                LOGD(TAG, "size of lsitsts : " + latlng.size());
 
 
             } catch (IOException e) {

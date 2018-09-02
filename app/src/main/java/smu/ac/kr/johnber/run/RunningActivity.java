@@ -175,6 +175,9 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
         double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
 //    double endTime = Double.parseDouble(preferences.getString("ENDTIME", "0"));
 
+        //m -> km단위로 변환.
+        distance = distance * 0.001;
+
 
 //    Date date = null;
 

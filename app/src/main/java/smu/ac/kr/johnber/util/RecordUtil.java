@@ -42,10 +42,12 @@ public class RecordUtil {
         int hours = (minutes/60)%60;
         seconds = seconds % 60;
 
+
+
         String stringTime ="";
-        if (hours > 0) {
+//        if (hours > 0) {
             stringTime=String.format("%02d", hours)+":";
-        }
+//        }
         stringTime += String.format("%02d", minutes);
         stringTime += ":" + String.format("%02d", seconds);
 
