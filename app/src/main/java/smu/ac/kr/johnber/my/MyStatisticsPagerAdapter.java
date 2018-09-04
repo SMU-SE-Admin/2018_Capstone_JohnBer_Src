@@ -94,7 +94,7 @@ public class MyStatisticsPagerAdapter extends PagerAdapter {
       case 1:
         return "Weekly";
       case 2:
-        return "Monthly";
+        return "Monthly Record";
     }
     return super.getPageTitle(position);
   }
