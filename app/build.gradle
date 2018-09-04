@@ -5,7 +5,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "smu.ac.kr.johnber"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
     implementation 'com.ethanhua:skeleton:1.1.1'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
-
+    implementation 'com.airbnb.android:lottie:2.5.0'
 
     implementation 'io.realm:android-adapters:2.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'

@@ -22,6 +22,7 @@
 
     <ImageView
         android:layout_width="28dp"
+        android:id="@+id/tb_logo"
         android:layout_height="28dp"
         android:src="@drawable/jbic_logo2_abbr" />
 

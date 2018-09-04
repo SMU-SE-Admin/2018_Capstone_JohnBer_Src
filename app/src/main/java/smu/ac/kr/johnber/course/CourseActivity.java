@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.support.v7.widget.Toolbar;
 
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -63,6 +64,8 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
     private AppBarLayout mAppBarLayout;
     private CourseDetailFragment.detailFragListener fragListener;
     private  RealmResults<RunningCourse> courseItems;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,8 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
         LOGD(TAG, "onCreate");
         initView();
         mAppBarLayout = findViewById(R.id.appbar);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.getRootView().findViewById(R.id.tb_logo).setVisibility(View.GONE);
         //RecyclerView 설정
         Realm.init(this);
         mRealm = Realm.getDefaultInstance();
@@ -225,6 +230,7 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
 
         return true;
     }
+
 
     @Override
     public void onFiltered(RealmResults<RunningCourse> filteredResult) {

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent" android:layout_width="match_parent">
-    <item android:drawable="@android:color/black" />
-    <item>
-        <bitmap android:src="@mipmap/ic_launcher" android:gravity="center" />
-    </item>
-    </layer-list>

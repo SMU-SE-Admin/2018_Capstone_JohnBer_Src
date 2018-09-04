@@ -92,8 +92,8 @@ public class CoursePlaceInfoAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((CourseReviewHolder) holder).name.setText(review.getAuthorName());
             ((CourseReviewHolder) holder).date.setText(review.getRelativeTimeDescription());
             //프로파일사진 가져오기
-            Uri uri = Uri.parse(review.getProfilePhotoUrl());
-            if (uri != null) {
+            if(review.getProfilePhotoUrl() != null){
+             Uri uri = Uri.parse(review.getProfilePhotoUrl());
                 Glide.with(context)
                         .load(uri)
                         .apply(new RequestOptions().centerCrop()
