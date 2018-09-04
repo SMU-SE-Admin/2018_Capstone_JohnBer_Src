@@ -7,14 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieDrawable;
 
 import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.run.MainActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    LottieAnimationView animationView ;
+    LottieAnimationView animationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,7 +25,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             animationView.addAnimatorListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
                 }
 
                 @Override
@@ -38,21 +36,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 @Override
                 public void onAnimationCancel(Animator animation) {
-
                 }
 
                 @Override
                 public void onAnimationRepeat(Animator animation) {
-
                 }
-            });
-
-//        try {
-//            Thread.sleep(1500);
-
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
+            });j
     }
 }

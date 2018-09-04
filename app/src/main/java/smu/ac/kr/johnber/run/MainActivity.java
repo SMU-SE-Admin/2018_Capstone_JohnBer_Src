@@ -549,7 +549,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     FirebaseUser user = mAuth.getCurrentUser();
                     String uid = user.getUid();
-
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         if (snapshot.getKey().toString().equals(uid)) {
                             for (DataSnapshot profileSnapshot : snapshot.getChildren()) {
@@ -571,17 +570,15 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
 
                 }
             });
-
             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
-
-        } else {
-          // User is signed out activity_login 화면으로 이동.
-          Log.d(TAG, "onAuthStateChanged:signed_out");
-          Intent intent = new Intent(getApplicationContext(), loginActivity.class);
-          startActivity(intent);
-        }
-        // ...
+          } else {
+              // User is signed out activity_login 화면으로 이동.
+              Log.d(TAG, "onAuthStateChanged:signed_out");
+              Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+              startActivity(intent);
+          }
+          // ...
       }
     };
   }
