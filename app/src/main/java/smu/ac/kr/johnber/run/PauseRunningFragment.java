@@ -1,14 +1,10 @@
 package smu.ac.kr.johnber.run;
 
 
-import static smu.ac.kr.johnber.util.LogUtils.LOGD;
-import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +13,6 @@ import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,7 +23,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
@@ -36,17 +30,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.LocationUtil;
-import smu.ac.kr.johnber.util.LogUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+import static smu.ac.kr.johnber.util.LogUtils.LOGD;
+import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
+
 public class PauseRunningFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
     private final static String TAG = makeLogTag(PauseRunningFragment.class);
 
@@ -73,10 +64,10 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         mView = inflater.inflate(R.layout.run_pause_running_fragment, container, false);
-        LOGD(TAG, "onCreateVeiw");
         if (savedInstanceState == null) {
+
             //view 초기화 및 MapView 추가
             initView();
             mMapView.onCreate(savedInstanceState);
@@ -89,23 +80,23 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onAttach(Context context) {
+
         //Activity에 할당되었을 때 호출
         super.onAttach(context);
+
         // Activity로 데이터를 전달 할 커스텀 리스너 연결(RunningFragment와 통신을 위해 Activity를 거쳐 통신함)
         callBackListener = (RunFragCallBackListener) getActivity();
-        LOGD(TAG, "onAttached");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        LOGD(TAG, "onActivityCreated");
-        //Fragment 화면 full screen
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
         //view에 이전 값 불러와  세팅
         setRecordtoView();
 
@@ -113,23 +104,21 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onPause() {
+
         //fragment를 떠났을 때 유지시킬 데이터 저장
         super.onPause();
         mMapView.onPause();
-        LOGD(TAG, "onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
-        LOGD(TAG, "onDestroy");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        LOGD(TAG, "onDetach");
     }
 
     @Override
@@ -144,6 +133,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
 
         switch (view.getId()) {
             case R.id.btn_resume:
+
                 //달리기 재개
                 if (fragmentManager.getBackStackEntryCount() != 0) {
                     fragmentManager.popBackStack();
@@ -152,6 +142,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
                 break;
 
             case R.id.btn_stop:
+
                 //return 버튼으로 transit
                 TransitionManager
                         .beginDelayedTransition(transitionContainer);
@@ -159,6 +150,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
                 break;
 
             case R.id.btn_return:
+
                 // RunningActivity에서 운동기록 정보를 저장 ->  on Ready callback 메소드 필요
                 //달리기 종료버튼 클릭 후 running fragment , pause fragment 모두 스택에서 pop
                 callBackListener.onClickedReturn();
@@ -175,13 +167,13 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LOGD(TAG, "onMapReady");
-        //TODO : GPS : 확인
+//        LOGD(TAG, "onMapReady");
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(8);
         ArrayList<JBLocation> route = getRoute();
-        LOGD(TAG, "getRoute: "+route);
+//        LOGD(TAG, "getRoute: "+route);
         mgoogleMap.addPolyline(setPolylineOptions(route));
+
         //마커 설정
         LatLng start = LocationUtil.jbLocationToLatLng(locationArrayList.get(0));
         LatLng end = LocationUtil.jbLocationToLatLng(locationArrayList.get(locationArrayList.size() - 1));
@@ -199,6 +191,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
         mgoogleMap.addMarker(endMarker).showInfoWindow();
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
         //경로에 맞게 zoomlevel 조정
         for(JBLocation jbPoint : route) {
             LatLng point = LocationUtil.jbLocationToLatLng(jbPoint);
@@ -245,7 +238,7 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
     }
 
     public ArrayList<JBLocation> getRoute() {
-        //TODO : preference Util  만들기
+
         //저장된 루트 받아오기
         locationArrayList = new ArrayList<>();
         if (preferences != null) {
@@ -256,18 +249,17 @@ public class PauseRunningFragment extends Fragment implements View.OnClickListen
             locationArrayList = gson.fromJson(response, new TypeToken<ArrayList<JBLocation>>() {
             }.getType());
         }
-        LOGD(TAG, "getRoute");
         return locationArrayList;
     }
 
     public PolylineOptions setPolylineOptions(ArrayList<JBLocation> list) {
         PolylineOptions options = new PolylineOptions();
+
         for (JBLocation location : list) {
             options.add(LocationUtil.jbLocationToLatLng(location));
-            LOGD(TAG, "[location] " + LocationUtil.jbLocationToLatLng(location));
         }
         options.width(13).color(Color.parseColor("#1D8BF8")).geodesic(true);
-        LOGD(TAG, "sizeof array" + list.size());
+
         return options;
     }
 

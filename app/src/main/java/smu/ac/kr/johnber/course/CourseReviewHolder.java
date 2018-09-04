@@ -8,8 +8,8 @@ import android.widget.TextView;
 import smu.ac.kr.johnber.R;
 
 public class CourseReviewHolder extends RecyclerView.ViewHolder{
-    //구글 place detail 에서 받아온 review
 
+    //구글 place detail 에서 받아온 review
     public ImageView profile;
     public TextView name;
     public TextView date;
@@ -20,7 +20,6 @@ public class CourseReviewHolder extends RecyclerView.ViewHolder{
 
     public CourseReviewHolder(View itemView) {
         super(itemView);
-
         profile = itemView.findViewById(R.id.iv_course_detail_ad_profile);
         name = itemView.findViewById(R.id.tv_course_detail_ad_review_name);
         date = itemView.findViewById(R.id.tv_course_detail_ad_review_dates);

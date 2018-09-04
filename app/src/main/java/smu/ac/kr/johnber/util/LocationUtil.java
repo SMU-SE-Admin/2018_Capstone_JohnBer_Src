@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import smu.ac.kr.johnber.map.JBLocation;
-
-import static android.support.constraint.Constraints.TAG;
+import smu.ac.kr.johnber.run.JBLocation;
 
 /**
  * android.location <-> johnber.location

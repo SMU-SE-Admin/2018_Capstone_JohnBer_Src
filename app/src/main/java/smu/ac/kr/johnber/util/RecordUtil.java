@@ -18,7 +18,12 @@ public class RecordUtil {
         int minutes = millisecondsToMinute(workoutTime);
 //        LogUtils.LOGD("RecordUtil ", Integer.toString(minutes));
         double calories = 5 * (7 * (3.5 * weight * minutes) / 1000);
+
         return calories;
+    }
+
+    public static String getFormattedCalories(double cal) {
+        return String.valueOf(Math.round(cal * 100) / 100.0);
     }
 
     public static int millisecondsToMinute(double elapsedTime) {

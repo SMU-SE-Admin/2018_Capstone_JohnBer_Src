@@ -10,13 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.VectorDrawable;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -31,20 +25,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -52,13 +40,9 @@ import com.google.android.gms.maps.model.RoundCap;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.util.BitmapUtil;
-import smu.ac.kr.johnber.util.LocationUtil;
 import smu.ac.kr.johnber.util.RecordUtil;
 
 /**
@@ -140,7 +124,6 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         //Activity에 할당되었을 때 호출
         super.onAttach(context);
         mActivity = getActivity();
-//        LOGD(TAG, "onAttached");
 
         //RUN버튼을 눌러 넘어온 경우이므로 INIT으로 세팅
         setState(INIT);
@@ -149,32 +132,27 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        LOGD(TAG, "onActivityCreated");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        LOGD(TAG, "onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         bindTrackerService();
-        LOGD(TAG, "onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LOGD(TAG, "onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LOGD(TAG, "onDestroy");
         unbindTrackerService();
     }
 
@@ -210,7 +188,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         mgoogleMap = googleMap;
         googleMap.setMinZoomPreference(19);
         Intent intent = getActivity().getIntent();
-        LatLng centerPoint ;
+        LatLng centerPoint;
+
         // Main화면에서 넘긴 좌표 꺼내기
         Double latitude = intent.getExtras().getDouble("latitude");
         Double longitude = intent.getExtras().getDouble("longitude");
@@ -229,13 +208,12 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
             courseNames[1] = intent.getStringExtra("course_eName");
             LOGD(TAG, courseNames[0] + courseNames[1]);
 
-//FIXME  :
             double dist_S = RecordUtil.distance(latitude, longitude, courseDetailLatLng.get(0).latitude
                     , courseDetailLatLng.get(0).longitude);
-            double dist_E = RecordUtil.distance(latitude,longitude,courseDetailLatLng.get(1).latitude
+            double dist_E = RecordUtil.distance(latitude, longitude, courseDetailLatLng.get(1).latitude
                     , courseDetailLatLng.get(1).longitude);
-double dist;
-double height;
+            double dist;
+            double height;
             if ((dist_S < dist_E)) {
                 dist = dist_S;
                 height = SphericalUtil.computeHeading(new LatLng(latitude, longitude), courseDetailLatLng.get(0));
@@ -248,7 +226,7 @@ double height;
             centerPoint = SphericalUtil.computeOffset(new LatLng(latitude, longitude), dist * 0.5, height);
 
         } else {
-            centerPoint =new LatLng(latitude, longitude);
+            centerPoint = new LatLng(latitude, longitude);
         }
 
         mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng(centerPoint));
@@ -271,12 +249,12 @@ double height;
     ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
             //bind되었을 때 Service객체 가져오기
             mTrackerService = ((TrackerService.TrackerBinder) iBinder).getService();
 
             //callback 등록
             mTrackerService.registerCallback(mCallback);
-//            Toast.makeText(mTrackerService, "TrackerService connected", Toast.LENGTH_SHORT).show();
 
             //기록 측정 시작
             if (mTrackerService != null) {
@@ -292,7 +270,6 @@ double height;
 
             //callback 해제
             mTrackerService.unregisterCallback(mCallback);
-//            Toast.makeText(mTrackerService, "TrackerService disconnected", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -302,7 +279,7 @@ double height;
         @Override
         public void onDistanceChanged(double value) {
             Message msg = mHandler.obtainMessage(MSG_DISTANCE, (int) value, 0);
-            LOGD(TAG, "distance: " + Integer.toString((int) value));
+//            LOGD(TAG, "distance: " + Integer.toString((int) value));
             mHandler.sendMessage(msg);
         }
 
@@ -310,15 +287,11 @@ double height;
         public void onCaloriesChanged(double value) {
             Message msg = mHandler.obtainMessage(MSG_CALORIES);
             Bundle bundle = new Bundle();
-            bundle.putString("calories", Integer.toString((int) value));
+//            bundle.putString("calories", Integer.toString((int) value));
             msg.setData(bundle);
             mHandler.sendMessageDelayed(msg, 1000);
         }
 
-        @Override
-        public void onElapsedtimeChanged(double value) {
-
-        }
 
         @Override
         public void onLocationChanged(double latitude, double longitude) {
@@ -397,13 +370,10 @@ double height;
     // 지도에 마커 표시
     // 시작점, 끝점(현재위치)
     private void setMarkers() {
-        LOGD(TAG, "setMarkers()");
         ArrayList<LatLng> markerList = new ArrayList<>();
 
         //시작 위치
         markerList.add(0, locationArrayList.get(0));
-
-        //TODO : 코스에서 RUN하는경우 코스 시작, 종료지점 마커 추가
 
         if (locationArrayList.size() > 1) {
 
@@ -418,8 +388,6 @@ double height;
         mgoogleMap.addMarker(options1);
 
         //코스 마커
-        // TODO : Puase 화면에서 코스 마커도 표시 ..?
-
         LOGD(TAG, "set markers : " + isFromCourseRec);
         if (isFromCourseRec) {
             for (LatLng point : courseDetailLatLng) {
@@ -444,19 +412,6 @@ double height;
             mMarker = mgoogleMap.addMarker(options2);
         }
 
-
-//        //카메라 이동
-//        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//        for(LatLng point : locationArrayList) {
-//            builder.include(point);
-//        }
-//        //bound로 애니메이션
-//        LatLngBounds bounds = builder.build();
-//        int width = getResources().getDisplayMetrics().widthPixels;
-//        int height = 300;
-//        int padding = 50;
-//        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
-//        mgoogleMap.moveCamera(cu);
         //카메라 이동
         mgoogleMap.moveCamera(CameraUpdateFactory.newLatLng
                 (locationArrayList.get(locationArrayList.size() - 1)));
@@ -464,8 +419,8 @@ double height;
 
     //bindService
     private void bindTrackerService() {
-        LOGD(TAG, "TrackerService Connected");
         getActivity().startService(new Intent(getActivity(), TrackerService.class));
+
         //flag BIND_AUTO_CREATE 로 설정시 stopSelf()를 호출하여도 unbound 될 때까지 연결이 살아있기때문에 0으로 교체
         getActivity().bindService(new Intent(getActivity(), TrackerService.class), mConnection, 0);
         isBound = true;
@@ -474,7 +429,6 @@ double height;
     //unbindService
     private void unbindTrackerService() {
         if (isBound) {
-            LOGD(TAG, "TrackerService disconnected");
             getActivity().stopService(new Intent(getActivity(), TrackerService.class));
             getActivity().unbindService(mConnection);
         }
@@ -483,7 +437,6 @@ double height;
     }
 
     public void resumebindService() {
-        LOGD(TAG, "resumebindService");
         setState(RESUME);
 
         bindTrackerService();

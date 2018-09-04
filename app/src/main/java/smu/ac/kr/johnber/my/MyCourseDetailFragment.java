@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.map.JBLocation;
+import smu.ac.kr.johnber.run.JBLocation;
 import smu.ac.kr.johnber.run.Record;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.LocationUtil;
@@ -86,7 +86,7 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         endPoint.setText(LocationUtil.latlngtoStringLocation(record.getJBLocation().get(record.getJBLocation().size() - 1),getActivity().getApplicationContext()));
         String dist = RecordUtil.distanceToStringFormat(record.getDistance());
         distance.setText(dist);
-        calories.setText(Double.toString(record.getCalories()));
+        calories.setText(RecordUtil.getFormattedCalories(record.getCalories()));
         String stime = RecordUtil.milliseconsToStringFormat(record.getElapsedTime());
         time.setText(stime);
 

@@ -1,11 +1,8 @@
 package smu.ac.kr.johnber.my;
 
-import static android.widget.LinearLayout.VERTICAL;
 import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -13,10 +10,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,7 +26,6 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,22 +34,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.lang.ref.WeakReference;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
 import smu.ac.kr.johnber.BaseActivity;
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.course.CourseDetailFragment;
-import smu.ac.kr.johnber.map.JBLocation;
 import smu.ac.kr.johnber.run.Record;
 import smu.ac.kr.johnber.util.BitmapUtil;
 
@@ -307,7 +294,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MyCourseDetailFragment fragment = new MyCourseDetailFragment();
         fragment.setArguments(data);
-        fragmentTransaction.replace(R.id.mycourse_item_container, fragment, "MYCOURSEDETAILFRAGMENT")
+        fragmentTransaction.add(R.id.mycourse_item_container, fragment, "MYCOURSEDETAILFRAGMENT")
                 .addToBackStack(null)
                 .commit();
     }
