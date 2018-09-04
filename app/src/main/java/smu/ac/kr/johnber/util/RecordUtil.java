@@ -15,7 +15,10 @@ public class RecordUtil {
      * 7MET 계산(달리기 가중치7.0)
      */
     public static double getAverageCalories(double weight, double workoutTime) {
-        int minutes = millisecondsToMinute(workoutTime);
+        //if 14:50 -> 14.83333
+        double seconds = (workoutTime / 1000) % 60 *1/60;
+        double minutes = workoutTime/(1000*60) + seconds;
+
 //        LogUtils.LOGD("RecordUtil ", Integer.toString(minutes));
         double calories = 5 * (7 * (3.5 * weight * minutes) / 1000);
 
@@ -26,11 +29,6 @@ public class RecordUtil {
         return String.valueOf(Math.round(cal * 100) / 100.0);
     }
 
-    public static int millisecondsToMinute(double elapsedTime) {
-        int seconds = (int) (elapsedTime / 1000);
-        int minutes = (seconds / 60) % 60;
-        return minutes;
-    }
 
     public static double metersToKillometers(double distance) {
         return distance / 1000;

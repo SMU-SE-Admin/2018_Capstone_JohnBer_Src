@@ -49,7 +49,6 @@ public class WeeklyStatistics {
             String dates = keys.split("/")[0];
             //날짜 따오기. 23
             String day = dates.split("-")[2];
-            //Log.d("mainactivity", "keys, dates, times: " + dates.toString());
 
             for (int i=0;i<rangeDateOfWeek.length;i++){
                 if (rangeDateOfWeek[i] == Integer.parseInt(day)){
@@ -81,13 +80,12 @@ public class WeeklyStatistics {
         }
 
         Log.d("MAINACTIVITY", "weeklykcal : " + sum);
-    return Math.round(sum*100)/100.0;
+        return Math.round(sum*100)/100.0;
     }
 
     public static double calculateTime(List<Double> timeList, int dayOfWeek){
         double sum =0;
         for(int i=0; i<timeList.size(); i++){
-            //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             sum += timeList.get(i);
         }
 
@@ -98,8 +96,8 @@ public class WeeklyStatistics {
         }
 
         int seconds = (int) (sum / 1000) % 60 ;            //초
-        int minutes = (int) ((sum/ (1000*60)) % 60);  //분
-        int hours   = (int) ((sum / (1000*60*60)) % 24);//시
+        int minutes = (int) ((sum/ (1000*60)) % 60);      //분
+        int hours   = (int) ((sum / (1000*60*60)) % 24); //시
 
         Log.d("MAINACTIVITY", "weeklyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
         return Math.round(sum*100)/100.0;
