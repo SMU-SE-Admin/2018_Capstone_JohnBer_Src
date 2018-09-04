@@ -41,6 +41,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 @Override
                 public void onAnimationRepeat(Animator animation) {
                 }
-            });j
+            });
     }
 }
