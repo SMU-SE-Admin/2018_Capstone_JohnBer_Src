@@ -305,6 +305,11 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
             mHandler.sendMessage(msg);
         }
 
+        @Override
+        public void onElapsedtimeChanged(double value) {
+            
+        }
+
     };
 
     private static final int MSG_DISTANCE = 322;
