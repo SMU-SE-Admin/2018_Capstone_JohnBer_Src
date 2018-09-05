@@ -16,7 +16,5 @@ public class  CoursePlaceInfoViewHolder extends RecyclerView.ViewHolder {
 
         imgview = itemView.findViewById(R.id.cv_course_detail_info_additional_imgview);
 
-
-
     }
 }

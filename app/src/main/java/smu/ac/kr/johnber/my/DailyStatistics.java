@@ -29,16 +29,12 @@ public class DailyStatistics {
         dailyTime = new ArrayList<Double>();
         dailyCal = new ArrayList<Double>();
 
-
         Iterator<String> iter = recordHashMap.keySet().iterator();
         while (iter.hasNext()) {
-            //Log.d("mainactivity", "dkdkdkdkdkdkdkd : " + recordHashMap.keySet());
             //ex) keys : hashmap의 key, 2018
             String keys = (String) iter.next();
             String dates = keys.split("/")[0];
-            String times = keys.split("/")[1];
-
-            //Log.d("mainactivity", "keys, dates, times: " + dates.toString());
+            //String times = keys.split("/")[1];
 
             if (todayDate.equals(dates)) {
                 Record dailyRecord = recordHashMap.get(keys);
@@ -46,8 +42,6 @@ public class DailyStatistics {
                 dailyKM.add(dailyRecord.getDistance());
                 dailyTime.add(dailyRecord.getElapsedTime());
                 dailyCal.add(dailyRecord.getCalories());
-
-                //Log.d("mainactivity", "daily: " + dailyKM.toString());
             }
         }
 
@@ -74,8 +68,8 @@ public class DailyStatistics {
             sum += timeList.get(i);
         }
 
-        int seconds = (int) (sum / 1000) % 60;            //초
-        int minutes = (int) ((sum / (1000 * 60)) % 60);  //분
+        int seconds = (int) (sum / 1000) % 60;              //초
+        int minutes = (int) ((sum / (1000 * 60)) % 60);    //분
         int hours = (int) ((sum / (1000 * 60 * 60)) % 24);//시
 
         Log.d("MAINACTIVITY", "dailyTIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
@@ -90,6 +84,4 @@ public class DailyStatistics {
         Log.d("MAINACTIVITY", "dailyKM" + sum);
         return Math.round(sum*100)/100.0;
     }
-
-
 }

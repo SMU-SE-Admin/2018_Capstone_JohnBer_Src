@@ -1,4 +1,4 @@
-package smu.ac.kr.johnber.map;
+package smu.ac.kr.johnber.run;
 
 public class JBLocation {
 

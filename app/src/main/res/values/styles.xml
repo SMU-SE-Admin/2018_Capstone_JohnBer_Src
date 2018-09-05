@@ -23,7 +23,7 @@
 
   <style name="ToolbarTheme_Title">
     <item name="android:textSize">14dp</item>
-    <item name="android:textColor">@color/dark_grey</item>
+    <item name="android:textColor">@color/black</item>
   </style>
 
   <!--navigation bar style-->
@@ -57,5 +57,13 @@
     <item name="android:paddingBottom">8dp</item>
     <item name="android:layout_centerHorizontal">true</item>
   </style>
+
+
+  <!--splash-->
+  <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <item name="android:windowBackground">@drawable/activity_splash_screen_logo</item>
+  </style>
+
+  <style name="PagerTabStrip"> <item name="android:textColor">@color/pager_tab_strip_text_selector</item></style>
 
 </resources>

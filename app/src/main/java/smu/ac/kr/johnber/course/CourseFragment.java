@@ -18,7 +18,7 @@ public class CourseFragment extends Fragment {
   private final static String TAG = makeLogTag(CourseFragment.class);
 
   public CourseFragment() {
-    // Required empty public constructor
+
   }
 
 

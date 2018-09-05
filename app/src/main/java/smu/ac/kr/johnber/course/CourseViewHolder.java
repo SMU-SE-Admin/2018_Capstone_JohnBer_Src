@@ -27,7 +27,6 @@ public class CourseViewHolder extends RealmViewHolder {
   public TextView TIME;
   public TextView KM;
   public TextView CAL;
-  //TODO : thumnail view  설정
   public ImageView thumnail;
   private itemClickListener listener;
 
@@ -43,10 +42,8 @@ public class CourseViewHolder extends RealmViewHolder {
     KM = view.findViewById(R.id.tv_cousrse_km_text);
     CAL = view.findViewById(R.id.tv_course_time_text);
     CAL.setVisibility(View.GONE);
-//    lbDistance = view.findViewById(R.id.tv_cousrse_km_text);
-//    lbTime = view.findViewById(R.id.tv_course_time_text);
-//    lbCalories = view.findViewById(R.id.tv_course_calories_text);
     thumnail = view.findViewById(R.id.iv_course_map_thumbnail);
+
     this.listener = listener;
     view.setOnClickListener(new View.OnClickListener() {
       @Override

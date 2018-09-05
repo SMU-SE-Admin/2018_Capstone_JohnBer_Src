@@ -1,9 +1,5 @@
 package smu.ac.kr.johnber;
 
-import static smu.ac.kr.johnber.util.LogUtils.LOGD;
-import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
-
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +8,7 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -20,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +25,9 @@ import smu.ac.kr.johnber.account.loginActivity;
 import smu.ac.kr.johnber.course.CourseActivity;
 import smu.ac.kr.johnber.my.MyActivity;
 import smu.ac.kr.johnber.run.MainActivity;
+
+import static smu.ac.kr.johnber.util.LogUtils.LOGD;
+import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
 
 /**
  * Created by yj34 on 26/03/2018.
@@ -51,7 +50,6 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    LOGD(TAG, "oncreate");
 
 
 
@@ -62,7 +60,6 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
   @Override
   protected void onStart() {
     super.onStart();
-    LOGD(TAG, "onStart");
   }
 
   @Override
@@ -109,7 +106,6 @@ public class BaseActivity extends AppCompatActivity implements OnNavigationItemS
         Intent intent = new Intent(getApplicationContext(), loginActivity.class);
         startActivity(intent);
 
-        Toast.makeText(this, "logout is completed", Toast.LENGTH_SHORT).show();
         return true;
 
         default:

@@ -9,9 +9,6 @@ public class ApiHelper {
     public static final int PLACE_DETAIL_FEILDS_REQUEST = 1102;
     public static final int PLACE_PHOTO_MAXHEIGHT = 400;
 
-
-
-
     // Place Search
     // key, input(location name), inputtype=textquery)
     // language
@@ -19,8 +16,6 @@ public class ApiHelper {
     //locationbiase = point:lat,lang
     //key=
     //https://square.github.io/retrofit/2.x/retrofit/index.html?retrofit2/http/QueryMap.html
-
-
 
     //* place_id is required
     //place_id
@@ -45,10 +40,6 @@ public class ApiHelper {
 
     public static String getLocationbiase(LatLng lat) {
         return "point:"+lat.latitude+","+lat.longitude;
-    }
-
-    public static int getPhotoMaxHeight() {
-        return PLACE_PHOTO_MAXHEIGHT;
     }
 
 

@@ -1,7 +1,6 @@
 package smu.ac.kr.johnber.account;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,9 +21,6 @@ import smu.ac.kr.johnber.R;
 import smu.ac.kr.johnber.run.MainActivity;
 import smu.ac.kr.johnber.util.LogUtils;
 
-import static smu.ac.kr.johnber.util.LogUtils.LOGD;
-
-
 public class loginActivity extends AppCompatActivity {
     private static final String TAG = LogUtils.makeLogTag(loginActivity.class);
     private EditText text_id;
@@ -34,12 +30,10 @@ public class loginActivity extends AppCompatActivity {
     // [START declare_auth]
     private FirebaseAuth mAuth;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        LOGD(TAG, "메시지");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -64,7 +58,6 @@ public class loginActivity extends AppCompatActivity {
         });
     }
 
-
     private void loginUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -87,8 +80,6 @@ public class loginActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
 
 

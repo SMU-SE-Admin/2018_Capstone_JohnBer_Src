@@ -37,8 +37,6 @@ public class MonthlyStatistics {
             String month = dates.split("-")[1];
             dates = year + month;
 
-            //Log.d("mainactivity", "keys, dates, times: " + dates.toString());
-
             if (dates.equals(yyyyMM)){
                 Record dailyRecord = recordHashMap.get(keys);
 
@@ -47,8 +45,6 @@ public class MonthlyStatistics {
                 monthlyCal.add(dailyRecord.getCalories());
 
                 numberOfRecord ++;
-
-                //Log.d("mainactivity", "daily: " + dailyKM.toString());
             }
         }
 
@@ -61,22 +57,20 @@ public class MonthlyStatistics {
 
     public static double calculateKcal(List<Double> kcalList, int numberOfRecord){
         double sum=0;
+
         for(int i=0; i<kcalList.size(); i++){
             sum+=kcalList.get(i);
         }
 
         sum = sum/numberOfRecord;
 
-
-
-    Log.d("MAINACTIVITY", "monthly_weeklykcal : " + sum);
-return Math.round(sum);
-
-        
+        Log.d("MAINACTIVITY", "monthly_weeklykcal : " + sum);
+        return Math.round(sum);
     }
 
     public static double calculateTime(List<Double> timeList, int numberOfRecord){
         double sum =0;
+
         for(int i=0; i<timeList.size(); i++){
             //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             sum += timeList.get(i);
@@ -85,9 +79,8 @@ return Math.round(sum);
         sum = sum/numberOfRecord;
 
         int seconds = (int) (sum / 1000) % 60 ;            //초
-        int minutes = (int) ((sum/ (1000*60)) % 60);  //분
-        int hours   = (int) ((sum / (1000*60*60)) % 24);//시
-
+        int minutes = (int) ((sum/ (1000*60)) % 60);      //분
+        int hours   = (int) ((sum / (1000*60*60)) % 24); //시
 
         Log.d("MAINACTIVITY", "monthly_TIME : " + String.format("%02d h:%02d m:%02d s", hours, minutes, seconds));
         return Math.round(sum*100)/100.0;
@@ -95,14 +88,14 @@ return Math.round(sum);
 
     public static double calculateKM(List<Double> kmList, int numberOfRecord){
         double sum=0;
+
         for(int i=0; i<kmList.size(); i++){
             sum+=kmList.get(i);
         }
 
         sum = sum/numberOfRecord;
 
-
-            Log.d("MAINACTIVITY", "monthly_KM : " + sum);
-    return Math.round(sum*100)/100.0;
+        Log.d("MAINACTIVITY", "monthly_KM : " + sum);
+        return Math.round(sum*100)/100.0;
     }
 }
