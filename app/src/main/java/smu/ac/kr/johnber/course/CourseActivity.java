@@ -2,9 +2,6 @@ package smu.ac.kr.johnber.course;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentManager;
@@ -16,15 +13,10 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.Realm;
@@ -176,7 +168,10 @@ public class CourseActivity extends BaseActivity implements CourseViewHolder.ite
         mSearchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getComponentName()));
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
-
+        ImageView icon = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+        icon.setColorFilter(getResources().getColor(R.color.black));
+        ImageView icon2 = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        icon2.setColorFilter(getResources().getColor(R.color.black));
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String charString) {

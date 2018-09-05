@@ -349,7 +349,6 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         try {
             currentLocationName = mGeoCoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
             locality = currentLocationName.get(0).getLocality();
-            LOGD(TAG, locality);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -364,7 +363,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         HashMap<Integer, String> courseName = new HashMap<>();
         final double QUERY_DIAMETER = 2.0; // km 단위
 
-//        LOGD(TAG, "query result : " + query.size());
+        LOGD(TAG, "query result : " + query.size());
 
         //현재 좌표와 검색결과 좌표 거리 계산
         if (query.size() != 0) {

@@ -55,10 +55,10 @@
         android:id="@+id/login_id"
         android:layout_width="0dp"
         android:layout_height="43dp"
-        android:backgroundTint="@color/grey"
+        android:backgroundTint="@color/black"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:textColor="@color/text_grey"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/btn_login"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_login"
@@ -83,12 +83,36 @@
         android:id="@+id/login_password"
         android:layout_width="0dp"
         android:layout_height="43dp"
-        android:backgroundTint="@color/grey"
+        android:backgroundTint="@color/black"
         android:hint="Password"
         android:inputType="textPassword"
         android:textColor="@color/text_grey"
         app:layout_constraintEnd_toEndOf="@+id/btn_login"
         app:layout_constraintStart_toStartOf="@+id/btn_login"
         app:layout_constraintTop_toBottomOf="@+id/tv_password_label" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="75dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/login_id"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.363"
+        app:srcCompat="@drawable/jbic_logo" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SMURUN"
+        android:textColor="#305796"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
 </android.support.constraint.ConstraintLayout>

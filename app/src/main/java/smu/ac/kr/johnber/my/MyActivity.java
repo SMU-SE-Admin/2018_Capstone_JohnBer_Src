@@ -11,10 +11,12 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,11 +58,15 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
     private SharedPreferences pref ;
     private HashMap<String, Record> recordHashMap = new HashMap<String, Record>();
     private SkeletonScreen skeletonScreen;
+    private PagerTabStrip tabStrip;
+    private  MyStatisticsPagerAdapter myStatisticsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_act);
+        tabStrip = findViewById(R.id.pager_title_strip);
+        tabStrip.setTabIndicatorColorResource(R.color.black);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -99,7 +105,7 @@ public class MyActivity extends BaseActivity implements MyCourseViewHolder.itemC
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        MyStatisticsPagerAdapter myStatisticsPagerAdapter = new MyStatisticsPagerAdapter(this,recordHashMap);
+        myStatisticsPagerAdapter = new MyStatisticsPagerAdapter(this,recordHashMap);
         ViewPager myStatisticsviewPager = (ViewPager)findViewById(R.id.my_statistics_viewPager);
         myStatisticsviewPager.setAdapter(myStatisticsPagerAdapter);
 

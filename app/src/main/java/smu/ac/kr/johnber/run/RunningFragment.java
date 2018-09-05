@@ -1,3 +1,4 @@
+
 package smu.ac.kr.johnber.run;
 
 
@@ -42,6 +43,7 @@ import com.google.maps.android.SphericalUtil;
 import java.util.ArrayList;
 
 import smu.ac.kr.johnber.R;
+import smu.ac.kr.johnber.run.JBLocation;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.RecordUtil;
 
@@ -458,4 +460,3 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
         return mgoogleMap;
     }
 }
-

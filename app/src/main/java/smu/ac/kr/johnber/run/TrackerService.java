@@ -123,6 +123,9 @@ public class TrackerService extends Service {
         public void onCaloriesChanged(double value);
 
         public void onLocationChanged(double latitude, double longitude);
+
+        public void onElapsedtimeChanged(double value);
+
     }
 
     /**
