@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.map.JBLocation;
+import smu.ac.kr.johnber.run.JBLocation;
 import smu.ac.kr.johnber.run.Record;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.LocationUtil;
@@ -47,7 +47,6 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
     public TextView calories;
     public TextView time;
     private View mView;
-    private Marker mMarker;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
     private List<Record> data;
@@ -67,7 +66,7 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-    mView = inflater.inflate(R.layout.fragment_my_course_detail, container, false);
+        mView = inflater.inflate(R.layout.fragment_my_course_detail, container, false);
         courseName = mView.findViewById(R.id.tv_my_course_detail_summary_title);
         startPoint = mView.findViewById(R.id.tv_my_course_detail_summary_start_point);
         endPoint = mView.findViewById(R.id.tv_my_course_detail_summary_end_point);
@@ -75,7 +74,7 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         calories = mView.findViewById(R.id.tv_my_course_calories);
         time = mView.findViewById(R.id.tv_my_course_time);
         scrollView = getActivity().findViewById(R.id.my_scrollview);
-       scrollView.scrollTo(0,0);
+        scrollView.scrollTo(0,0);
         mMapView = this.mView.findViewById(R.id.mycourse_map_view);
 
         data = ((MyActivity)getActivity()).getRecordsItems();
@@ -86,7 +85,7 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         endPoint.setText(LocationUtil.latlngtoStringLocation(record.getJBLocation().get(record.getJBLocation().size() - 1),getActivity().getApplicationContext()));
         String dist = RecordUtil.distanceToStringFormat(record.getDistance());
         distance.setText(dist);
-        calories.setText(Double.toString(record.getCalories()));
+        calories.setText(RecordUtil.getFormattedCalories(record.getCalories()));
         String stime = RecordUtil.milliseconsToStringFormat(record.getElapsedTime());
         time.setText(stime);
 
@@ -96,8 +95,6 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
 
         return mView;
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -109,8 +106,8 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         //fragment를 떠났을 때 유지시킬 데이터 저장
         super.onPause();
         mMapView.onPause();
-        LOGD(TAG, "onPause");
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -119,7 +116,6 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mgoogleMap = googleMap;
-//        googleMap.setMinZoomPreference(8);
         ArrayList<JBLocation> route = record.getJBLocation();
         mgoogleMap.addPolyline(setPolylineOptions(route));
 
@@ -138,12 +134,13 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
                 .title("end")
                 .icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, getActivity()));
         mgoogleMap.addMarker(endMarker).showInfoWindow();
-    //
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for(JBLocation jbPoint : route) {
             LatLng point = LocationUtil.jbLocationToLatLng(jbPoint);
             builder.include(point);
         }
+
         //bound로 애니메이션
         LatLngBounds bounds = builder.build();
         int width = getResources().getDisplayMetrics().widthPixels;
@@ -157,47 +154,8 @@ public class MyCourseDetailFragment extends Fragment  implements OnMapReadyCallb
         PolylineOptions options = new PolylineOptions();
         for (JBLocation location : list) {
             options.add(LocationUtil.jbLocationToLatLng(location));
-            LOGD(TAG, "[location] " + LocationUtil.jbLocationToLatLng(location));
         }
         options.width(15).color(Color.parseColor("#1D8BF8")).geodesic(true);
-        LOGD(TAG, "sizeof array" + list.size());
         return options;
     }
-
-
-
-    public String latlngtoStringLocation(JBLocation location) {
-        String stringLocation=null;
-        Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
-        List <Address> address;
-
-        try {
-            address = mGeoCoder.getFromLocation(location.getmLatitude(), location.getmLongitude(), 1);
-            if(address != null &&address.size()>0){
-                stringLocation = address.get(0).getAddressLine(0).toString();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return stringLocation;
-    }
-
-//    public String latlngtoStringLocation(JBLocation location) {
-//        String stringLocation=null;
-//        Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
-//        List <Address> address;
-//
-//        try {
-//            address = mGeoCoder.getFromLocation(location.getmLatitude(), location.getmLongitude(), 1);
-//            if(address != null &&address.size()>0){
-//                stringLocation = address.get(0).getAddressLine(0).toString();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return stringLocation;
-//    }
-
 }

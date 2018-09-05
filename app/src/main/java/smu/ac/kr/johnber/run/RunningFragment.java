@@ -1,3 +1,4 @@
+
 package smu.ac.kr.johnber.run;
 
 
@@ -56,7 +57,7 @@ import java.util.List;
 import java.util.Map;
 
 import smu.ac.kr.johnber.R;
-import smu.ac.kr.johnber.map.JBLocation;
+import smu.ac.kr.johnber.run.JBLocation;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.LocationUtil;
 import smu.ac.kr.johnber.util.RecordUtil;
@@ -234,8 +235,8 @@ public class RunningFragment extends Fragment implements View.OnClickListener, O
                     , courseDetailLatLng.get(0).longitude);
             double dist_E = RecordUtil.distance(latitude,longitude,courseDetailLatLng.get(1).latitude
                     , courseDetailLatLng.get(1).longitude);
-double dist;
-double height;
+            double dist;
+            double height;
             if ((dist_S < dist_E)) {
                 dist = dist_S;
                 height = SphericalUtil.computeHeading(new LatLng(latitude, longitude), courseDetailLatLng.get(0));
@@ -505,4 +506,3 @@ double height;
         return mgoogleMap;
     }
 }
-

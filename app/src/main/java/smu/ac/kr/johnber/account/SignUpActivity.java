@@ -1,7 +1,5 @@
 package smu.ac.kr.johnber.account;
 
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,8 +34,6 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText text_password;
     private Button button;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +63,6 @@ public class SignUpActivity extends AppCompatActivity {
                         ,gender.getSelectedItem().toString());
             }
         });
-
     }
 
     //사용자 회원가입
@@ -91,22 +86,16 @@ public class SignUpActivity extends AppCompatActivity {
                             DatabaseReference myRef = database.getReference();
                             UserProfile userProfile = new UserProfile(user.getUid(), weight, height, gender);
                             myRef.child(user.getUid()).child("userProfile").setValue(userProfile);
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }
 
-    //???
     private void updateUI(FirebaseUser user) {
     }
-
-
 }

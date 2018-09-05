@@ -2,6 +2,6 @@
 
 <!--color list for navigation item selection-->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/dark_grey" android:state_checked="true" />
+    <item android:color="@color/black" android:state_checked="true" />
     <item android:color="@color/lightgrey" />
 </selector>

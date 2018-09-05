@@ -1,18 +1,14 @@
 package smu.ac.kr.johnber.my;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import smu.ac.kr.johnber.R;
-
-import static smu.ac.kr.johnber.util.LogUtils.LOGD;
 
 public class MyStatisticsFragment extends android.support.v4.app.Fragment{
     private Double km;

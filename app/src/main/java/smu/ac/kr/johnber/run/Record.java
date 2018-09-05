@@ -4,20 +4,17 @@ package smu.ac.kr.johnber.run;
 import java.util.ArrayList;
 import java.util.Date;
 
-import io.realm.RealmObject;
-import smu.ac.kr.johnber.map.JBLocation;
-
 /**
  * 운동기록 Model
  */
 public class Record {
-    //TODO : 시간 포맷 등 바꿔주는 util 필요함
+
     private double distance, elapsedTime, calories, startTime, endTime;
+
     // android.JBLocation 대신 커스텀 JBLocation 사용
     private ArrayList<JBLocation> JBLocation;
     private Date date;
     private String title;
-    //이미지 url
     private String imgUrl;
 
     public Record(double distance, double elapsedTime, double calories, ArrayList<JBLocation> JBLocation, Date date, double startTime, double endTime, String title) {
@@ -58,11 +55,11 @@ public class Record {
         this.calories = calories;
     }
 
-    public ArrayList<smu.ac.kr.johnber.map.JBLocation> getJBLocation() {
+    public ArrayList<smu.ac.kr.johnber.run.JBLocation> getJBLocation() {
         return JBLocation;
     }
 
-    public void setJBLocation(ArrayList<smu.ac.kr.johnber.map.JBLocation> JBLocation) {
+    public void setJBLocation(ArrayList<smu.ac.kr.johnber.run.JBLocation> JBLocation) {
         this.JBLocation = JBLocation;
     }
 
@@ -97,6 +94,7 @@ public class Record {
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getImgUrl() {
         return imgUrl;
     }

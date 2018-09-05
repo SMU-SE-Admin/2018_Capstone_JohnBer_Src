@@ -1,13 +1,10 @@
 package smu.ac.kr.johnber.course;
 
 
-import static smu.ac.kr.johnber.util.LogUtils.LOGD;
-import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Camera;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,14 +19,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.net.Uri;
 
-import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,7 +30,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -62,6 +54,9 @@ import smu.ac.kr.johnber.run.RunningActivity;
 import smu.ac.kr.johnber.util.BitmapUtil;
 import smu.ac.kr.johnber.util.PermissionUtil;
 
+import static smu.ac.kr.johnber.util.LogUtils.LOGD;
+import static smu.ac.kr.johnber.util.LogUtils.makeLogTag;
+
 public class CourseDetailFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private final static String TAG = makeLogTag(CourseDetailFragment.class);
     private static final int REQUEST_LOCATION_PERMISSION = 101;
@@ -69,26 +64,24 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
     private TextView courseName;
     private TextView startPoint;
-    public TextView endPoint;
-    public TextView distance;
-    public TextView calories;
-    public TextView time;
-    public TextView course;
-    public TextView courseInfo;
-    public TextView avgRates;
-    public TextView phone;
-    public ImageView btPhone;
-    public ImageView btWebsite;
-    public TextView website;
+    private TextView endPoint;
+    private TextView distance;
+    private TextView calories;
+    private TextView time;
+    private TextView course;
+    private TextView courseInfo;
+    private TextView avgRates;
+    private TextView phone;
+    private ImageView btPhone;
+    private ImageView btWebsite;
+    private TextView website;
     private ScrollView scrollView;
     private Button mRun;
+    private RecyclerView recyclerView;
     private View mView;
+    private View rootView;
     private MapView mMapView;
     private GoogleMap mgoogleMap;
-    private SkeletonScreen skeletonScreen;
-    private CoursePlaceInfoAdapter adapter;
-    private RecyclerView recyclerView;
-    private View rootView;
     private Realm mRealm;
     private int dataNO;
     private RunningCourse mcourseData;
@@ -98,8 +91,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
     private detailFragListener callbacklistener;
     private ApiCallback callback;
-    private ApiDetailCallback placedetail_callback;
-
 
     public CourseDetailFragment() {
 
@@ -109,7 +100,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LOGD(TAG, "onCreateView");
+
         mView = inflater.inflate(R.layout.course_detail_fragment, container, false);
         Realm.init(getActivity().getApplicationContext());
         mRealm = Realm.getDefaultInstance();
@@ -150,8 +141,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         mMapView.getMapAsync(this);
 
 
-
-
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -190,7 +179,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void getPlaceID(final RunningCourse course, String query, final ApiCallback callback) {
-        //get place id from google place search
 
         ApiService apiService =
                 ApiServiceGenerator.getApiServiceGenerator(ApiServiceGenerator.BASE_URL_TYPE_PLACE)
@@ -205,36 +193,37 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             responseBodyCall.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                    String photoref = null;
+
                     try {
+
                         //response body를 string으로 변환
                         String json = response.body().string();
                         JSONObject jsonObject = new JSONObject(json);
+
                         //candidates
                         //status
                         String status = jsonObject.getString("status");
-//                    LOGD(TAG, "status : " + status);
+
                         if (status.equals("OK")) {
                             JSONObject candidates = jsonObject.getJSONArray("candidates").getJSONObject(0);
 
                             String formatted_address = candidates.getString("formatted_address");
                             String place_id = candidates.getString("place_id");
+
                             if (candidates.has("photos")) {
-//                                photoref = candidates.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
                             }
-//                            LOGD(TAG, "place address: " +course.getStartPoint()+":"+ formatted_address);
+
                             LOGD(TAG, "place id is  r: " + course.getStartPoint() + " : " + place_id);
-//                            LOGD(TAG, "photo reference: " +course.getStartPoint()+":"+ photoref);
-                            //
+
                             if (!place_id.equals(null)) {
                                 callback.onSuccess(place_id);
-//                                getPlaceDetails(place_id);
                             }
+
                         } else {
                             if (status.equals("ZERO_RESULTS")) {
-//                                callback.onZERORESUT();
-                            }
+
 //                        LOGD(TAG, "place request error code : " + status);
+                            }
                             return;
                         }
                     } catch (IOException e) {
@@ -263,11 +252,12 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         mRealm.close();
         mMapView.onDestroy();
-        if (callbacklistener != null) {
 
-        callbacklistener.onBackPressed();
+        if (callbacklistener != null) {
+            callbacklistener.onBackPressed();
         }
 
     }
@@ -280,66 +270,29 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         mgoogleMap = googleMap;
 
 
-//        try {
-//            //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
-//            Geocoder mGeoCoder = new Geocoder(getActivity().getApplicationContext(), Locale.KOREA);
-//            List<Address> startLocation = null;
-//            List<Address> endLocation = null;
         markerList = new ArrayList<>();
-//            if (!mcourseData.getStartPointAddr().equals("null")) {
-//                //지번주소
-//                LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
-//                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1);
-//                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1).toString());
-//            } else if (!mcourseData.getStartPointRoadAddr().equals("null")) {
-//                //도로명주소
-//                LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
-//                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1);
-//                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1).toString());
-//            }
-//
-//            if (!mcourseData.getEndPointAddr().equals("null")) {
-//                //지번주소
-//                LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
-//                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
-//                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
-//
-//            } else if (!mcourseData.getEndPointRoadAddr().equals("null")) {
-//                //도로명주소
-//                LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
-//                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1);
-//                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1).toString());
-//            }
-//            markerList.add(new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude()));
-//            markerList.add(new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude()));
-//            LOGD(TAG, "end : " + endLocation.get(0).getLatitude() + " " + endLocation.get(0).getLongitude());
-//            LOGD(TAG, "estar : " + startLocation.get(0).getLatitude() + " " + startLocation.get(0).getLongitude());
-//            LOGD(TAG, "size ; " + markerList.size());
-
 
         if (!mcourseData.getEndPointAddr().equals("null")) {
-            //지번주소
-//            LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
-//            endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
-//            LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
-
 
             LatLng sPoint = new LatLng(mcourseData.getsLat(), mcourseData.getsLng());
             LatLng ePoint = new LatLng(mcourseData.geteLat(), mcourseData.geteLng());
-            LOGD(TAG, "detail start point : " + sPoint.toString());
-            LOGD(TAG, "detail start point : " + ePoint.toString());
+//            LOGD(TAG, "detail start point : " + sPoint.toString());
+//            LOGD(TAG, "detail start point : " + ePoint.toString());
             markerList.add(sPoint);
             markerList.add(ePoint);
 
 
             for (int position = 0; position < markerList.size(); position++) {
+
                 String title;
                 if (position == 0)
                     title = mcourseData.getStartPoint();
                 else
                     title = mcourseData.getEndPoint();
+
                 mgoogleMap.addMarker(new MarkerOptions().position(markerList.get(position)).title(title).icon(BitmapUtil.getBitmapDescriptor(R.drawable.ic_marker_current, getActivity())));
             }
+
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(markerList.get(0)).include(markerList.get(1));
             LatLngBounds bounds = builder.build();
@@ -352,7 +305,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             if (sPoint.equals(ePoint)) {
 
                 //시작-종료지점 같은경우 zoom level 조정
-                cu = CameraUpdateFactory.newLatLngZoom(sPoint,18);
+                cu = CameraUpdateFactory.newLatLngZoom(sPoint, 18);
 
             } else {
                 cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
@@ -360,9 +313,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             mgoogleMap.moveCamera(cu);
 
 
-//부가정보     String [] id = null;
+//부가정보
             final String[] tmpid = new String[1];
             callback = new ApiCallback() {
+
                 @Override
                 public void onSuccess(String place_id) {
                     if (!place_id.equals(null))
@@ -396,9 +350,10 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
         if (placeDetails.getResult().getPhotos() != null) {
             for (int i = 0; i < placeDetails.getResult().getPhotos().size(); i++) {
-                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
+//                LOGD(TAG, "get ref photos : " + placeDetails.getResult().getPhotos().get(i).getPhotoReference());
             }
-            //부가정보 사진 //TODO :
+
+            //부가정보 사진
             CoursePlaceInfoAdapter adapterP = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 0);
             recyclerView = mView.findViewById(R.id.rv_course_detail_info_photos);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true));
@@ -407,7 +362,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapterP);
         }
-        //review정보있는경우 넘기기기
+
         if (placeDetails.getResult().getReviews() != null) {
             CoursePlaceInfoAdapter adapterR = new CoursePlaceInfoAdapter(placeDetails.getResult(), getContext(), 1);
             recyclerView = mView.findViewById(R.id.rv_course_detail_info_reviews);
@@ -419,17 +374,16 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         }
 
         if (placeDetails.getResult().getRating() != null) {
-            //TODO  :  UI기본상태 gone 으로 바꿀것
             mView.findViewById(R.id.tv_course_detail_info_AVGratings_title_additional).setVisibility(View.VISIBLE);
             avgRates.setText(placeDetails.getResult().getRating().toString());
         }
 
         if (placeDetails.getResult().getFormattedPhoneNumber() != null) {
             mView.findViewById(R.id.tv_course_detail_info_numbers_title_additional).setVisibility(View.VISIBLE);
-//                            phone.setText(placeDetails.getResult().getFormattedPhoneNumber());
             btPhone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     // 전화 연결
                     String receiver = placeDetails.getResult().getFormattedPhoneNumber();
                     Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + receiver));
@@ -441,7 +395,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
 
         if (placeDetails.getResult().getWebsite() != null) {
             mView.findViewById(R.id.tv_course_detail_info_website_title_additional).setVisibility(View.VISIBLE);
-//                            website.setText(placeDetails.getResult().getWebsite());
             btWebsite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -451,16 +404,13 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                 }
             });
         }
+
         if (placeDetails.getStatus().equals("ZERO_RESULTS")
                 || placeDetails.getStatus().equals("ZERO_RESULT")
                 || placeDetails.getResult().getPhotos() == null)
 
             mView.findViewById(R.id.cv_course_detail_info_add_cardview).setVisibility(View.GONE);
 
-        {
-
-        }
-        //부가정보 숨김
     }
 
     private void getPlaceDetails(String place_id, final ApiDetailCallback detailCallback) {
@@ -469,7 +419,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         ApiService apiService =
                 ApiServiceGenerator.getApiServiceGenerator(ApiServiceGenerator.BASE_URL_TYPE_PLACE)
                         .getApiService();
-        LOGD(TAG, "dd" + markerList.toString());
+
         if (markerList != null) {
 
             final Call<PlaceDetails> responseBodyCall =
@@ -477,12 +427,13 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
                             ApiHelper.getQueryFeilds(ApiHelper.PLACE_DETAIL_FEILDS_REQUEST),
                             ApiService.GOOGLE_MAPS_API_SERVICE_KEY);
             responseBodyCall.enqueue(new Callback<PlaceDetails>() {
+
                 @Override
                 public void onResponse(Call<PlaceDetails> call, Response<PlaceDetails> response) {
                     if (response.isSuccessful() && response.body().getStatus().equals("OK")) {
                         LOGD(TAG, "server contacted at: " + call.request().url());
-
                         placeDetails = response.body();
+
                         //photo정보 있는경우 주소 가져오기
                         if (placeDetails.getResult() != null) {
                             detailCallback.onDetailSuccessed(placeDetails);
@@ -546,7 +497,6 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
         } else
             PermissionUtil.checkPermission(getActivity(), PERMISSION, REQUEST_LOCATION_PERMISSION);
     }
-
 
 
     public interface detailFragListener {
