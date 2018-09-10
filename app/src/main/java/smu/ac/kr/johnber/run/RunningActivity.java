@@ -148,7 +148,7 @@ public class RunningActivity extends AppCompatActivity implements PauseRunningFr
         double startTime = Double.parseDouble(preferences.getString("STARTTIME", "0"));
 
         //m -> km단위로 변환.
-        //distance = distance * 0.001;
+        distance = distance * 0.001;
 
         mRecord = new Record(distance, elapsedTime, calories, locationArrayList, null, startTime, endTime, null);
 
