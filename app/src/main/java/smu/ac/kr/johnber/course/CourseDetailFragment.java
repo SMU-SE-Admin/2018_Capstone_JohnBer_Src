@@ -179,6 +179,7 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void getPlaceID(final RunningCourse course, String query, final ApiCallback callback) {
+        //get place id from google place search
 
         ApiService apiService =
                 ApiServiceGenerator.getApiServiceGenerator(ApiServiceGenerator.BASE_URL_TYPE_PLACE)
@@ -193,37 +194,36 @@ public class CourseDetailFragment extends Fragment implements OnMapReadyCallback
             responseBodyCall.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+//                    String photoref = null;
                     try {
-
                         //response body를 string으로 변환
                         String json = response.body().string();
                         JSONObject jsonObject = new JSONObject(json);
-
                         //candidates
                         //status
                         String status = jsonObject.getString("status");
-
+//                    LOGD(TAG, "status : " + status);
                         if (status.equals("OK")) {
                             JSONObject candidates = jsonObject.getJSONArray("candidates").getJSONObject(0);
 
                             String formatted_address = candidates.getString("formatted_address");
                             String place_id = candidates.getString("place_id");
-
                             if (candidates.has("photos")) {
+//                                photoref = candidates.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
                             }
-
-                            LOGD(TAG, "place id is  r: " + course.getStartPoint() + " : " + place_id);
-
+//                            LOGD(TAG, "place address: " +course.getStartPoint()+":"+ formatted_address);
+//                            LOGD(TAG, "place id is  r: " + course.getStartPoint() + " : " + place_id);
+//                            LOGD(TAG, "photo reference: " +course.getStartPoint()+":"+ photoref);
+                            //
                             if (!place_id.equals(null)) {
                                 callback.onSuccess(place_id);
+//                                getPlaceDetails(place_id);
                             }
-
                         } else {
                             if (status.equals("ZERO_RESULTS")) {
-
-//                        LOGD(TAG, "place request error code : " + status);
+//                                callback.onZERORESUT();
                             }
+//                        LOGD(TAG, "place request error code : " + status);
                             return;
                         }
                     } catch (IOException e) {

@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -244,7 +245,8 @@ public class TrackerService extends Service {
         if (!from.equals(to)) {
 
             //mLastLocation ~ mCurrentLocation 거리 구하기
-            distance += RecordUtil.distance(from.latitude, from.longitude, to.latitude, to.longitude);
+//            distance += RecordUtil.distance(from.latitude, from.longitude, to.latitude, to.longitude);
+            distance += SphericalUtil.computeDistanceBetween(from, to);
         }
 
         //운동시간

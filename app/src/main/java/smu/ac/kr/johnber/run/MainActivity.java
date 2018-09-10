@@ -361,7 +361,7 @@ public class MainActivity extends BaseActivity implements OnClickListener, OnMap
         // integer : primary key of course
         HashMap<Integer, LatLng> courseMap = new HashMap<>();
         HashMap<Integer, String> courseName = new HashMap<>();
-        final double QUERY_DIAMETER = 2.0; // km 단위
+        final double QUERY_DIAMETER = 5.0; // km 단위
 
         LOGD(TAG, "query result : " + query.size());
 
