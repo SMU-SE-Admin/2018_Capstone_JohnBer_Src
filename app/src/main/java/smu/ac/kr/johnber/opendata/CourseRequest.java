@@ -72,7 +72,6 @@ public class CourseRequest {
                     for (int i = 0; i< jsonArray.length();i++){
                         //Array안의 각 코스 Ojbect를 꺼낸다.
                         jsonObject = jsonArray.getJSONObject(i);
-                        //TODO:
                         if(!jsonObject.get("총길이").toString().equals("null")
                                 &&!jsonObject.get("총소요시간").toString().equals("null")
                                 &&jsonObject.get("길소개").toString().length()>50){
@@ -140,61 +139,6 @@ public class CourseRequest {
     }
 
 
-
-
-    private List<LatLng> getLatLangFromAddr(RunningCourse mcourseData) {
-
-
-
-        List<LatLng> latlng = new ArrayList<>();
-        if(mcourseData == null)
-        LOGD(TAG,"mcourseData is empty");
-        try {
-            //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
-            Geocoder mGeoCoder = new Geocoder(context, Locale.KOREA);
-            List<Address> startLocation = null;
-            List<Address> endLocation = null;
-            if (!(mcourseData.getStartPointAddr().equals("null")||mcourseData.getStartPointAddr().equals("해당 없음"))) {
-                //지번주소
-                LOGD(TAG, "Course data sp " + mcourseData.getStartPointAddr());
-                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1);
-                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointAddr(), 1).toString());
-            } else if (!(mcourseData.getStartPointRoadAddr().equals("null")||mcourseData.getStartPointRoadAddr().equals("해당 없음"))) {
-                //도로명주소
-                LOGD(TAG, "Course data srRp " + mcourseData.getStartPointRoadAddr());
-                startLocation = mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1);
-                LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(mcourseData.getStartPointRoadAddr(), 1).toString());
-            }
-
-            if (!(mcourseData.getEndPointAddr().equals("null")||mcourseData.getEndPointAddr().equals("해당 없음"))) {
-                //지번주소
-                LOGD(TAG, "Course ep " + mcourseData.getEndPointAddr());
-                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1);
-                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointAddr(), 1).toString());
-                if (endLocation.size() <= 0) {
-                    endLocation = startLocation;
-                }
-            } else if (!(mcourseData.getEndPointRoadAddr().equals("null")||mcourseData.getEndPointRoadAddr().equals("해당 없음"))) {
-                //도로명주소
-                LOGD(TAG, "Course data eRp " + mcourseData.getEndPointRoadAddr());
-                endLocation = mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1);
-                LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(mcourseData.getEndPointRoadAddr(), 1).toString());
-            }
-            LatLng start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
-            LatLng end =new LatLng(endLocation.get(0).getLatitude(), endLocation.get(0).getLongitude());
-            latlng.add(start);
-            latlng.add(end);
-            LOGD(TAG, "size of lsitsts : " + latlng.size());
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            LOGD(TAG, "cannot find location info" + mcourseData.getCourseName() + " " + mcourseData.getStartPointAddr() + " " + mcourseData.getStartPointRoadAddr() + " " + mcourseData.getEndPointAddr() + " " + mcourseData.getEndPointRoadAddr());
-        }
-
-        return latlng;
-    }
-
     private List<LatLng> getLatLangFromAddr(List<String> addrs) {
 
 
@@ -204,8 +148,6 @@ public class CourseRequest {
             List<LatLng> latlng = new ArrayList<>();
         LatLng start;
         LatLng end;
-        LOGD(TAG, "addr s tart  is : " + startaddr);
-        LOGD(TAG, "addr  edbd t  is : " + endaddr);
 
             try {
                 //시작지점명 , 종료지점명으로부터 위도,경도 정보 알아내기
@@ -216,13 +158,10 @@ public class CourseRequest {
                     startLocation = mGeoCoder.getFromLocationName(startaddr, 1);
                     LOGD(TAG, "start : " + mGeoCoder.getFromLocationName(startaddr, 1).toString());
 
-
-
                     endLocation = mGeoCoder.getFromLocationName(endaddr, 1);
                     LOGD(TAG, "end : " + mGeoCoder.getFromLocationName(endaddr, 1).toString());
 
-                if ( startLocation.size() ==0) {
-
+                if (startLocation.size() ==0) {
                     start = new LatLng( 37.5665,  126.9780);
                 }else {
                     start =new LatLng(startLocation.get(0).getLatitude(), startLocation.get(0).getLongitude());
@@ -235,12 +174,10 @@ public class CourseRequest {
                 }
                 latlng.add(start);
                 latlng.add(end);
-//                LOGD(TAG, "size of lsitsts : " + latlng.size());
-
 
             } catch (IOException e) {
                 e.printStackTrace();
-                LOGD(TAG, "cannot find location iuuuuuuunfo" );
+                LOGD(TAG, "cannot find location info" );
             }
 
             return latlng;
