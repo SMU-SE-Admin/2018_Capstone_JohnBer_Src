@@ -19,8 +19,8 @@
          JBLocation permissions for the 'MyLocation' functionality.
     -->
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="JohnBer"
+        android:icon="@drawable/icon"
+        android:label="SMURUN"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
